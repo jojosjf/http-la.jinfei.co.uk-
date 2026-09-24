@@ -1,9 +1,15 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../l10n/app_localizations.dart';
+import '../logic/centering.dart';
+import '../models/guide_lines.dart';
+import 'canvas_geometry.dart';
+import 'guide_painter.dart';
 import 'image_loader.dart';
 import 'picked_file_cleanup.dart';
+import 'result_bar.dart';
 
 /// 唯一的页面：空状态，或图片 + 参考线 + 结果栏。
 class MeasurePage extends StatefulWidget {
@@ -147,7 +153,7 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-/// 图片测量区域。
+/// 图片测量区域：图片、参考线、结果栏。
 class MeasureView extends StatefulWidget {
   const MeasureView({super.key, required this.image});
 
@@ -158,52 +164,143 @@ class MeasureView extends StatefulWidget {
 }
 
 class _MeasureViewState extends State<MeasureView> {
+  late final ValueNotifier<GuideLines> _lines = ValueNotifier(
+      GuideLines.defaults(widget.image.width, widget.image.height));
+  LineId? _selected;
+
+  // 拖动中的状态：起始位置 + 累计的屏幕位移，避免夹住后手指与线错位。
+  LineId? _dragging;
+  double _dragStart = 0;
+  double _dragDelta = 0;
+
+  @override
+  void dispose() {
+    _lines.dispose();
+    super.dispose();
+  }
+
+  void _moveLine(LineId id, double value) {
+    _lines.value = _lines.value.withLine(id, value,
+        width: widget.image.width, height: widget.image.height);
+  }
+
+  void _onDragStart(LineId id) {
+    setState(() {
+      _selected = id;
+      _dragging = id;
+    });
+    _dragStart = _lines.value[id];
+    _dragDelta = 0;
+  }
+
+  void _onDragUpdate(CanvasGeometry geo, DragUpdateDetails d) {
+    final id = _dragging;
+    if (id == null) return;
+    _dragDelta += id.isVertical ? d.delta.dx : d.delta.dy;
+    _moveLine(id, _dragStart + geo.screenToImage(_dragDelta));
+  }
+
+  void _onDragEnd() {
+    setState(() => _dragging = null);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final geo = CanvasGeometry(constraints.biggest, widget.image);
-      return ColoredBox(
-        color: Colors.black,
-        child: Stack(children: [
-          Positioned.fromRect(
-            rect: geo.imageRect,
-            child: RawImage(
-              image: widget.image.image,
-              fit: BoxFit.fill,
-              filterQuality: FilterQuality.medium,
+    return Column(children: [
+      Expanded(
+        child: LayoutBuilder(builder: (context, constraints) {
+          final geo = CanvasGeometry(
+            viewport: constraints.biggest,
+            imageWidth: widget.image.width,
+            imageHeight: widget.image.height,
+          );
+          return ClipRect(
+            child: ColoredBox(
+              color: Colors.black,
+              child: Stack(children: [
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => setState(() => _selected = null),
+                    child: Stack(children: [
+                      Positioned.fromRect(
+                        rect: geo.imageRect,
+                        child: RawImage(
+                          image: widget.image.image,
+                          fit: BoxFit.fill,
+                          filterQuality: FilterQuality.medium,
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+                ..._overlay(geo),
+              ]),
+            ),
+          );
+        }),
+      ),
+      ValueListenableBuilder<GuideLines>(
+        valueListenable: _lines,
+        builder: (context, lines, _) =>
+            ResultBar(result: computeCentering(lines)),
+      ),
+    ]);
+  }
+
+  /// 参考线绘制层 + 每个手柄一块触摸区域（半径 22 点）。
+  List<Widget> _overlay(CanvasGeometry geo) {
+    const touch = CanvasGeometry.handleBand;
+    return [
+      Positioned.fill(
+        child: IgnorePointer(
+          child: ValueListenableBuilder<GuideLines>(
+            valueListenable: _lines,
+            builder: (context, lines, _) => CustomPaint(
+              painter: GuidePainter(
+                  geometry: geo, lines: lines, selected: _selected),
             ),
           ),
-        ]),
-      );
-    });
+        ),
+      ),
+      ValueListenableBuilder<GuideLines>(
+        valueListenable: _lines,
+        builder: (context, lines, _) {
+          // 选中的手柄放在最上层，重叠时优先响应。
+          final ids = [
+            for (final id in LineId.values)
+              if (id != _selected) id,
+            if (_selected != null) _selected!,
+          ];
+          return Stack(children: [
+            for (final id in ids)
+              if (_onScreen(geo, geo.handleCenter(id, lines)))
+                Positioned(
+                  // key 放在最外层：选中后手柄会调整层级，保持同一个手势不中断。
+                  key: ValueKey('handle-${id.name}'),
+                  left: geo.handleCenter(id, lines).dx - touch / 2,
+                  top: geo.handleCenter(id, lines).dy - touch / 2,
+                  width: touch,
+                  height: touch,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    dragStartBehavior: DragStartBehavior.down,
+                    onTap: () => setState(() => _selected = id),
+                    onPanStart: (_) => _onDragStart(id),
+                    onPanUpdate: (d) => _onDragUpdate(geo, d),
+                    onPanEnd: (_) => _onDragEnd(),
+                    onPanCancel: _onDragEnd,
+                  ),
+                ),
+          ]);
+        },
+      ),
+    ];
   }
-}
 
-/// 画布几何：图片在视口中按比例居中显示，四周留出手柄带。
-class CanvasGeometry {
-  CanvasGeometry(this.viewport, LoadedImage image) {
-    final avail = Rect.fromLTWH(0, 0, viewport.width, viewport.height)
-        .deflate(handleBand);
-    final w = image.width, h = image.height;
-    final scale = (avail.width / w) < (avail.height / h)
-        ? avail.width / w
-        : avail.height / h;
-    fitScale = scale > 0 ? scale : 0;
-    imageRect = Rect.fromCenter(
-      center: avail.center,
-      width: w * fitScale,
-      height: h * fitScale,
-    );
-  }
-
-  /// 视口四周放手柄的区域宽度（逻辑像素），等于手柄触摸直径。
-  static const double handleBand = 44;
-
-  final Size viewport;
-
-  /// 1 原图像素在未缩放画布上的逻辑像素数。
-  late final double fitScale;
-
-  /// 图片在未缩放画布上的位置。
-  late final Rect imageRect;
+  static bool _onScreen(CanvasGeometry geo, Offset c) =>
+      c.dx >= 0 &&
+      c.dx <= geo.viewport.width &&
+      c.dy >= 0 &&
+      c.dy <= geo.viewport.height;
 }

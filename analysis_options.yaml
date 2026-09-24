@@ -30,6 +30,8 @@ linter:
   rules:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # 鸿蒙版 Flutter 的 Dart 版本较旧，不使用 Dart 3.8 的 null-aware 元素语法。
+    use_null_aware_elements: false
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
