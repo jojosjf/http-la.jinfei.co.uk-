@@ -10,14 +10,33 @@
   "topBottom": "Top / Bottom",
   "referenceGrade": "Reference grade",
   "gradeValue": "PSA {grade}",
-  "@gradeValue": {"placeholders": {"grade": {"type": "String"}}},
+  "@gradeValue": {
+    "placeholders": {
+      "grade": {
+        "type": "String"
+      }
+    }
+  },
   "belowStandard": "Below PSA 3",
   "borderline": "Borderline: close to PSA {grade}",
-  "@borderline": {"placeholders": {"grade": {"type": "String"}}},
+  "@borderline": {
+    "placeholders": {
+      "grade": {
+        "type": "String"
+      }
+    }
+  },
   "disclaimer": "Front centering only, based on PSA's published standards. Not an actual grade; not affiliated with PSA.",
   "lineName": "{line, select, outerLeft{Outer left} innerLeft{Inner left} innerRight{Inner right} outerRight{Outer right} outerTop{Outer top} innerTop{Inner top} innerBottom{Inner bottom} outerBottom{Outer bottom} other{Line}}",
-  "@lineName": {"placeholders": {"line": {"type": "String"}}},
+  "@lineName": {
+    "placeholders": {
+      "line": {
+        "type": "String"
+      }
+    }
+  },
   "moveOnePixel": "Move 1 pixel",
+  "nudgeHint": "Tap a handle to select a line for fine-tuning",
   "about": "About",
   "aboutBody": "How to use: drag the handles so the outer lines sit on the card's outer edges and the inner lines on the artwork border. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: this app measures front centering only, based on PSA's published standards. The result is for reference and is not an actual grade. This app is not affiliated with PSA.",
   "close": "Close"

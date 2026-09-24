@@ -28,7 +28,9 @@ class CardCenteringApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       // 中文系统用中文，其他语言一律用英文。
       localeResolutionCallback: (locale, supported) =>
-          locale?.languageCode == 'zh' ? const Locale('zh') : const Locale('en'),
+          locale?.languageCode == 'zh'
+          ? const Locale('zh')
+          : const Locale('en'),
       home: const MeasurePage(),
     );
   }

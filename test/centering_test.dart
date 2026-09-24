@@ -3,12 +3,7 @@ import 'package:card_centering/models/guide_lines.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// 用四边边框宽度构造参考线：外框 1000×1400，内框按边框宽度内缩。
-GuideLines lines({
-  required double l,
-  required double r,
-  double? t,
-  double? b,
-}) {
+GuideLines lines({required double l, required double r, double? t, double? b}) {
   const w = 1000.0, h = 1400.0;
   t ??= 50;
   b ??= 50;
@@ -25,7 +20,8 @@ GuideLines lines({
 }
 
 /// 左右边框按 big/100 : (100-big)/100 分配，上下居中。
-GuideLines lrRatio(num big) => lines(l: big.toDouble(), r: 100 - big.toDouble());
+GuideLines lrRatio(num big) =>
+    lines(l: big.toDouble(), r: 100 - big.toDouble());
 
 void main() {
   group('比例计算', () {
@@ -63,8 +59,22 @@ void main() {
 
   group('等级判定（阈值边界）', () {
     const cases = <int, double?>{
-      50: 10, 55: 10, 56: 9, 60: 9, 61: 8, 65: 8, 66: 7, 70: 7,
-      71: 6, 80: 6, 81: 5, 85: 5, 86: 3, 90: 3, 91: null, 99: null,
+      50: 10,
+      55: 10,
+      56: 9,
+      60: 9,
+      61: 8,
+      65: 8,
+      66: 7,
+      70: 7,
+      71: 6,
+      80: 6,
+      81: 5,
+      85: 5,
+      86: 3,
+      90: 3,
+      91: null,
+      99: null,
     };
     cases.forEach((worse, grade) {
       test('$worse → ${grade ?? '低于标准'}', () {

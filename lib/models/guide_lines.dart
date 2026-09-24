@@ -36,34 +36,40 @@ class GuideLines {
 
   /// 默认位置：外 8%、内 14%，右/下侧对称（W、H 为原图宽高）。
   factory GuideLines.defaults(double width, double height) => GuideLines(
-        outerLeft: 0.08 * width,
-        innerLeft: 0.14 * width,
-        innerRight: 0.86 * width,
-        outerRight: 0.92 * width,
-        outerTop: 0.08 * height,
-        innerTop: 0.14 * height,
-        innerBottom: 0.86 * height,
-        outerBottom: 0.92 * height,
-      );
+    outerLeft: 0.08 * width,
+    innerLeft: 0.14 * width,
+    innerRight: 0.86 * width,
+    outerRight: 0.92 * width,
+    outerTop: 0.08 * height,
+    innerTop: 0.14 * height,
+    innerBottom: 0.86 * height,
+    outerBottom: 0.92 * height,
+  );
 
   factory GuideLines._fromList(List<double> v) => GuideLines(
-        outerLeft: v[0],
-        innerLeft: v[1],
-        innerRight: v[2],
-        outerRight: v[3],
-        outerTop: v[4],
-        innerTop: v[5],
-        innerBottom: v[6],
-        outerBottom: v[7],
-      );
+    outerLeft: v[0],
+    innerLeft: v[1],
+    innerRight: v[2],
+    outerRight: v[3],
+    outerTop: v[4],
+    innerTop: v[5],
+    innerBottom: v[6],
+    outerBottom: v[7],
+  );
 
   double outerLeft, innerLeft, innerRight, outerRight;
   double outerTop, innerTop, innerBottom, outerBottom;
 
   List<double> _toList() => [
-        outerLeft, innerLeft, innerRight, outerRight,
-        outerTop, innerTop, innerBottom, outerBottom,
-      ];
+    outerLeft,
+    innerLeft,
+    innerRight,
+    outerRight,
+    outerTop,
+    innerTop,
+    innerBottom,
+    outerBottom,
+  ];
 
   double operator [](LineId id) => _toList()[id.index];
 

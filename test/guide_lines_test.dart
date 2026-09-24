@@ -5,7 +5,8 @@ void main() {
   const w = 1000.0, h = 1400.0;
   final g = GuideLines.defaults(w, h);
 
-  GuideLines move(LineId id, double v) => g.withLine(id, v, width: w, height: h);
+  GuideLines move(LineId id, double v) =>
+      g.withLine(id, v, width: w, height: h);
 
   test('默认位置', () {
     expect(
@@ -28,7 +29,10 @@ void main() {
     expect(move(LineId.innerLeft, 50)[LineId.innerLeft], 81);
     expect(move(LineId.innerLeft, 5000)[LineId.innerLeft], 859);
     expect(move(LineId.outerLeft, 500)[LineId.outerLeft], 139);
-    expect(move(LineId.innerBottom, 100)[LineId.innerBottom], closeTo(197, 1e-9));
+    expect(
+      move(LineId.innerBottom, 100)[LineId.innerBottom],
+      closeTo(197, 1e-9),
+    );
     expect(move(LineId.innerTop, 1300)[LineId.innerTop], 1203);
   });
 

@@ -32,7 +32,12 @@ class CanvasGeometry {
   }
 
   const CanvasGeometry._(
-      this.viewport, this.fitScale, this.imageRect, this.zoom, this.pan);
+    this.viewport,
+    this.fitScale,
+    this.imageRect,
+    this.zoom,
+    this.pan,
+  );
 
   /// 视口四周放手柄的区域宽度（逻辑像素），等于手柄触摸直径。
   static const double handleBand = 44;
@@ -64,11 +69,11 @@ class CanvasGeometry {
 
   /// 图片在屏幕上的位置（可能超出视口）。
   Rect get screenImageRect => Rect.fromLTRB(
-        xToScreen(0),
-        yToScreen(0),
-        zoom * imageRect.right + pan.dx,
-        zoom * imageRect.bottom + pan.dy,
-      );
+    xToScreen(0),
+    yToScreen(0),
+    zoom * imageRect.right + pan.dx,
+    zoom * imageRect.bottom + pan.dy,
+  );
 
   /// 手柄中心。竖线：外框线手柄在图片上方，内框线在下方；
   /// 横线：外框线在左侧，内框线在右侧。手柄始终保持在视口内。

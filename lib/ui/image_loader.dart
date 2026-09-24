@@ -55,7 +55,8 @@ Future<LoadedImage> decodeForDisplay(Uint8List bytes) async {
   var ow = (w ?? image.width).toDouble();
   var oh = (h ?? image.height).toDouble();
   // 描述符给的是未旋转的尺寸；EXIF 旋转 90° 的图解码后宽高互换。
-  if ((image.width > image.height) != (ow > oh) && image.width != image.height) {
+  if ((image.width > image.height) != (ow > oh) &&
+      image.width != image.height) {
     final t = ow;
     ow = oh;
     oh = t;

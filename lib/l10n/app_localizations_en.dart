@@ -75,6 +75,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moveOnePixel => 'Move 1 pixel';
 
   @override
+  String get nudgeHint => 'Tap a handle to select a line for fine-tuning';
+
+  @override
   String get about => 'About';
 
   @override

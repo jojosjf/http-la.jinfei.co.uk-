@@ -72,6 +72,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get moveOnePixel => '移动 1 像素';
 
   @override
+  String get nudgeHint => '点一下手柄选中参考线，可逐像素微调';
+
+  @override
   String get about => '说明';
 
   @override

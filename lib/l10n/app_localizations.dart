@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Move 1 pixel'**
   String get moveOnePixel;
 
+  /// No description provided for @nudgeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a handle to select a line for fine-tuning'**
+  String get nudgeHint;
+
   /// No description provided for @about.
   ///
   /// In en, this message translates to:

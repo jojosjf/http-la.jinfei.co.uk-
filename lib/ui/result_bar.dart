@@ -28,17 +28,25 @@ class ResultBar extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(children: [
-                _Cell(label: l10n.leftRight, value: '${r.lrBig}/${r.lrSmall}'),
-                _Cell(label: l10n.topBottom, value: '${r.tbBig}/${r.tbSmall}'),
-                _Cell(
-                  label: l10n.referenceGrade,
-                  value: grade == null
-                      ? l10n.belowStandard
-                      : l10n.gradeValue(formatGrade(grade)),
-                  emphasize: true,
-                ),
-              ]),
+              Row(
+                children: [
+                  _Cell(
+                    label: l10n.leftRight,
+                    value: '${r.lrBig}/${r.lrSmall}',
+                  ),
+                  _Cell(
+                    label: l10n.topBottom,
+                    value: '${r.tbBig}/${r.tbSmall}',
+                  ),
+                  _Cell(
+                    label: l10n.referenceGrade,
+                    value: grade == null
+                        ? l10n.belowStandard
+                        : l10n.gradeValue(formatGrade(grade)),
+                    emphasize: true,
+                  ),
+                ],
+              ),
               if (r.borderline && near != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
@@ -56,8 +64,9 @@ class ResultBar extends StatelessWidget {
                 child: Text(
                   l10n.disclaimer,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
             ],
@@ -69,7 +78,11 @@ class ResultBar extends StatelessWidget {
 }
 
 class _Cell extends StatelessWidget {
-  const _Cell({required this.label, required this.value, this.emphasize = false});
+  const _Cell({
+    required this.label,
+    required this.value,
+    this.emphasize = false,
+  });
 
   final String label, value;
   final bool emphasize;
@@ -78,20 +91,22 @@ class _Cell extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Expanded(
-      child: Column(children: [
-        Text(label, style: theme.textTheme.labelMedium),
-        const SizedBox(height: 2),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            value,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: emphasize ? theme.colorScheme.primary : null,
+      child: Column(
+        children: [
+          Text(label, style: theme.textTheme.labelMedium),
+          const SizedBox(height: 2),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: emphasize ? theme.colorScheme.primary : null,
+              ),
             ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }

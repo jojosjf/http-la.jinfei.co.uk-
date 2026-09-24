@@ -58,7 +58,12 @@ class GuidePainter extends CustomPainter {
   }
 
   void _paintHandle(
-      Canvas canvas, Offset c, LineId id, Color color, bool isSel) {
+    Canvas canvas,
+    Offset c,
+    LineId id,
+    Color color,
+    bool isSel,
+  ) {
     final r = isSel ? 13.0 : 11.0;
     canvas.drawCircle(c, r + 2, Paint()..color = Colors.white);
     canvas.drawCircle(c, r, Paint()..color = color);
@@ -71,24 +76,26 @@ class GuidePainter extends CustomPainter {
     const a = 5.0, b = 3.0;
     if (id.isVertical) {
       canvas.drawPath(
-          Path()
-            ..moveTo(c.dx - a + b, c.dy - b)
-            ..lineTo(c.dx - a, c.dy)
-            ..lineTo(c.dx - a + b, c.dy + b)
-            ..moveTo(c.dx + a - b, c.dy - b)
-            ..lineTo(c.dx + a, c.dy)
-            ..lineTo(c.dx + a - b, c.dy + b),
-          arrow);
+        Path()
+          ..moveTo(c.dx - a + b, c.dy - b)
+          ..lineTo(c.dx - a, c.dy)
+          ..lineTo(c.dx - a + b, c.dy + b)
+          ..moveTo(c.dx + a - b, c.dy - b)
+          ..lineTo(c.dx + a, c.dy)
+          ..lineTo(c.dx + a - b, c.dy + b),
+        arrow,
+      );
     } else {
       canvas.drawPath(
-          Path()
-            ..moveTo(c.dx - b, c.dy - a + b)
-            ..lineTo(c.dx, c.dy - a)
-            ..lineTo(c.dx + b, c.dy - a + b)
-            ..moveTo(c.dx - b, c.dy + a - b)
-            ..lineTo(c.dx, c.dy + a)
-            ..lineTo(c.dx + b, c.dy + a - b),
-          arrow);
+        Path()
+          ..moveTo(c.dx - b, c.dy - a + b)
+          ..lineTo(c.dx, c.dy - a)
+          ..lineTo(c.dx + b, c.dy - a + b)
+          ..moveTo(c.dx - b, c.dy + a - b)
+          ..lineTo(c.dx, c.dy + a)
+          ..lineTo(c.dx + b, c.dy + a - b),
+        arrow,
+      );
     }
   }
 
