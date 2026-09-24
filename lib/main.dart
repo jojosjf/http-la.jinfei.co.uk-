@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -18,6 +19,9 @@ class CardCenteringApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        // 网页版用内置字体，不从谷歌服务器下载（国内常加载失败）；
+        // 手机上用系统字体。
+        fontFamily: kIsWeb ? 'NotoSansSCSubset' : null,
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate,

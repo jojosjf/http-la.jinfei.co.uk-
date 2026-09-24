@@ -1,5 +1,5 @@
 name: card_centering
-description: "A new Flutter project."
+description: "卡片居中检查 Card Centering Check"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -47,6 +47,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,6 +60,19 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # 网页版内置的中文字体子集（只含界面用到的字符），由 tool/subset_web_font.py 生成。
+  fonts:
+    - family: NotoSansSCSubset
+      fonts:
+        - asset: assets/fonts/NotoSansSC-Subset-400.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansSC-Subset-500.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansSC-Subset-600.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansSC-Subset-700.ttf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -90,3 +104,18 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# 应用图标：dart run flutter_launcher_icons
+# assets/icon/icon_1024.png 目前是占位图标，拿到正式图标后替换同名文件再运行一次。
+flutter_launcher_icons:
+  image_path: assets/icon/icon_1024.png
+  android: true
+  adaptive_icon_background: "#283593"
+  adaptive_icon_foreground: assets/icon/icon_foreground_1024.png
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: assets/icon/icon_1024.png
+    background_color: "#283593"
+    theme_color: "#283593"

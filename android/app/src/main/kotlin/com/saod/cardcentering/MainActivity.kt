@@ -1,4 +1,4 @@
-package com.saod.card_centering
+package com.saod.cardcentering
 
 import io.flutter.embedding.android.FlutterActivity
 

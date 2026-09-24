@@ -1,11 +1,11 @@
 {
-    "name": "card_centering",
-    "short_name": "card_centering",
+    "name": "卡片居中检查",
+    "short_name": "卡片居中检查",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#283593",
+    "theme_color": "#283593",
+    "description": "测量卡片正面四边边框的居中比例",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

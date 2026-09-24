@@ -7,7 +7,14 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Card Centering</string>
+	<string>Card Centering Check</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>zh-Hans</string>
+	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used only to open the card photo you choose. Photos are processed on this device and never uploaded. / 仅用于打开你选择的卡片照片，照片只在本机处理，不会上传。</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
