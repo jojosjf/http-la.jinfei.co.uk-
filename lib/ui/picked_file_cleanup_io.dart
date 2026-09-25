@@ -6,7 +6,13 @@ Future<void> deletePickedCopy(String path) async {
   final p = path.replaceAll('\\', '/');
   if (!p.contains('/cache/') && !p.contains('/tmp/')) return;
   try {
-    await File(path).delete();
+    final file = File(path);
+    await file.delete();
+    // 安卓上 image_picker 会为每次选图建一个随机命名的子目录，一并删掉；
+    // 非递归删除，目录不空时会失败而不会误删别的文件。
+    final dir = file.parent;
+    final name = dir.uri.pathSegments.where((s) => s.isNotEmpty).last;
+    if (name != 'cache' && name != 'tmp') await dir.delete();
   } catch (_) {
     // 删除失败不影响使用，系统会自行清理临时目录。
   }
