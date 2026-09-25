@@ -1,6 +1,7 @@
 import 'dart:math' as math;
-import 'dart:typed_data';
 import 'dart:ui' as ui;
+
+import 'package:flutter/foundation.dart';
 
 /// 超过这个像素数的图片只解码一张缩小的显示图。
 const int maxDisplayPixels = 12000000;
@@ -22,39 +23,44 @@ class LoadedImage {
 }
 
 /// 解码图片。解码由引擎在后台线程完成，并按 EXIF 摆正方向；
-/// 超过 [maxDisplayPixels] 的图直接按比例解码成缩略图，避免占用大量内存。
-Future<LoadedImage> decodeForDisplay(Uint8List bytes) async {
-  final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
-  final descriptor = await ui.ImageDescriptor.encoded(buffer);
-
-  // 网页端拿不到原图尺寸，交给浏览器完整解码。
+/// 超过 [maxPixels] 的图直接按比例解码成缩略图，避免占用大量内存。
+Future<LoadedImage> decodeForDisplay(
+  Uint8List bytes, {
+  int maxPixels = maxDisplayPixels,
+}) async {
   int? w, h;
-  try {
-    w = descriptor.width;
-    h = descriptor.height;
-  } on UnsupportedError {
-    w = h = null;
-  }
-
-  int? targetWidth;
-  if (w != null && h != null && w * h > maxDisplayPixels) {
-    targetWidth = (w * math.sqrt(maxDisplayPixels / (w * h))).round();
-  }
-
   final ui.Codec codec;
-  try {
-    codec = await descriptor.instantiateCodec(targetWidth: targetWidth);
-  } finally {
-    descriptor.dispose();
-    buffer.dispose();
+  if (kIsWeb) {
+    // 网页端解码前拿不到原图尺寸，交给浏览器完整解码。
+    codec = await ui.instantiateImageCodec(bytes);
+  } else {
+    // 注意：不能自己创建 ImageDescriptor 并在取帧前释放它——解码发生在
+    // getNextFrame 时，提前释放会导致引擎解码线程崩溃。这里交给引擎管理，
+    // buffer 也由它负责释放。
+    final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
+    codec = await ui.instantiateImageCodecWithSize(
+      buffer,
+      getTargetSize: (iw, ih) {
+        w = iw;
+        h = ih;
+        if (iw * ih <= maxPixels) return const ui.TargetImageSize();
+        return ui.TargetImageSize(
+          width: (iw * math.sqrt(maxPixels / (iw * ih))).round(),
+        );
+      },
+    );
   }
-  final frame = await codec.getNextFrame();
-  codec.dispose();
+  final ui.FrameInfo frame;
+  try {
+    frame = await codec.getNextFrame();
+  } finally {
+    codec.dispose();
+  }
   final image = frame.image;
 
   var ow = (w ?? image.width).toDouble();
   var oh = (h ?? image.height).toDouble();
-  // 描述符给的是未旋转的尺寸；EXIF 旋转 90° 的图解码后宽高互换。
+  // 引擎给的是未旋转的尺寸；EXIF 旋转 90° 的图解码后宽高互换。
   if ((image.width > image.height) != (ow > oh) &&
       image.width != image.height) {
     final t = ow;
