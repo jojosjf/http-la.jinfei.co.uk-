@@ -39,7 +39,8 @@ class _MeasurePageState extends State<MeasurePage> {
         source: ImageSource.gallery,
         requestFullMetadata: false,
       );
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Photo picker failed: $e');
       messenger.showSnackBar(SnackBar(content: Text(l10n.imageLoadFailed)));
       return;
     }
@@ -51,7 +52,9 @@ class _MeasurePageState extends State<MeasurePage> {
       final bytes = await file.readAsBytes();
       await deletePickedCopy(file.path);
       loaded = await decodeForDisplay(bytes);
-    } catch (_) {
+    } catch (e) {
+      // 只记录错误类型与信息，不含图片内容。
+      debugPrint('Failed to load picked photo: $e');
       loaded = null;
     }
     if (!mounted) {
