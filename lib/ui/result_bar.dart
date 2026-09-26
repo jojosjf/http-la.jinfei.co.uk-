@@ -47,18 +47,22 @@ class ResultBar extends StatelessWidget {
                   ),
                 ],
               ),
-              if (r.borderline && near != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Text(
-                    l10n.borderline(formatGrade(near)),
-                    key: const Key('borderline'),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.orange.shade800,
-                      fontWeight: FontWeight.w600,
-                    ),
+              // 临界提示始终占一行：出现或消失时结果栏高度不变，图片不会跳动。
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  r.borderline && near != null
+                      ? l10n.borderline(formatGrade(near))
+                      : '',
+                  key: const Key('borderline'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.orange.shade800,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
