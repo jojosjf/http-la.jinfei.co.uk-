@@ -188,6 +188,18 @@ abstract class AppLocalizations {
   /// **'Move 1 pixel'**
   String get moveOnePixel;
 
+  /// No description provided for @handleOuter.
+  ///
+  /// In en, this message translates to:
+  /// **'O'**
+  String get handleOuter;
+
+  /// No description provided for @handleInner.
+  ///
+  /// In en, this message translates to:
+  /// **'I'**
+  String get handleInner;
+
   /// No description provided for @nudgeHint.
   ///
   /// In en, this message translates to:
@@ -203,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutBody.
   ///
   /// In en, this message translates to:
-  /// **'How to use: drag the handles so the outer lines sit on the card\'s outer edges and the inner lines on the artwork border. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: this app measures front centering only, based on PSA\'s published standards. The result is for reference and is not an actual grade. This app is not affiliated with PSA.'**
+  /// **'How to use: drag the handles so the outer lines (solid, handle marked \"O\") sit on the card\'s outer edges and the inner lines (dashed, handle marked \"I\") on the artwork border. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: this app measures front centering only, based on PSA\'s published standards. The result is for reference and is not an actual grade. This app is not affiliated with PSA.'**
   String get aboutBody;
 
   /// No description provided for @close.

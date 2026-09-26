@@ -75,6 +75,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moveOnePixel => 'Move 1 pixel';
 
   @override
+  String get handleOuter => 'O';
+
+  @override
+  String get handleInner => 'I';
+
+  @override
   String get nudgeHint => 'Tap a handle to select a line for fine-tuning';
 
   @override
@@ -82,7 +88,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutBody =>
-      'How to use: drag the handles so the outer lines sit on the card\'s outer edges and the inner lines on the artwork border. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: this app measures front centering only, based on PSA\'s published standards. The result is for reference and is not an actual grade. This app is not affiliated with PSA.';
+      'How to use: drag the handles so the outer lines (solid, handle marked \"O\") sit on the card\'s outer edges and the inner lines (dashed, handle marked \"I\") on the artwork border. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: this app measures front centering only, based on PSA\'s published standards. The result is for reference and is not an actual grade. This app is not affiliated with PSA.';
 
   @override
   String get close => 'Close';
