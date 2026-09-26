@@ -33,8 +33,8 @@ class CardCenteringApp extends StatelessWidget {
       // 主要面向国内市场：只有英文系统显示英文，其他语言一律显示中文。
       localeResolutionCallback: (locale, supported) =>
           locale?.languageCode == 'en'
-          ? const Locale('en')
-          : const Locale('zh'),
+              ? const Locale('en')
+              : const Locale('zh'),
       home: const MeasurePage(),
     );
   }

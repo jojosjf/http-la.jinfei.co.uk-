@@ -117,8 +117,8 @@ class _MeasurePageState extends State<MeasurePage> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : image == null
-          ? _EmptyState(onPick: _pick)
-          : MeasureView(key: ObjectKey(image), image: image),
+              ? _EmptyState(onPick: _pick)
+              : MeasureView(key: ObjectKey(image), image: image),
     );
   }
 }
@@ -467,63 +467,63 @@ class _MeasureViewState extends State<MeasureView> {
                 onDone: () => setState(() => _rotating = false),
               )
             : id == null
-            ? Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l10n.nudgeHint,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.nudgeHint,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ),
-                    ),
+                      TextButton.icon(
+                        key: const Key('rotate-open'),
+                        onPressed: () => setState(() => _rotating = true),
+                        icon: const Icon(Icons.rotate_right),
+                        label: Text(
+                          _angle == 0
+                              ? l10n.rotate
+                              : '${l10n.rotate} ${_angle.toStringAsFixed(1)}°',
+                        ),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      Icon(
+                        Icons.circle,
+                        size: 12,
+                        color: GuidePainter.colorOf(id, selected: true),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          l10n.lineName(id.name),
+                          style: theme.textTheme.titleSmall,
+                        ),
+                      ),
+                      IconButton.filledTonal(
+                        key: const Key('nudge-minus'),
+                        tooltip: l10n.moveOnePixel,
+                        icon: Icon(
+                          id.isVertical ? Icons.arrow_back : Icons.arrow_upward,
+                        ),
+                        onPressed: () => _nudge(-1),
+                      ),
+                      const SizedBox(width: 12),
+                      IconButton.filledTonal(
+                        key: const Key('nudge-plus'),
+                        tooltip: l10n.moveOnePixel,
+                        icon: Icon(
+                          id.isVertical
+                              ? Icons.arrow_forward
+                              : Icons.arrow_downward,
+                        ),
+                        onPressed: () => _nudge(1),
+                      ),
+                    ],
                   ),
-                  TextButton.icon(
-                    key: const Key('rotate-open'),
-                    onPressed: () => setState(() => _rotating = true),
-                    icon: const Icon(Icons.rotate_right),
-                    label: Text(
-                      _angle == 0
-                          ? l10n.rotate
-                          : '${l10n.rotate} ${_angle.toStringAsFixed(1)}°',
-                    ),
-                  ),
-                ],
-              )
-            : Row(
-                children: [
-                  Icon(
-                    Icons.circle,
-                    size: 12,
-                    color: GuidePainter.colorOf(id, selected: true),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      l10n.lineName(id.name),
-                      style: theme.textTheme.titleSmall,
-                    ),
-                  ),
-                  IconButton.filledTonal(
-                    key: const Key('nudge-minus'),
-                    tooltip: l10n.moveOnePixel,
-                    icon: Icon(
-                      id.isVertical ? Icons.arrow_back : Icons.arrow_upward,
-                    ),
-                    onPressed: () => _nudge(-1),
-                  ),
-                  const SizedBox(width: 12),
-                  IconButton.filledTonal(
-                    key: const Key('nudge-plus'),
-                    tooltip: l10n.moveOnePixel,
-                    icon: Icon(
-                      id.isVertical
-                          ? Icons.arrow_forward
-                          : Icons.arrow_downward,
-                    ),
-                    onPressed: () => _nudge(1),
-                  ),
-                ],
-              ),
       ),
     );
   }

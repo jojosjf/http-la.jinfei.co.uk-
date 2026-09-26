@@ -54,9 +54,9 @@ class AngleDial extends StatelessWidget {
                 tick: theme.colorScheme.onSurfaceVariant,
                 accent: theme.colorScheme.primary,
                 labelStyle: DefaultTextStyle.of(context).style.copyWith(
-                  fontSize: 9,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+                      fontSize: 9,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
               ),
             ),
           ),

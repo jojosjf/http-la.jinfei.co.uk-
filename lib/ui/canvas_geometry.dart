@@ -66,11 +66,11 @@ class CanvasGeometry {
 
   /// 图片在屏幕上的位置（可能超出视口）。
   Rect get screenImageRect => Rect.fromLTRB(
-    xToScreen(0),
-    yToScreen(0),
-    zoom * imageRect.right + pan.dx,
-    zoom * imageRect.bottom + pan.dy,
-  );
+        xToScreen(0),
+        yToScreen(0),
+        zoom * imageRect.right + pan.dx,
+        zoom * imageRect.bottom + pan.dy,
+      );
 
   /// 手柄标签的大小：上下两边的标签横放（图示在左、文字在右），
   /// 左右两边的标签竖放（图示在上、文字在下）。

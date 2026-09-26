@@ -18,9 +18,8 @@ void main() {
   });
 
   test('8 倍缩放 + 平移时，线的位置与图片用同一个矩阵换算', () {
-    final m = Matrix4.identity()
-      ..translateByDouble(-900, -1300, 0, 1)
-      ..scaleByDouble(8, 8, 1, 1);
+    final m = Matrix4.diagonal3Values(8, 8, 1)
+      ..setTranslationRaw(-900, -1300, 0);
     final g = CanvasGeometry(
       viewport: viewport,
       imageWidth: w,
@@ -49,7 +48,7 @@ void main() {
   });
 
   test('屏幕位移除以缩放倍数换算成原图像素', () {
-    final m = Matrix4.identity()..scaleByDouble(8, 8, 1, 1);
+    final m = Matrix4.diagonal3Values(8, 8, 1);
     final g = CanvasGeometry(
       viewport: viewport,
       imageWidth: w,
@@ -61,9 +60,8 @@ void main() {
   });
 
   test('放大后手柄标签仍完整留在视口内', () {
-    final m = Matrix4.identity()
-      ..translateByDouble(-1400, -2450, 0, 1)
-      ..scaleByDouble(8, 8, 1, 1);
+    final m = Matrix4.diagonal3Values(8, 8, 1)
+      ..setTranslationRaw(-1400, -2450, 0);
     final g = CanvasGeometry(
       viewport: viewport,
       imageWidth: w,

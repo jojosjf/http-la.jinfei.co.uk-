@@ -166,10 +166,10 @@ class GuidePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(GuidePainter old) =>
-      old.lines != lines ||
-      old.selected != selected ||
-      old.geometry != geometry ||
-      old.labelStyle != labelStyle ||
-      old.showHandles != showHandles;
+  bool shouldRepaint(GuidePainter oldDelegate) =>
+      oldDelegate.lines != lines ||
+      oldDelegate.selected != selected ||
+      oldDelegate.geometry != geometry ||
+      oldDelegate.labelStyle != labelStyle ||
+      oldDelegate.showHandles != showHandles;
 }
