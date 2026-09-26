@@ -399,8 +399,9 @@ class _MeasureViewState extends State<MeasureView> {
     ];
   }
 
-  /// 放大镜显示在手指上方 80 点（放不下时改到下方），
-  /// 放大的是被拖动的线穿过卡片中部的位置，方便对准卡片边缘。
+  /// 放大镜显示在手指上方 80 点（放不下时改到下方），放大被拖动的线上
+  /// 与手指对应的那一点：拖竖线时取手指的高度，拖横线时取手指的水平位置。
+  /// 手指沿线方向移动不会改变线的位置，只换放大的地方，可以沿线逐段检查。
   List<Widget> _magnifier(
     CanvasGeometry geo,
     GuideLines lines,
@@ -417,24 +418,15 @@ class _MeasureViewState extends State<MeasureView> {
     );
 
     final img = geo.screenImageRect.intersect(Offset.zero & vp);
-    final Offset focus;
-    if (id.isVertical) {
-      final mid =
-          (geo.yToScreen(lines.outerTop) + geo.yToScreen(lines.outerBottom)) /
-          2;
-      focus = Offset(
-        geo.xToScreen(lines[id]),
-        mid.clamp(img.top, img.bottom).toDouble(),
-      );
-    } else {
-      final mid =
-          (geo.xToScreen(lines.outerLeft) + geo.xToScreen(lines.outerRight)) /
-          2;
-      focus = Offset(
-        mid.clamp(img.left, img.right).toDouble(),
-        geo.yToScreen(lines[id]),
-      );
-    }
+    final Offset focus = id.isVertical
+        ? Offset(
+            geo.xToScreen(lines[id]),
+            finger.dy.clamp(img.top, img.bottom).toDouble(),
+          )
+        : Offset(
+            finger.dx.clamp(img.left, img.right).toDouble(),
+            geo.yToScreen(lines[id]),
+          );
     return [
       Positioned(
         left: center.dx - r,

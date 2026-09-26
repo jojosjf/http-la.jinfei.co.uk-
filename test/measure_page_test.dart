@@ -190,6 +190,48 @@ void main() {
     expect(checked, greaterThan(0));
   });
 
+  testWidgets('放大镜跟随手指：拖竖线取手指高度，拖横线取手指水平位置', (tester) async {
+    final img = await testImage(tester);
+    await tester.pumpWidget(app(MeasureView(image: img)));
+
+    Offset focus() {
+      final m = tester.widget<RawMagnifier>(find.byType(RawMagnifier));
+      return tester.getCenter(find.byType(RawMagnifier)) + m.focalPointOffset;
+    }
+
+    // 竖线：先横向拖过起拖距离，再往下移 60 点
+    final start = tester.getCenter(handle('outerLeft'));
+    final g = await tester.startGesture(start);
+    await g.moveBy(const Offset(40, 0));
+    await tester.pump();
+    final lr = tester.widgetList<Text>(find.textContaining('/')).first.data;
+    final f1 = focus();
+    await g.moveBy(const Offset(0, 60));
+    await tester.pump();
+    final f2 = focus();
+    expect(f2.dy - f1.dy, closeTo(60, 1e-6), reason: '放大位置跟随手指高度');
+    expect(f2.dx, closeTo(f1.dx, 1e-6), reason: '仍在同一条线上');
+    expect(
+      tester.widgetList<Text>(find.textContaining('/')).first.data,
+      lr,
+      reason: '手指沿线移动不改变线的位置',
+    );
+    await g.up();
+    await tester.pump();
+
+    // 横线：先纵向拖过起拖距离，再往右移 50 点
+    final g2 = await tester.startGesture(tester.getCenter(handle('innerTop')));
+    await g2.moveBy(const Offset(0, 40));
+    await tester.pump();
+    final h1 = focus();
+    await g2.moveBy(const Offset(50, 0));
+    await tester.pump();
+    final h2 = focus();
+    expect(h2.dx - h1.dx, closeTo(50, 1e-6));
+    expect(h2.dy, closeTo(h1.dy, 1e-6));
+    await g2.up();
+  });
+
   group('旋转刻度盘', () {
     double imageAngle(WidgetTester tester) {
       final t = tester.widget<Transform>(

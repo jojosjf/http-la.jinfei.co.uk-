@@ -9,7 +9,7 @@ const Color selectedLineColor = Color(0xFFFFEA00);
 
 /// 在图片上方绘制 8 条参考线和它们的手柄。
 ///
-/// 外框线与内框线用三重方式区分：颜色（青 / 粉）、线型（实线 / 虚线）、
+/// 外框线与内框线用三重方式区分：颜色（青 / 粉）、线型（长虚线 / 短虚线）、
 /// 手柄标签（双框小图示高亮要对准的那条边，旁边写“外左”“内上”等）。
 class GuidePainter extends CustomPainter {
   GuidePainter({
@@ -28,7 +28,9 @@ class GuidePainter extends CustomPainter {
   final String Function(LineId id) labelOf;
   final TextStyle labelStyle;
 
-  static const double _dash = 6, _gap = 4;
+  /// 外框线长虚线、内框线短虚线：空隙露出底下的卡片边缘，不会把边缘挡住。
+  static const double _outerDash = 14, _outerGap = 6;
+  static const double _innerDash = 5, _innerGap = 5;
 
   static Color colorOf(LineId id, {required bool selected}) => selected
       ? selectedLineColor
@@ -52,7 +54,7 @@ class GuidePainter extends CustomPainter {
       final line = Paint()
         ..color = color
         ..strokeWidth = isSel ? 2.5 : 1.5;
-      // 线贯穿图片。外框线实线，内框线虚线。
+      // 线贯穿图片。外框线长虚线，内框线短虚线。
       if (id.isVertical) {
         final x = geometry.xToScreen(lines[id]);
         _drawLine(canvas, id.isOuter, true, x, img.top, img.bottom, line);
@@ -64,12 +66,12 @@ class GuidePainter extends CustomPainter {
     }
   }
 
-  /// 画一条水平或竖直的线。[at] 是线所在的 x（竖线）或 y（横线），
-  /// [from]–[to] 是线的另一方向的范围。虚线的起点对齐到屏幕坐标，
-  /// 拖动时纹路不会跟着滑动。
+  /// 画一条水平或竖直的虚线。[at] 是线所在的 x（竖线）或 y（横线），
+  /// [from]–[to] 是线的另一方向的范围。外框线长虚线、内框线短虚线；
+  /// 虚线的起点对齐到屏幕坐标，拖动时纹路不会跟着滑动。
   void _drawLine(
     Canvas canvas,
-    bool solid,
+    bool outer,
     bool vertical,
     double at,
     double from,
@@ -77,15 +79,12 @@ class GuidePainter extends CustomPainter {
     Paint paint,
   ) {
     Offset p(double t) => vertical ? Offset(at, t) : Offset(t, at);
-    if (solid) {
-      canvas.drawLine(p(from), p(to), paint);
-      return;
-    }
-    const period = _dash + _gap;
+    final dash = outer ? _outerDash : _innerDash;
+    final period = dash + (outer ? _outerGap : _innerGap);
     var start = (from / period).floorToDouble() * period;
     for (; start < to; start += period) {
       final a = start < from ? from : start;
-      final b = start + _dash > to ? to : start + _dash;
+      final b = start + dash > to ? to : start + dash;
       if (b > a) canvas.drawLine(p(a), p(b), paint);
     }
   }
