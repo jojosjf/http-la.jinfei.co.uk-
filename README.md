@@ -22,7 +22,7 @@
 flutter pub get
 flutter analyze
 flutter test                                  # 计算模块单元测试 + 页面 widget 测试
-flutter run --flavor china                    # 安卓调试（安卓必须指定 flavor）
+flutter run                                   # 安卓调试（默认国内版，等同 --flavor china）
 flutter run -d chrome                         # 网页调试
 ```
 

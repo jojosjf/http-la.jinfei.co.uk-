@@ -55,6 +55,8 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   generate: true
+  # 不指定 --flavor 时（例如在 Android Studio 里直接点运行）默认用国内版。
+  default-flavor: china
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
