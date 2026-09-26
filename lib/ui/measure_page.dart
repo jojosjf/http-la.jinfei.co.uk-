@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -5,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../l10n/app_localizations.dart';
 import '../logic/centering.dart';
 import '../models/guide_lines.dart';
+import 'angle_dial.dart';
 import 'canvas_geometry.dart';
 import 'guide_painter.dart';
 import 'image_loader.dart';
@@ -183,6 +186,11 @@ class _MeasureViewState extends State<MeasureView> {
   final GlobalKey _canvasKey = GlobalKey();
   LineId? _selected;
 
+  /// 图片旋转角度（度，顺时针为正）与是否显示刻度盘。参考线不随图片转，
+  /// 用户把歪斜的卡片转正，对齐到水平、竖直的参考线上。
+  double _angle = 0;
+  bool _rotating = false;
+
   /// 最近一次布局的画布几何，拖动时用来换算坐标。
   CanvasGeometry? _geo;
 
@@ -221,6 +229,7 @@ class _MeasureViewState extends State<MeasureView> {
 
   void _onDragStart(LineId id, DragStartDetails d) {
     setState(() {
+      _rotating = false;
       _selected = id;
       _dragging = id;
       _finger = _toCanvas(d.globalPosition);
@@ -285,10 +294,17 @@ class _MeasureViewState extends State<MeasureView> {
                                 children: [
                                   Positioned.fromRect(
                                     rect: base.imageRect,
-                                    child: RawImage(
-                                      image: widget.image.image,
-                                      fit: BoxFit.fill,
-                                      filterQuality: FilterQuality.medium,
+                                    // 绕图片中心旋转，超出原图范围的部分裁掉。
+                                    child: ClipRect(
+                                      child: Transform.rotate(
+                                        key: const Key('rotated-image'),
+                                        angle: _angle * math.pi / 180,
+                                        child: RawImage(
+                                          image: widget.image.image,
+                                          fit: BoxFit.fill,
+                                          filterQuality: FilterQuality.medium,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -368,7 +384,10 @@ class _MeasureViewState extends State<MeasureView> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               dragStartBehavior: DragStartBehavior.down,
-              onTap: () => setState(() => _selected = id),
+              onTap: () => setState(() {
+                _rotating = false;
+                _selected = id;
+              }),
               onPanStart: (d) => _onDragStart(id, d),
               onPanUpdate: _onDragUpdate,
               onPanEnd: (_) => _onDragEnd(),
@@ -438,7 +457,7 @@ class _MeasureViewState extends State<MeasureView> {
     ];
   }
 
-  /// 微调栏始终占位，选中与否都不改变画布大小，避免拖动开始时图片跳动。
+  /// 微调栏始终占位，选中与否、显示刻度盘与否都不改变画布大小，避免图片跳动。
   Widget _nudgeBar(LineId? id) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -448,12 +467,34 @@ class _MeasureViewState extends State<MeasureView> {
         height: 52,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         alignment: Alignment.centerLeft,
-        child: id == null
-            ? Text(
-                l10n.nudgeHint,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+        child: _rotating
+            ? AngleDial(
+                angle: _angle,
+                onChanged: (a) => setState(() => _angle = a),
+                onDone: () => setState(() => _rotating = false),
+              )
+            : id == null
+            ? Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.nudgeHint,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    key: const Key('rotate-open'),
+                    onPressed: () => setState(() => _rotating = true),
+                    icon: const Icon(Icons.rotate_right),
+                    label: Text(
+                      _angle == 0
+                          ? l10n.rotate
+                          : '${l10n.rotate} ${_angle.toStringAsFixed(1)}°',
+                    ),
+                  ),
+                ],
               )
             : Row(
                 children: [

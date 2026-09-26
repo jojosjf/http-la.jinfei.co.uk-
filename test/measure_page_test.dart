@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:card_centering/l10n/app_localizations.dart';
 import 'package:card_centering/main.dart';
 import 'package:card_centering/ui/image_loader.dart';
@@ -180,5 +182,82 @@ void main() {
       checked++;
     }
     expect(checked, greaterThan(0));
+  });
+
+  group('旋转刻度盘', () {
+    double imageAngle(WidgetTester tester) {
+      final t = tester.widget<Transform>(
+        find.byKey(const Key('rotated-image')),
+      );
+      // 从变换矩阵还原角度（度）。
+      final m = t.transform.storage;
+      return math.atan2(m[1], m[0]) * 180 / math.pi;
+    }
+
+    String angleText(WidgetTester tester) =>
+        tester.widget<Text>(find.byKey(const Key('rotate-angle'))).data!;
+
+    testWidgets('拖动刻度盘旋转图片，参考线与结果不变，画布不跳动', (tester) async {
+      final img = await testImage(tester);
+      await tester.pumpWidget(app(MeasureView(image: img)));
+      final canvasBefore = tester.getSize(find.byType(InteractiveViewer));
+      final handleBefore = tester.getRect(handle('outerLeft'));
+
+      await tester.tap(find.byKey(const Key('rotate-open')));
+      await tester.pump();
+      expect(find.byKey(const Key('rotate-dial')), findsOneWidget);
+      expect(tester.getSize(find.byType(InteractiveViewer)), canvasBefore);
+
+      // 向左拖 40 点 = 顺时针 5°
+      await tester.drag(
+        find.byKey(const Key('rotate-dial')),
+        const Offset(-40, 0),
+        touchSlopX: 0,
+      );
+      await tester.pump();
+      expect(imageAngle(tester), closeTo(5, 0.3));
+      expect(angleText(tester), startsWith('5.'));
+      expect(find.text('50/50'), findsNWidgets(2));
+      expect(tester.getRect(handle('outerLeft')), handleBefore);
+
+      // 归零
+      await tester.tap(find.byKey(const Key('rotate-reset')));
+      await tester.pump();
+      expect(imageAngle(tester), closeTo(0, 1e-9));
+      expect(angleText(tester), '0.0°');
+
+      // 完成后收起刻度盘，恢复提示与旋转按钮
+      await tester.tap(find.byKey(const Key('rotate-done')));
+      await tester.pump();
+      expect(find.byKey(const Key('rotate-dial')), findsNothing);
+      expect(find.byKey(const Key('rotate-open')), findsOneWidget);
+    });
+
+    testWidgets('角度限制在 ±180°', (tester) async {
+      final img = await testImage(tester);
+      await tester.pumpWidget(app(MeasureView(image: img)));
+      await tester.tap(find.byKey(const Key('rotate-open')));
+      await tester.pump();
+      for (var i = 0; i < 10; i++) {
+        await tester.drag(
+          find.byKey(const Key('rotate-dial')),
+          const Offset(400, 0),
+          touchSlopX: 0,
+        );
+        await tester.pump();
+      }
+      expect(angleText(tester), '-180.0°');
+    });
+
+    testWidgets('点手柄会收起刻度盘，进入微调', (tester) async {
+      final img = await testImage(tester);
+      await tester.pumpWidget(app(MeasureView(image: img)));
+      await tester.tap(find.byKey(const Key('rotate-open')));
+      await tester.pump();
+      await tester.tap(handle('innerTop'));
+      await tester.pump();
+      expect(find.byKey(const Key('rotate-dial')), findsNothing);
+      expect(find.byKey(const Key('nudge-plus')), findsOneWidget);
+    });
   });
 }

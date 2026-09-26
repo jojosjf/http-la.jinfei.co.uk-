@@ -128,6 +128,24 @@ abstract class AppLocalizations {
   /// **'Change photo'**
   String get changePhoto;
 
+  /// No description provided for @rotate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate'**
+  String get rotate;
+
+  /// No description provided for @rotateReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get rotateReset;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
   /// No description provided for @imageLoadFailed.
   ///
   /// In en, this message translates to:
@@ -173,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @disclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Front centering only, based on PSA\'s published standards. Not an actual grade; not affiliated with PSA.'**
+  /// **'Based on PSA standards · for reference only · not affiliated with PSA'**
   String get disclaimer;
 
   /// No description provided for @lineName.
@@ -209,7 +227,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutBody.
   ///
   /// In en, this message translates to:
-  /// **'How to use: drag the handles so the outer lines (solid) sit on the card\'s outer edges and the inner lines (dashed) on the artwork border; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: this app measures front centering only, based on PSA\'s published standards. The result is for reference and is not an actual grade. This app is not affiliated with PSA.'**
+  /// **'How to use: drag the handles so the outer lines (solid) sit on the card\'s outer edges and the inner lines (dashed) on the artwork border; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×). If the photo is tilted, tap \"Rotate\" at the bottom and drag the dial to straighten the card (0.1° steps).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: the reference grade uses PSA\'s published front centering standards (back standards are looser, so for the back of a card only the ratios are meaningful). The result is for reference and is not an actual grade. This app is not affiliated with PSA.'**
   String get aboutBody;
 
   /// No description provided for @close.

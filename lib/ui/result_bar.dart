@@ -63,12 +63,16 @@ class ResultBar extends StatelessWidget {
                   ),
                 ),
               ),
+              // 免责说明缩成一行小字，完整内容在“说明”里。
               Padding(
-                padding: const EdgeInsets.only(top: 6),
+                padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   l10n.disclaimer,
                   textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodySmall?.copyWith(
+                    fontSize: 10,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),

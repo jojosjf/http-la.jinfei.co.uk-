@@ -25,6 +25,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get changePhoto => '更换图片';
 
   @override
+  String get rotate => '旋转';
+
+  @override
+  String get rotateReset => '归零';
+
+  @override
+  String get done => '完成';
+
+  @override
   String get imageLoadFailed => '无法读取这张图片，请换一张 JPG 或 PNG 图片。';
 
   @override
@@ -50,7 +59,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get disclaimer => '仅测量正面居中，参考 PSA 公开标准；结果仅供参考，不代表实际评级，本应用与 PSA 无关联。';
+  String get disclaimer => '参考 PSA 公开标准，仅供参考，与 PSA 无关联';
 
   @override
   String lineName(String line) {
@@ -95,7 +104,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aboutBody =>
-      '使用方法：拖动手柄，把外框线（实线）对齐卡片外边缘，把内框线（虚线）对齐图案边框；手柄上的小图会标出这条线要对准哪一条边。点一下手柄可选中该线，再用箭头按钮每次移动 1 像素。双指可放大，最高 8 倍。\n\n隐私：图片只在本机处理，不上传、不保存，离开页面即释放。\n\n免责：本应用仅测量正面居中，参考 PSA 公开标准；结果仅供参考，不代表实际评级。本应用与 PSA 无关联。';
+      '使用方法：拖动手柄，把外框线（实线）对齐卡片外边缘，把内框线（虚线）对齐图案边框；手柄上的小图会标出这条线要对准哪一条边。点一下手柄可选中该线，再用箭头按钮每次移动 1 像素。双指可放大，最高 8 倍。照片拍歪了，点底部的“旋转”，左右拖动刻度盘把卡片转正（精确到 0.1°）。\n\n隐私：图片只在本机处理，不上传、不保存，离开页面即释放。\n\n免责：参考等级按 PSA 公开的正面居中标准给出（背面标准更宽松，用于背面时仅比例可作参考）；结果仅供参考，不代表实际评级。本应用与 PSA 无关联。';
 
   @override
   String get close => '关闭';
