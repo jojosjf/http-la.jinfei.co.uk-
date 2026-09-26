@@ -47,12 +47,8 @@ android {
         }
     }
 
-    // 两个商店版本功能完全相同：googleplay 出 AAB，china 出 APK 给国内安卓商店。
-    flavorDimensions += "store"
-    productFlavors {
-        create("googleplay") { dimension = "store" }
-        create("china") { dimension = "store" }
-    }
+    // 国内商店与 Google Play 用同一份配置：国内出 APK，Google Play 出 AAB。
+    // 不用 product flavor，否则 iOS 也必须配套 Xcode scheme，直接运行会报错。
 
     buildTypes {
         release {

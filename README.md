@@ -22,16 +22,16 @@
 flutter pub get
 flutter analyze
 flutter test                                  # 计算模块单元测试 + 页面 widget 测试
-flutter run                                   # 安卓调试（默认国内版，等同 --flavor china）
+flutter run                                   # 在连接的手机或模拟器上调试（安卓、iOS 都一样）
 flutter run -d chrome                         # 网页调试
 ```
 
 ## 构建发布版
 
 ```bash
-# 安卓：两个版本功能完全相同
-flutter build apk --flavor china --release             # 国内安卓商店
-flutter build appbundle --flavor googleplay --release  # Google Play
+# 安卓：同一份代码和配置，只是打包格式不同
+flutter build apk --release                   # 国内安卓商店（APK）
+flutter build appbundle --release             # Google Play（AAB）
 
 # iOS（仅在 Mac 上）
 flutter build ipa --release
@@ -42,8 +42,8 @@ flutter build web --release --no-web-resources-cdn
 
 产物位置：
 
-- 国内版 APK：`build/app/outputs/flutter-apk/app-china-release.apk`
-- Google Play 版 AAB：`build/app/outputs/bundle/googleplayRelease/app-googleplay-release.aab`
+- 国内版 APK：`build/app/outputs/flutter-apk/app-release.apk`
+- Google Play 版 AAB：`build/app/outputs/bundle/release/app-release.aab`
 - 网页：`build/web/`，整个目录作为静态文件部署即可
 
 ### 安卓签名
