@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 import '../models/guide_lines.dart';
 
-/// 画布几何：图片在视口中按比例居中显示，四周留出放手柄的区域；
-/// 负责原图像素坐标与屏幕坐标之间的换算。
+/// 画布几何：图片在视口中按比例放到最大并居中显示；
+/// 负责原图像素坐标与屏幕坐标之间的换算，以及手柄标签的摆放。
 @immutable
 class CanvasGeometry {
   factory CanvasGeometry({
@@ -12,7 +12,7 @@ class CanvasGeometry {
     required double imageHeight,
     Matrix4? transform,
   }) {
-    final avail = (Offset.zero & viewport).deflate(handleBand);
+    final avail = Offset.zero & viewport;
     var fit = avail.width / imageWidth;
     if (avail.height / imageHeight < fit) fit = avail.height / imageHeight;
     if (fit < 0) fit = 0;
@@ -38,9 +38,6 @@ class CanvasGeometry {
     this.zoom,
     this.pan,
   );
-
-  /// 视口四周放手柄的区域宽度（逻辑像素），等于手柄触摸直径。
-  static const double handleBand = 44;
 
   final Size viewport;
 
@@ -75,49 +72,58 @@ class CanvasGeometry {
     zoom * imageRect.bottom + pan.dy,
   );
 
-  /// 手柄中心。竖线：外框线手柄在图片上方，内框线在下方；
-  /// 横线：外框线在左侧，内框线在右侧。手柄始终保持在视口内。
-  Offset handleCenter(LineId id, GuideLines lines) {
-    const half = handleBand / 2;
-    final img = screenImageRect;
+  /// 手柄标签的大小：上下两边的标签横放（图示在左、文字在右），
+  /// 左右两边的标签竖放（图示在上、文字在下）。
+  static const Size horizontalLineHandleSize = Size(76, 36);
+  static const Size verticalLineHandleSize = Size(44, 60);
+
+  /// 手柄标签在屏幕上的区域，也是它的触摸区域。
+  ///
+  /// 每条边的两个标签放在这条边的中间：外框标签在线的外侧，内框标签
+  /// 在线的内侧，中间隔着边框，不会重叠。放大后标签沿线移动，停在屏幕上
+  /// 可见的那一段，并且整个标签保持在视口内。
+  Rect handleRect(LineId id, GuideLines lines) {
+    const gap = 2.0;
+    final visible = screenImageRect.intersect(Offset.zero & viewport);
+    // 朝外：上边的外框线往上、下边的外框线往下；内框线相反。
+    final outward = id.isStartSide == id.isOuter;
+    Rect r;
     if (id.isVertical) {
+      final size = verticalLineHandleSize;
       final x = xToScreen(lines[id]);
-      final y = id.isOuter
-          ? _clamp(img.top - half, half, viewport.height - half)
-          : _clamp(img.bottom + half, half, viewport.height - half);
-      return Offset(x, y);
+      final mid =
+          (yToScreen(lines.outerTop) + yToScreen(lines.outerBottom)) / 2;
+      final y = _clampInto(mid, visible.top, visible.bottom, size.height);
+      final left = outward ? x - gap - size.width : x + gap;
+      r = Rect.fromLTWH(left, y - size.height / 2, size.width, size.height);
     } else {
+      final size = horizontalLineHandleSize;
       final y = yToScreen(lines[id]);
-      final x = id.isOuter
-          ? _clamp(img.left - half, half, viewport.width - half)
-          : _clamp(img.right + half, half, viewport.width - half);
-      return Offset(x, y);
+      final mid =
+          (xToScreen(lines.outerLeft) + xToScreen(lines.outerRight)) / 2;
+      final x = _clampInto(mid, visible.left, visible.right, size.width);
+      final top = outward ? y - gap - size.height : y + gap;
+      r = Rect.fromLTWH(x - size.width / 2, top, size.width, size.height);
     }
+    // 整个标签保持在视口内（卡片贴着照片边缘时，外框标签会被推回来）。
+    final dx = r.left < 0
+        ? -r.left
+        : (r.right > viewport.width ? viewport.width - r.right : 0.0);
+    final dy = r.top < 0
+        ? -r.top
+        : (r.bottom > viewport.height ? viewport.height - r.bottom : 0.0);
+    return r.shift(Offset(dx, dy));
   }
 
-  /// 手柄标签的大小：竖线的标签横放（图示 + 文字），放在图片上下方；
-  /// 横线的标签竖放（图示在上、文字在下），宽度等于左右两侧的手柄区。
-  static const Size verticalHandleSize = Size(76, handleBand);
-  static const Size horizontalHandleSize = Size(handleBand, 64);
+  /// 标签中心。
+  Offset handleCenter(LineId id, GuideLines lines) =>
+      handleRect(id, lines).center;
 
-  /// 手柄标签在屏幕上的区域，也是它的触摸区域。标签贴在线的一侧：
-  /// 左边的线贴右侧、右边的线贴左侧；上边的线挂在下方、下边的线在上方。
-  Rect handleRect(LineId id, GuideLines lines) {
-    final c = handleCenter(id, lines);
-    const gap = 1.0;
-    if (id.isVertical) {
-      final size = verticalHandleSize;
-      final left = id.isStartSide ? c.dx + gap : c.dx - gap - size.width;
-      return Rect.fromLTWH(
-        left,
-        c.dy - size.height / 2,
-        size.width,
-        size.height,
-      );
-    }
-    final size = horizontalHandleSize;
-    final top = id.isStartSide ? c.dy + gap : c.dy - gap - size.height;
-    return Rect.fromLTWH(c.dx - size.width / 2, top, size.width, size.height);
+  /// 把长度为 [extent] 的标签中心 [v] 夹在 [lo, hi] 区间内；区间放不下时居中。
+  static double _clampInto(double v, double lo, double hi, double extent) {
+    final a = lo + extent / 2, b = hi - extent / 2;
+    if (a > b) return (lo + hi) / 2;
+    return _clamp(v, a, b);
   }
 
   static double _clamp(double v, double lo, double hi) =>

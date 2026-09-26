@@ -52,17 +52,13 @@ class GuidePainter extends CustomPainter {
       final line = Paint()
         ..color = color
         ..strokeWidth = isSel ? 2.5 : 1.5;
-      // 线贯穿图片，并延伸到手柄。外框线实线，内框线虚线。
+      // 线贯穿图片。外框线实线，内框线虚线。
       if (id.isVertical) {
-        final x = handle.dx;
-        final top = handle.dy < img.top ? handle.dy : img.top;
-        final bottom = handle.dy > img.bottom ? handle.dy : img.bottom;
-        _drawLine(canvas, id.isOuter, true, x, top, bottom, line);
+        final x = geometry.xToScreen(lines[id]);
+        _drawLine(canvas, id.isOuter, true, x, img.top, img.bottom, line);
       } else {
-        final y = handle.dy;
-        final left = handle.dx < img.left ? handle.dx : img.left;
-        final right = handle.dx > img.right ? handle.dx : img.right;
-        _drawLine(canvas, id.isOuter, false, y, left, right, line);
+        final y = geometry.yToScreen(lines[id]);
+        _drawLine(canvas, id.isOuter, false, y, img.left, img.right, line);
       }
       _paintHandle(canvas, handle, id, color, isSel);
     }
@@ -125,16 +121,14 @@ class GuidePainter extends CustomPainter {
       ),
       textDirection: TextDirection.ltr,
     )..layout();
-    // 图示总是靠着线的那一侧，文字在另一侧。
+    // 左右两边的标签竖放：图示在上、文字在下；上下两边的标签横放：图示在左、文字在右。
     final Offset glyphAt, textAt;
     if (id.isVertical) {
-      final y = rect.center.dy;
-      glyphAt = Offset(id.isStartSide ? rect.left + 19 : rect.right - 19, y);
-      textAt = Offset(id.isStartSide ? rect.left + 53 : rect.right - 53, y);
+      glyphAt = Offset(rect.center.dx, rect.top + 19);
+      textAt = Offset(rect.center.dx, rect.bottom - 13);
     } else {
-      final x = rect.center.dx;
-      glyphAt = Offset(x, id.isStartSide ? rect.top + 21 : rect.bottom - 21);
-      textAt = Offset(x, id.isStartSide ? rect.bottom - 14 : rect.top + 14);
+      glyphAt = Offset(rect.left + 18, rect.center.dy);
+      textAt = Offset(rect.left + 50, rect.center.dy);
     }
     _paintGlyph(canvas, glyphAt, id, color);
     text.paint(canvas, textAt - Offset(text.width / 2, text.height / 2));
@@ -143,8 +137,8 @@ class GuidePainter extends CustomPainter {
 
   /// 双框小卡片：外框套内框，用线的颜色高亮这条线要对准的那一条边。
   void _paintGlyph(Canvas canvas, Offset c, LineId id, Color color) {
-    final outer = Rect.fromCenter(center: c, width: 20, height: 27);
-    final inner = Rect.fromCenter(center: c, width: 11, height: 17);
+    final outer = Rect.fromCenter(center: c, width: 18, height: 25);
+    final inner = Rect.fromCenter(center: c, width: 10, height: 15);
     final stroke = Paint()
       ..color = const Color(0xFFC8C8CD)
       ..style = PaintingStyle.stroke
