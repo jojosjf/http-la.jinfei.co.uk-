@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:card_centering/l10n/app_localizations.dart';
 import 'package:card_centering/main.dart';
+import 'package:card_centering/ui/guide_painter.dart';
 import 'package:card_centering/ui/image_loader.dart';
 import 'package:card_centering/ui/measure_page.dart';
 import 'package:flutter/material.dart';
@@ -230,6 +231,27 @@ void main() {
     expect(h2.dx - h1.dx, closeTo(50, 1e-6));
     expect(h2.dy, closeTo(h1.dy, 1e-6));
     await g2.up();
+  });
+
+  testWidgets('拖线时隐藏标签，松手后恢复', (tester) async {
+    final img = await testImage(tester);
+    await tester.pumpWidget(app(MeasureView(image: img)));
+    bool shown() => tester
+        .widgetList<CustomPaint>(find.byType(CustomPaint))
+        .map((c) => c.painter)
+        .whereType<GuidePainter>()
+        .single
+        .showHandles;
+
+    expect(shown(), isTrue);
+    final g = await tester.startGesture(tester.getCenter(handle('innerRight')));
+    await g.moveBy(const Offset(-40, 0));
+    await tester.pump();
+    expect(shown(), isFalse);
+    expect(find.byType(RawMagnifier), findsOneWidget);
+    await g.up();
+    await tester.pump();
+    expect(shown(), isTrue);
   });
 
   group('旋转刻度盘', () {

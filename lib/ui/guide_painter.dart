@@ -18,6 +18,7 @@ class GuidePainter extends CustomPainter {
     required this.selected,
     required this.labelOf,
     required this.labelStyle,
+    this.showHandles = true,
   });
 
   final CanvasGeometry geometry;
@@ -27,6 +28,9 @@ class GuidePainter extends CustomPainter {
   /// 手柄上的文字，如“外左”“内上”。
   final String Function(LineId id) labelOf;
   final TextStyle labelStyle;
+
+  /// 是否画手柄标签。拖线时隐藏，免得标签被放大镜放大、挡住卡片边缘。
+  final bool showHandles;
 
   /// 外框线长虚线、内框线短虚线：空隙露出底下的卡片边缘，不会把边缘挡住。
   static const double _outerDash = 14, _outerGap = 6;
@@ -62,7 +66,7 @@ class GuidePainter extends CustomPainter {
         final y = geometry.yToScreen(lines[id]);
         _drawLine(canvas, id.isOuter, false, y, img.left, img.right, line);
       }
-      _paintHandle(canvas, handle, id, color, isSel);
+      if (showHandles) _paintHandle(canvas, handle, id, color, isSel);
     }
   }
 
@@ -166,5 +170,6 @@ class GuidePainter extends CustomPainter {
       old.lines != lines ||
       old.selected != selected ||
       old.geometry != geometry ||
-      old.labelStyle != labelStyle;
+      old.labelStyle != labelStyle ||
+      old.showHandles != showHandles;
 }

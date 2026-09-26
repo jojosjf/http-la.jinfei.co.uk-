@@ -368,6 +368,7 @@ class _MeasureViewState extends State<MeasureView> {
               labelOf: (id) =>
                   AppLocalizations.of(context).handleLabel(id.name),
               labelStyle: DefaultTextStyle.of(context).style,
+              showHandles: _dragging == null,
             ),
           ),
         ),
