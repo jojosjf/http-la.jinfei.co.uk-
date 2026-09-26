@@ -10,14 +10,13 @@ const Color selectedLineColor = Color(0xFFFFEA00);
 /// 在图片上方绘制 8 条参考线和它们的手柄。
 ///
 /// 外框线与内框线用三重方式区分：颜色（青 / 粉）、线型（实线 / 虚线）、
-/// 手柄上的文字（“外” / “内”）。
+/// 手柄标签（双框小图示高亮要对准的那条边，旁边写“外左”“内上”等）。
 class GuidePainter extends CustomPainter {
   GuidePainter({
     required this.geometry,
     required this.lines,
     required this.selected,
-    required this.outerLabel,
-    required this.innerLabel,
+    required this.labelOf,
     required this.labelStyle,
   });
 
@@ -25,8 +24,8 @@ class GuidePainter extends CustomPainter {
   final GuideLines lines;
   final LineId? selected;
 
-  /// 手柄上的文字，如“外”“内”。
-  final String outerLabel, innerLabel;
+  /// 手柄上的文字，如“外左”“内上”。
+  final String Function(LineId id) labelOf;
   final TextStyle labelStyle;
 
   static const double _dash = 6, _gap = 4;
@@ -102,23 +101,71 @@ class GuidePainter extends CustomPainter {
     Color color,
     bool isSel,
   ) {
-    final r = isSel ? 15.0 : 13.0;
-    canvas.drawCircle(c, r + 2, Paint()..color = Colors.white);
-    canvas.drawCircle(c, r, Paint()..color = color);
+    final rect = geometry.handleRect(id, lines);
+    final rr = RRect.fromRectAndRadius(rect, const Radius.circular(10));
+    canvas.drawRRect(rr, Paint()..color = const Color(0xD91C1C1E));
+    if (isSel) {
+      canvas.drawRRect(
+        rr.deflate(1),
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2,
+      );
+    }
     final text = TextPainter(
       text: TextSpan(
-        text: id.isOuter ? outerLabel : innerLabel,
+        text: labelOf(id),
         style: labelStyle.copyWith(
-          color: Colors.black,
-          fontSize: isSel ? 15 : 13,
+          color: color,
+          fontSize: 13,
           fontWeight: FontWeight.w700,
           height: 1,
         ),
       ),
       textDirection: TextDirection.ltr,
     )..layout();
-    text.paint(canvas, c - Offset(text.width / 2, text.height / 2));
+    // 图示总是靠着线的那一侧，文字在另一侧。
+    final Offset glyphAt, textAt;
+    if (id.isVertical) {
+      final y = rect.center.dy;
+      glyphAt = Offset(id.isStartSide ? rect.left + 19 : rect.right - 19, y);
+      textAt = Offset(id.isStartSide ? rect.left + 53 : rect.right - 53, y);
+    } else {
+      final x = rect.center.dx;
+      glyphAt = Offset(x, id.isStartSide ? rect.top + 21 : rect.bottom - 21);
+      textAt = Offset(x, id.isStartSide ? rect.bottom - 14 : rect.top + 14);
+    }
+    _paintGlyph(canvas, glyphAt, id, color);
+    text.paint(canvas, textAt - Offset(text.width / 2, text.height / 2));
     text.dispose();
+  }
+
+  /// 双框小卡片：外框套内框，用线的颜色高亮这条线要对准的那一条边。
+  void _paintGlyph(Canvas canvas, Offset c, LineId id, Color color) {
+    final outer = Rect.fromCenter(center: c, width: 20, height: 27);
+    final inner = Rect.fromCenter(center: c, width: 11, height: 17);
+    final stroke = Paint()
+      ..color = const Color(0xFFC8C8CD)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+    canvas.drawRect(outer, stroke);
+    canvas.drawRect(inner, stroke);
+    final r = id.isOuter ? outer : inner;
+    final edge = switch (id) {
+      LineId.outerLeft || LineId.innerLeft => [r.topLeft, r.bottomLeft],
+      LineId.outerRight || LineId.innerRight => [r.topRight, r.bottomRight],
+      LineId.outerTop || LineId.innerTop => [r.topLeft, r.topRight],
+      LineId.outerBottom || LineId.innerBottom => [r.bottomLeft, r.bottomRight],
+    };
+    canvas.drawLine(
+      edge[0],
+      edge[1],
+      Paint()
+        ..color = color
+        ..strokeWidth = 3
+        ..strokeCap = StrokeCap.square,
+    );
   }
 
   @override
@@ -126,7 +173,5 @@ class GuidePainter extends CustomPainter {
       old.lines != lines ||
       old.selected != selected ||
       old.geometry != geometry ||
-      old.outerLabel != outerLabel ||
-      old.innerLabel != innerLabel ||
       old.labelStyle != labelStyle;
 }

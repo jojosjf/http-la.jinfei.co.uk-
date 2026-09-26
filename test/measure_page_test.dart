@@ -146,9 +146,13 @@ void main() {
     final img = await testImage(tester);
     await tester.pumpWidget(app(MeasureView(image: img)));
     const vertical = ['outerLeft', 'innerLeft', 'innerRight', 'outerRight'];
-    final before = {
-      for (final n in vertical) n: tester.getCenter(handle(n)).dx,
-    };
+    // 标签贴在线的一侧（左边的线贴右侧，右边的线贴左侧），由贴线的边推出线的位置。
+    double lineX(String n) {
+      final r = tester.getRect(handle(n));
+      return n.endsWith('Left') ? r.left - 1 : r.right + 1;
+    }
+
+    final before = {for (final n in vertical) n: lineX(n)};
 
     final viewer = tester.getCenter(find.byType(InteractiveViewer));
     final a = await tester.startGesture(viewer - const Offset(20, 0));
@@ -172,11 +176,7 @@ void main() {
     for (final n in vertical) {
       if (handle(n).evaluate().isEmpty) continue; // 已移出视口
       final expected = MatrixUtils.transformPoint(m, Offset(before[n]!, 0)).dx;
-      expect(
-        tester.getCenter(handle(n)).dx,
-        closeTo(expected, 1e-6),
-        reason: n,
-      );
+      expect(lineX(n), closeTo(expected, 1e-6), reason: n);
       checked++;
     }
     expect(checked, greaterThan(0));

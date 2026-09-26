@@ -95,6 +95,31 @@ class CanvasGeometry {
     }
   }
 
+  /// 手柄标签的大小：竖线的标签横放（图示 + 文字），放在图片上下方；
+  /// 横线的标签竖放（图示在上、文字在下），宽度等于左右两侧的手柄区。
+  static const Size verticalHandleSize = Size(76, handleBand);
+  static const Size horizontalHandleSize = Size(handleBand, 64);
+
+  /// 手柄标签在屏幕上的区域，也是它的触摸区域。标签贴在线的一侧：
+  /// 左边的线贴右侧、右边的线贴左侧；上边的线挂在下方、下边的线在上方。
+  Rect handleRect(LineId id, GuideLines lines) {
+    final c = handleCenter(id, lines);
+    const gap = 1.0;
+    if (id.isVertical) {
+      final size = verticalHandleSize;
+      final left = id.isStartSide ? c.dx + gap : c.dx - gap - size.width;
+      return Rect.fromLTWH(
+        left,
+        c.dy - size.height / 2,
+        size.width,
+        size.height,
+      );
+    }
+    final size = horizontalHandleSize;
+    final top = id.isStartSide ? c.dy + gap : c.dy - gap - size.height;
+    return Rect.fromLTWH(c.dx - size.width / 2, top, size.width, size.height);
+  }
+
   static double _clamp(double v, double lo, double hi) =>
       v < lo ? lo : (v > hi ? hi : v);
 

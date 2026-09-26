@@ -72,10 +72,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get moveOnePixel => '移动 1 像素';
 
   @override
-  String get handleOuter => '外';
-
-  @override
-  String get handleInner => '内';
+  String handleLabel(String line) {
+    String _temp0 = intl.Intl.selectLogic(line, {
+      'outerLeft': '外左',
+      'innerLeft': '内左',
+      'innerRight': '内右',
+      'outerRight': '外右',
+      'outerTop': '外上',
+      'innerTop': '内上',
+      'innerBottom': '内下',
+      'outerBottom': '外下',
+      'other': '线',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get nudgeHint => '点一下手柄选中参考线，可逐像素微调';
@@ -85,7 +95,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aboutBody =>
-      '使用方法：拖动手柄，把外框线（实线，手柄标“外”）对齐卡片外边缘，把内框线（虚线，手柄标“内”）对齐图案边框。点一下手柄可选中该线，再用箭头按钮每次移动 1 像素。双指可放大，最高 8 倍。\n\n隐私：图片只在本机处理，不上传、不保存，离开页面即释放。\n\n免责：本应用仅测量正面居中，参考 PSA 公开标准；结果仅供参考，不代表实际评级。本应用与 PSA 无关联。';
+      '使用方法：拖动手柄，把外框线（实线）对齐卡片外边缘，把内框线（虚线）对齐图案边框；手柄上的小图会标出这条线要对准哪一条边。点一下手柄可选中该线，再用箭头按钮每次移动 1 像素。双指可放大，最高 8 倍。\n\n隐私：图片只在本机处理，不上传、不保存，离开页面即释放。\n\n免责：本应用仅测量正面居中，参考 PSA 公开标准；结果仅供参考，不代表实际评级。本应用与 PSA 无关联。';
 
   @override
   String get close => '关闭';

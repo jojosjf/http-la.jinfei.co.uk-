@@ -331,9 +331,8 @@ class _MeasureViewState extends State<MeasureView> {
     );
   }
 
-  /// 参考线绘制层、每个手柄一块触摸区域（半径 22 点）、拖动时的放大镜。
+  /// 参考线绘制层、每个手柄标签一块触摸区域、拖动时的放大镜。
   List<Widget> _overlay(CanvasGeometry geo, GuideLines lines) {
-    const touch = CanvasGeometry.handleBand;
     // 选中的手柄放在最上层，重叠时优先响应。
     final ids = [
       for (final id in LineId.values)
@@ -350,8 +349,8 @@ class _MeasureViewState extends State<MeasureView> {
               geometry: geo,
               lines: lines,
               selected: _selected,
-              outerLabel: AppLocalizations.of(context).handleOuter,
-              innerLabel: AppLocalizations.of(context).handleInner,
+              labelOf: (id) =>
+                  AppLocalizations.of(context).handleLabel(id.name),
               labelStyle: DefaultTextStyle.of(context).style,
             ),
           ),
@@ -362,10 +361,10 @@ class _MeasureViewState extends State<MeasureView> {
           Positioned(
             // key 放在最外层：选中后手柄会调整层级，保持同一个手势不中断。
             key: ValueKey('handle-${id.name}'),
-            left: geo.handleCenter(id, lines).dx - touch / 2,
-            top: geo.handleCenter(id, lines).dy - touch / 2,
-            width: touch,
-            height: touch,
+            left: geo.handleRect(id, lines).left,
+            top: geo.handleRect(id, lines).top,
+            width: geo.handleRect(id, lines).width,
+            height: geo.handleRect(id, lines).height,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               dragStartBehavior: DragStartBehavior.down,

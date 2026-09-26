@@ -16,6 +16,9 @@ enum LineId {
   int get order => index % 4;
 
   bool get isOuter => order == 0 || order == 3;
+
+  /// 是否为左侧或上侧的线（否则为右侧或下侧）。
+  bool get isStartSide => order < 2;
 }
 
 /// 相邻两线之间的最小间距（原图像素）。
