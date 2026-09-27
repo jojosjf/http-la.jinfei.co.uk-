@@ -2,3 +2,6 @@ arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 nullable-getter: false
+# 旧版 Flutter（如鸿蒙版 3.27）默认生成到合成包，这里强制生成到 lib/l10n。
+# 新版 Flutter 会提示此项已无作用，可忽略。
+synthetic-package: false

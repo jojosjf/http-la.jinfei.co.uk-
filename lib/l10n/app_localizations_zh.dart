@@ -62,17 +62,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String lineName(String line) {
-    String _temp0 = intl.Intl.selectLogic(line, {
-      'outerLeft': '外框左线',
-      'innerLeft': '内框左线',
-      'innerRight': '内框右线',
-      'outerRight': '外框右线',
-      'outerTop': '外框上线',
-      'innerTop': '内框上线',
-      'innerBottom': '内框下线',
-      'outerBottom': '外框下线',
-      'other': '参考线',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      line,
+      {
+        'outerLeft': '外框左线',
+        'innerLeft': '内框左线',
+        'innerRight': '内框右线',
+        'outerRight': '外框右线',
+        'outerTop': '外框上线',
+        'innerTop': '内框上线',
+        'innerBottom': '内框下线',
+        'outerBottom': '外框下线',
+        'other': '参考线',
+      },
+    );
     return '$_temp0';
   }
 
@@ -81,17 +84,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String handleLabel(String line) {
-    String _temp0 = intl.Intl.selectLogic(line, {
-      'outerLeft': '外左',
-      'innerLeft': '内左',
-      'innerRight': '内右',
-      'outerRight': '外右',
-      'outerTop': '外上',
-      'innerTop': '内上',
-      'innerBottom': '内下',
-      'outerBottom': '外下',
-      'other': '线',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      line,
+      {
+        'outerLeft': '外左',
+        'innerLeft': '内左',
+        'innerRight': '内右',
+        'outerRight': '外右',
+        'outerTop': '外上',
+        'innerTop': '内上',
+        'innerBottom': '内下',
+        'outerBottom': '外下',
+        'other': '线',
+      },
+    );
     return '$_temp0';
   }
 

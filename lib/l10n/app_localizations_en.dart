@@ -65,17 +65,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String lineName(String line) {
-    String _temp0 = intl.Intl.selectLogic(line, {
-      'outerLeft': 'Outer left',
-      'innerLeft': 'Inner left',
-      'innerRight': 'Inner right',
-      'outerRight': 'Outer right',
-      'outerTop': 'Outer top',
-      'innerTop': 'Inner top',
-      'innerBottom': 'Inner bottom',
-      'outerBottom': 'Outer bottom',
-      'other': 'Line',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      line,
+      {
+        'outerLeft': 'Outer left',
+        'innerLeft': 'Inner left',
+        'innerRight': 'Inner right',
+        'outerRight': 'Outer right',
+        'outerTop': 'Outer top',
+        'innerTop': 'Inner top',
+        'innerBottom': 'Inner bottom',
+        'outerBottom': 'Outer bottom',
+        'other': 'Line',
+      },
+    );
     return '$_temp0';
   }
 
@@ -84,17 +87,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String handleLabel(String line) {
-    String _temp0 = intl.Intl.selectLogic(line, {
-      'outerLeft': 'OL',
-      'innerLeft': 'IL',
-      'innerRight': 'IR',
-      'outerRight': 'OR',
-      'outerTop': 'OT',
-      'innerTop': 'IT',
-      'innerBottom': 'IB',
-      'outerBottom': 'OB',
-      'other': '?',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      line,
+      {
+        'outerLeft': 'OL',
+        'innerLeft': 'IL',
+        'innerRight': 'IR',
+        'outerRight': 'OR',
+        'outerTop': 'OT',
+        'innerTop': 'IT',
+        'innerBottom': 'IB',
+        'outerBottom': 'OB',
+        'other': '?',
+      },
+    );
     return '$_temp0';
   }
 
