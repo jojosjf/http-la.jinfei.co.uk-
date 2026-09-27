@@ -106,7 +106,7 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 # 应用图标：dart run flutter_launcher_icons
-# assets/icon/icon_1024.png 目前是占位图标，拿到正式图标后替换同名文件再运行一次。
+# 图标由 tool/make_icon.py 生成；修改设计后重新运行它和本命令。
 flutter_launcher_icons:
   image_path: assets/icon/icon_1024.png
   android: true
