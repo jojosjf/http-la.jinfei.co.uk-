@@ -1,22 +1,36 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../l10n/app_localizations.dart';
 import '../logic/centering.dart';
+import '../logic/record_store.dart';
 import '../models/guide_lines.dart';
+import '../models/measurement_record.dart';
+import 'about_page.dart';
 import 'angle_dial.dart';
+import 'auto_detect.dart';
 import 'canvas_geometry.dart';
 import 'guide_painter.dart';
 import 'image_loader.dart';
+import 'image_saver.dart';
 import 'picked_file_cleanup.dart';
+import 'records_page.dart';
 import 'result_bar.dart';
+import 'result_image.dart';
 
-/// 唯一的页面：空状态，或图片 + 参考线 + 结果栏。
+/// 测量页：空状态，或图片 + 参考线 + 工具栏 + 结果栏。
 class MeasurePage extends StatefulWidget {
-  const MeasurePage({super.key});
+  const MeasurePage({super.key, this.store, this.showMenu = false});
+
+  /// 测量记录；为 null 时不显示“保存”。
+  final RecordStore? store;
+
+  /// 没有底部导航时，在右上角“更多”菜单里放“测量记录”和“说明”。
+  final bool showMenu;
 
   @override
   State<MeasurePage> createState() => _MeasurePageState();
@@ -76,21 +90,8 @@ class _MeasurePageState extends State<MeasurePage> {
     }
   }
 
-  void _showAbout() {
-    final l10n = AppLocalizations.of(context);
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.about),
-        content: SingleChildScrollView(child: Text(l10n.aboutBody)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.close),
-          ),
-        ],
-      ),
-    );
+  void _open(Widget page) {
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page));
   }
 
   @override
@@ -107,18 +108,36 @@ class _MeasurePageState extends State<MeasurePage> {
               icon: const Icon(Icons.photo_library_outlined),
               onPressed: _loading ? null : _pick,
             ),
-          IconButton(
-            tooltip: l10n.about,
-            icon: const Icon(Icons.info_outline),
-            onPressed: _showAbout,
-          ),
+          if (widget.showMenu)
+            PopupMenuButton<int>(
+              key: const Key('more-menu'),
+              tooltip: l10n.more,
+              onSelected: (v) {
+                final store = widget.store;
+                if (v == 0 && store != null) {
+                  _open(RecordsPage(store: store));
+                } else if (v == 1) {
+                  _open(const AboutPage());
+                }
+              },
+              itemBuilder: (context) => [
+                if (widget.store != null)
+                  PopupMenuItem(value: 0, child: Text(l10n.records)),
+                PopupMenuItem(value: 1, child: Text(l10n.about)),
+              ],
+            ),
         ],
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : image == null
               ? _EmptyState(onPick: _pick)
-              : MeasureView(key: ObjectKey(image), image: image),
+              : MeasureView(
+                  key: ObjectKey(image),
+                  image: image,
+                  store: widget.store,
+                  autoDetectOnLoad: true,
+                ),
     );
   }
 }
@@ -170,9 +189,20 @@ class _EmptyState extends StatelessWidget {
 
 /// 图片测量区域：图片、参考线、结果栏。
 class MeasureView extends StatefulWidget {
-  const MeasureView({super.key, required this.image});
+  const MeasureView({
+    super.key,
+    required this.image,
+    this.store,
+    this.autoDetectOnLoad = false,
+  });
 
   final LoadedImage image;
+
+  /// 测量记录；为 null 时工具栏不显示“保存”。
+  final RecordStore? store;
+
+  /// 显示后立即自动识别边框。
+  final bool autoDetectOnLoad;
 
   @override
   State<MeasureView> createState() => _MeasureViewState();
@@ -202,15 +232,119 @@ class _MeasureViewState extends State<MeasureView> {
   /// 拖动时手指在画布上的位置，用于放大镜；null 表示不显示。
   Offset? _finger;
 
+  /// 正在自动识别、正在生成结果图。
+  bool _detecting = false;
+  bool _rendering = false;
+
   static const double _magnifierSize = 110;
   static const double _magnifierLift = 80;
   static const double _magnification = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autoDetectOnLoad) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _autoDetect());
+    }
+  }
 
   @override
   void dispose() {
     _lines.dispose();
     _transform.dispose();
     super.dispose();
+  }
+
+  void _toast(String text) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  /// 在当前旋转角度下自动识别 8 条参考线。
+  Future<void> _autoDetect() async {
+    if (_detecting || !mounted) return;
+    final l10n = AppLocalizations.of(context);
+    setState(() {
+      _detecting = true;
+      _rotating = false;
+      _selected = null;
+    });
+    AutoDetectResult? found;
+    try {
+      found = await autoDetect(widget.image, angle: _angle);
+    } catch (e) {
+      debugPrint('Auto detection failed: $e');
+    }
+    if (!mounted) return;
+    final straightened = found != null && found.angle != _angle;
+    setState(() {
+      _detecting = false;
+      if (found != null) _angle = found.angle;
+    });
+    if (found != null) _lines.value = found.lines;
+    _toast(
+      found == null
+          ? l10n.autoDetectFailed
+          : straightened
+              ? l10n.autoDetectStraightened(found.angle.toStringAsFixed(1))
+              : l10n.autoDetectDone,
+    );
+  }
+
+  Future<void> _saveRecord() async {
+    final store = widget.store;
+    if (store == null) return;
+    final l10n = AppLocalizations.of(context);
+    final result = computeCentering(_lines.value);
+    final note = await showDialog<String>(
+      context: context,
+      builder: (context) => _SaveRecordDialog(result: result),
+    );
+    if (note == null || !mounted) return;
+    await store.add(MeasurementRecord.fromResult(result, note: note));
+    if (mounted) _toast(l10n.recordSaved);
+  }
+
+  Future<void> _showResultImage() async {
+    if (_rendering) return;
+    final l10n = AppLocalizations.of(context);
+    setState(() => _rendering = true);
+    ResultImage? rendered;
+    try {
+      rendered = await renderResultImage(
+        image: widget.image,
+        angle: _angle,
+        lines: _lines.value,
+        result: computeCentering(_lines.value),
+        l10n: l10n,
+      );
+    } catch (e) {
+      debugPrint('Rendering result image failed: $e');
+    }
+    if (!mounted) {
+      rendered?.dispose();
+      return;
+    }
+    setState(() => _rendering = false);
+    if (rendered == null) {
+      _toast(l10n.imageSaveFailed);
+      return;
+    }
+    final result = rendered;
+    final outcome = await showDialog<SaveOutcome>(
+      context: context,
+      builder: (context) => _ResultImageDialog(result: result),
+    );
+    if (!mounted || outcome == null) return;
+    final text = switch (outcome) {
+      SaveOutcome.saved => l10n.imageSaved,
+      SaveOutcome.shared => l10n.imageShared,
+      SaveOutcome.downloaded => l10n.imageDownloaded,
+      SaveOutcome.failed => l10n.imageSaveFailed,
+      SaveOutcome.cancelled => null,
+    };
+    if (text != null) _toast(text);
   }
 
   void _moveLine(LineId id, double value) {
@@ -330,6 +464,15 @@ class _MeasureViewState extends State<MeasureView> {
                           },
                         ),
                       ),
+                      if (_detecting || _rendering)
+                        const Positioned(
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          child: LinearProgressIndicator(
+                            key: Key('busy'),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -450,7 +593,8 @@ class _MeasureViewState extends State<MeasureView> {
     ];
   }
 
-  /// 微调栏始终占位，选中与否、显示刻度盘与否都不改变画布大小，避免图片跳动。
+  /// 工具栏始终占位：平时是工具按钮，选中线时是微调按钮，旋转时是刻度盘；
+  /// 高度不变，画布不会跳动。
   Widget _nudgeBar(LineId? id) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
@@ -469,23 +613,32 @@ class _MeasureViewState extends State<MeasureView> {
             : id == null
                 ? Row(
                     children: [
-                      Expanded(
-                        child: Text(
-                          l10n.nudgeHint,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
+                      _ToolButton(
+                        key: const Key('tool-auto'),
+                        icon: Icons.auto_fix_high,
+                        label: l10n.autoDetect,
+                        onPressed: _detecting ? null : _autoDetect,
                       ),
-                      TextButton.icon(
+                      _ToolButton(
                         key: const Key('rotate-open'),
+                        icon: Icons.rotate_right,
+                        label: _angle == 0
+                            ? l10n.rotate
+                            : '${l10n.rotate} ${_angle.toStringAsFixed(1)}°',
                         onPressed: () => setState(() => _rotating = true),
-                        icon: const Icon(Icons.rotate_right),
-                        label: Text(
-                          _angle == 0
-                              ? l10n.rotate
-                              : '${l10n.rotate} ${_angle.toStringAsFixed(1)}°',
+                      ),
+                      if (widget.store != null)
+                        _ToolButton(
+                          key: const Key('tool-save'),
+                          icon: Icons.bookmark_add_outlined,
+                          label: l10n.saveRecord,
+                          onPressed: _saveRecord,
                         ),
+                      _ToolButton(
+                        key: const Key('tool-image'),
+                        icon: Icons.image_outlined,
+                        label: l10n.resultImage,
+                        onPressed: _rendering ? null : _showResultImage,
                       ),
                     ],
                   )
@@ -533,4 +686,171 @@ class _MeasureViewState extends State<MeasureView> {
       c.dx <= geo.viewport.width &&
       c.dy >= 0 &&
       c.dy <= geo.viewport.height;
+}
+
+/// 工具栏按钮：图标在上、文字在下。
+class _ToolButton extends StatelessWidget {
+  const _ToolButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color =
+        onPressed == null ? theme.disabledColor : theme.colorScheme.primary;
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onPressed,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 22, color: color),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelSmall?.copyWith(color: color),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 保存记录：显示本次结果，填写备注。确定时返回备注（可为空字符串）。
+class _SaveRecordDialog extends StatefulWidget {
+  const _SaveRecordDialog({required this.result});
+
+  final CenteringResult result;
+
+  @override
+  State<_SaveRecordDialog> createState() => _SaveRecordDialogState();
+}
+
+class _SaveRecordDialogState extends State<_SaveRecordDialog> {
+  final TextEditingController _note = TextEditingController();
+
+  @override
+  void dispose() {
+    _note.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final r = widget.result;
+    final grade = r.grade;
+    return AlertDialog(
+      title: Text(l10n.saveRecordTitle),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${l10n.recordSummary('${r.lrBig}/${r.lrSmall}', '${r.tbBig}/${r.tbSmall}')}'
+            '  ·  '
+            '${grade == null ? l10n.belowStandard : l10n.gradeValue(formatGrade(grade))}',
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            key: const Key('record-note'),
+            controller: _note,
+            autofocus: true,
+            maxLength: 40,
+            decoration: InputDecoration(labelText: l10n.noteLabel),
+            onSubmitted: (v) => Navigator.of(context).pop(v),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          key: const Key('record-save'),
+          onPressed: () => Navigator.of(context).pop(_note.text),
+          child: Text(l10n.save),
+        ),
+      ],
+    );
+  }
+}
+
+/// 结果图预览：可保存到相册（网页版为下载）。关闭时返回保存结果。
+/// 对话框关闭（退场动画结束）后释放图像。
+class _ResultImageDialog extends StatefulWidget {
+  const _ResultImageDialog({required this.result});
+
+  final ResultImage result;
+
+  @override
+  State<_ResultImageDialog> createState() => _ResultImageDialogState();
+}
+
+class _ResultImageDialogState extends State<_ResultImageDialog> {
+  bool _saving = false;
+
+  @override
+  void dispose() {
+    widget.result.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    setState(() => _saving = true);
+    final t = DateTime.now();
+    final outcome = await saveImageToGallery(
+      widget.result.png,
+      'card_centering_${t.millisecondsSinceEpoch}.png',
+    );
+    if (!mounted) return;
+    if (outcome == SaveOutcome.cancelled) {
+      setState(() => _saving = false);
+      return;
+    }
+    Navigator.of(context).pop(outcome);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final maxH = MediaQuery.sizeOf(context).height * 0.6;
+    return AlertDialog(
+      contentPadding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+      content: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: maxH),
+        // 直接显示生成的图像，不再解码 PNG。
+        child: RawImage(
+          key: const Key('result-image'),
+          image: widget.result.image,
+          fit: BoxFit.contain,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _saving ? null : () => Navigator.of(context).pop(),
+          child: Text(l10n.close),
+        ),
+        FilledButton.icon(
+          key: const Key('result-image-save'),
+          onPressed: _saving ? null : _save,
+          icon: const Icon(Icons.download),
+          label: Text(kIsWeb ? l10n.saveImageWeb : l10n.saveImage),
+        ),
+      ],
+    );
+  }
 }

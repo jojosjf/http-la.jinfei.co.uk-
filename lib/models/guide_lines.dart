@@ -49,6 +49,31 @@ class GuideLines {
         outerBottom: 0.92 * height,
       );
 
+  /// 由 8 个值（竖线 4 个、横线 4 个，顺序同 [LineId]）建立参考线。
+  /// 值会被夹在图片范围内，并保证同方向相邻两线至少相隔 [minLineGap]。
+  factory GuideLines.fromValues(
+    List<double> values, {
+    required double width,
+    required double height,
+  }) {
+    List<double> fix(List<double> a, double limit) {
+      final out = [for (final v in a) v.clamp(0.0, limit).toDouble()];
+      for (var i = 1; i < 4; i++) {
+        if (out[i] < out[i - 1] + minLineGap) out[i] = out[i - 1] + minLineGap;
+      }
+      for (var i = 3; i >= 0; i--) {
+        final hi = i == 3 ? limit : out[i + 1] - minLineGap;
+        if (out[i] > hi) out[i] = hi;
+      }
+      return out;
+    }
+
+    return GuideLines._fromList([
+      ...fix(values.sublist(0, 4), width),
+      ...fix(values.sublist(4, 8), height),
+    ]);
+  }
+
   factory GuideLines._fromList(List<double> v) => GuideLines(
         outerLeft: v[0],
         innerLeft: v[1],

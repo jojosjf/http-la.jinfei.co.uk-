@@ -17,7 +17,7 @@ OUT = ROOT / 'assets' / 'fonts'
 WEIGHTS = [400, 500, 600, 700]
 
 chars = set(chr(c) for c in range(0x20, 0x7f))
-chars |= set('×·—…“”‘’：，。；！？（）、%')
+chars |= set('×·—…“”‘’：，。；！？（）、%°')
 for arb in (ROOT / 'lib' / 'l10n').glob('*.arb'):
     for key, value in json.loads(arb.read_text('utf-8')).items():
         if not key.startswith('@') and isinstance(value, str):
