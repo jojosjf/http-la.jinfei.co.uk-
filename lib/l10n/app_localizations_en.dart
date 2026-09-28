@@ -168,6 +168,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'After measuring a card, tap \"Save\" in the toolbar and it will appear here.';
 
   @override
+  String get recordBelowStandard => 'Below 3';
+
+  @override
   String get untitledCard => 'Untitled card';
 
   @override

@@ -73,6 +73,7 @@
   "recordSaved": "Saved to Records",
   "noRecords": "No measurements yet",
   "noRecordsHint": "After measuring a card, tap \"Save\" in the toolbar and it will appear here.",
+  "recordBelowStandard": "Below 3",
   "untitledCard": "Untitled card",
   "sortNewest": "Newest",
   "sortGrade": "Grade",

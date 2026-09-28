@@ -204,8 +204,9 @@ class _RecordTile extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               grade == null
-                  ? l10n.belowStandard
-                  : l10n.gradeValue(formatGrade(grade)),
+                  ? l10n.recordBelowStandard
+                  // 列表里只写数字，避免“PSA”反复出现。
+                  : formatGrade(grade),
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: theme.colorScheme.primary,

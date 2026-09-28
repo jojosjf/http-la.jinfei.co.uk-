@@ -38,6 +38,7 @@
   "recordSaved": "已保存到测量记录",
   "noRecords": "还没有测量记录",
   "noRecordsHint": "测量完成后，点工具栏的“保存”，结果就会出现在这里。",
+  "recordBelowStandard": "低于 3",
   "untitledCard": "未命名卡片",
   "sortNewest": "最新",
   "sortGrade": "等级",

@@ -11,6 +11,7 @@ import 'package:card_centering/models/measurement_record.dart';
 import 'package:card_centering/ui/auto_detect.dart';
 import 'package:card_centering/ui/image_loader.dart';
 import 'package:card_centering/ui/measure_page.dart';
+import 'package:card_centering/ui/records_page.dart';
 import 'package:card_centering/ui/result_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -213,6 +214,16 @@ void main() {
       await tester.tap(find.text('Records'));
       await tester.pumpAndSettle();
       expect(titles(tester), ['Untitled card', '最差', '最好', '中等']);
+      // 列表里等级只写数字，不出现“PSA”。
+      final page = find.byType(RecordsPage);
+      expect(
+        find.descendant(of: page, matching: find.textContaining('PSA')),
+        findsNothing,
+      );
+      expect(find.descendant(of: page, matching: find.text('10')),
+          findsNWidgets(2));
+      expect(find.descendant(of: page, matching: find.text('Below 3')),
+          findsOneWidget);
       await tester.tap(find.text('Grade'));
       await tester.pumpAndSettle();
       // 同为 10 级时，较差一侧比例小的在前。

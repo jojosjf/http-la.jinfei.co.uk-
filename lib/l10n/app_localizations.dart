@@ -326,6 +326,12 @@ abstract class AppLocalizations {
   /// **'After measuring a card, tap \"Save\" in the toolbar and it will appear here.'**
   String get noRecordsHint;
 
+  /// No description provided for @recordBelowStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Below 3'**
+  String get recordBelowStandard;
+
   /// No description provided for @untitledCard.
   ///
   /// In en, this message translates to:

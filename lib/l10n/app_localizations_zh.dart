@@ -162,6 +162,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noRecordsHint => '测量完成后，点工具栏的“保存”，结果就会出现在这里。';
 
   @override
+  String get recordBelowStandard => '低于 3';
+
+  @override
   String get untitledCard => '未命名卡片';
 
   @override
