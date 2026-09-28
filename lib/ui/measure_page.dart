@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -848,7 +847,7 @@ class _ResultImageDialogState extends State<_ResultImageDialog> {
           key: const Key('result-image-save'),
           onPressed: _saving ? null : _save,
           icon: const Icon(Icons.download),
-          label: Text(kIsWeb ? l10n.saveImageWeb : l10n.saveImage),
+          label: Text(l10n.saveImage),
         ),
       ],
     );

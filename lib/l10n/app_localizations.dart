@@ -389,14 +389,8 @@ abstract class AppLocalizations {
   /// No description provided for @saveImage.
   ///
   /// In en, this message translates to:
-  /// **'Save to Photos'**
+  /// **'Save image'**
   String get saveImage;
-
-  /// No description provided for @saveImageWeb.
-  ///
-  /// In en, this message translates to:
-  /// **'Download image'**
-  String get saveImageWeb;
 
   /// No description provided for @imageSaved.
   ///

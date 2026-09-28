@@ -194,10 +194,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resultImage => '结果图';
 
   @override
-  String get saveImage => '保存到相册';
-
-  @override
-  String get saveImageWeb => '下载图片';
+  String get saveImage => '保存图片';
 
   @override
   String get imageSaved => '已保存到相册';

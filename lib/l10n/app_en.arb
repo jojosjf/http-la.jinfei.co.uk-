@@ -93,8 +93,7 @@
     }
   },
   "resultImage": "Image",
-  "saveImage": "Save to Photos",
-  "saveImageWeb": "Download image",
+  "saveImage": "Save image",
   "imageSaved": "Saved to Photos",
   "imageShared": "Done",
   "imageDownloaded": "Image downloaded",

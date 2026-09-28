@@ -200,10 +200,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resultImage => 'Image';
 
   @override
-  String get saveImage => 'Save to Photos';
-
-  @override
-  String get saveImageWeb => 'Download image';
+  String get saveImage => 'Save image';
 
   @override
   String get imageSaved => 'Saved to Photos';
