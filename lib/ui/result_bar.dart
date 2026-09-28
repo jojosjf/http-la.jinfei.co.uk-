@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../logic/centering.dart';
 
+/// 固定行高的 strut：不论这一行显示什么字、用到哪种字体，高度都一样。
+StrutStyle fixedLine(TextStyle? style) => StrutStyle(
+      fontSize: style?.fontSize ?? 14,
+      height: 1.4,
+      forceStrutHeight: true,
+    );
+
 String formatGrade(double g) =>
     g == g.roundToDouble() ? g.toInt().toString() : g.toString();
 
@@ -57,6 +64,9 @@ class ResultBar extends StatelessWidget {
                   key: const Key('borderline'),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  // 行高固定：中文和空行在有些系统上用不同字体，行高不同，
+                  // 提示出现或消失时结果栏会变高变矮，画布跟着跳动。
+                  strutStyle: fixedLine(theme.textTheme.bodyMedium),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.orange.shade800,
                     fontWeight: FontWeight.w600,
@@ -107,6 +117,8 @@ class _Cell extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               value,
+              // “PSA 9”与“低于 PSA 3”字体不同，同样固定行高。
+              strutStyle: fixedLine(theme.textTheme.titleLarge),
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: emphasize ? theme.colorScheme.primary : null,
