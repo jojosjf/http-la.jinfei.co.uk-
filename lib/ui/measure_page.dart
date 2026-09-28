@@ -223,10 +223,12 @@ class _MeasureViewState extends State<MeasureView> {
   /// 最近一次布局的画布几何，拖动时用来换算坐标。
   CanvasGeometry? _geo;
 
-  // 拖动中的状态：起始位置 + 累计的屏幕位移，避免夹住后手指与线错位。
+  // 拖动中的状态：线的起始位置与手指按下的位置。线的位置始终由“手指
+  // 离按下点多远”算出，而不是把每次的移动量累加：有的平台（如鸿蒙模拟器
+  // 用鼠标时）会重复发送移动事件，累加会让线跑得比手指快、来回撞到边界。
   LineId? _dragging;
   double _dragStart = 0;
-  double _dragDelta = 0;
+  Offset _dragOrigin = Offset.zero;
 
   /// 拖动时手指在画布上的位置，用于放大镜；null 表示不显示。
   Offset? _finger;
@@ -368,16 +370,19 @@ class _MeasureViewState extends State<MeasureView> {
       _finger = _toCanvas(d.globalPosition);
     });
     _dragStart = _lines.value[id];
-    _dragDelta = 0;
+    _dragOrigin = d.globalPosition;
   }
 
   void _onDragUpdate(DragUpdateDetails d) {
     final id = _dragging;
     final geo = _geo;
     if (id == null || geo == null) return;
-    _dragDelta += id.isVertical ? d.delta.dx : d.delta.dy;
+    final moved = d.globalPosition - _dragOrigin;
     // 屏幕位移 ÷ 当前缩放倍数，换算成原图像素。
-    _moveLine(id, _dragStart + geo.screenToImage(_dragDelta));
+    _moveLine(
+      id,
+      _dragStart + geo.screenToImage(id.isVertical ? moved.dx : moved.dy),
+    );
     setState(() => _finger = _toCanvas(d.globalPosition));
   }
 

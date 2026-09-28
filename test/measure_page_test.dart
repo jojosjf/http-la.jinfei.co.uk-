@@ -73,6 +73,43 @@ void main() {
     await g.up();
   });
 
+  testWidgets('重复的移动事件不会让线跑得比手指快', (tester) async {
+    final img = await testImage(tester);
+    await tester.pumpWidget(app(MeasureView(image: img)));
+    String lr() => tester
+        .widgetList<Text>(find.textContaining('/'))
+        .map((t) => t.data!)
+        .first;
+
+    final start = tester.getCenter(handle('innerLeft'));
+    final end = start + const Offset(40, 0);
+    await tester.sendEventToBinding(
+      PointerDownEvent(pointer: 7, position: start),
+    );
+    await tester.sendEventToBinding(
+      PointerMoveEvent(
+        pointer: 7,
+        position: end,
+        delta: const Offset(40, 0),
+      ),
+    );
+    await tester.pump();
+    final once = lr();
+    // 有的平台会把同一次移动再发一遍（位置相同，位移也相同）。
+    await tester.sendEventToBinding(
+      PointerMoveEvent(
+        pointer: 7,
+        position: end,
+        delta: const Offset(40, 0),
+      ),
+    );
+    await tester.pump();
+    expect(lr(), once);
+    await tester.sendEventToBinding(
+      PointerUpEvent(pointer: 7, position: end),
+    );
+  });
+
   testWidgets('任何拖法都无法越过相邻线', (tester) async {
     final img = await testImage(tester);
     await tester.pumpWidget(app(MeasureView(image: img)));
