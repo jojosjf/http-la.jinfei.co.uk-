@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>卡片居中检查 隐私政策</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #1c1c1e;
+      --muted: #5f6368;
+      --accent: #283593;
+      --line: #e3e5ea;
+      --box: #f3f5fb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121214;
+        --fg: #e8e8ea;
+        --muted: #a0a3a8;
+        --accent: #8c9eff;
+        --line: #2c2c31;
+        --box: #1c1d24;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.75;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1 { font-size: 26px; margin: 0 0 4px; color: var(--accent); }
+    h2 { font-size: 18px; margin: 32px 0 8px; padding-top: 16px; border-top: 1px solid var(--line); }
+    p, li { font-size: 15px; }
+    ul { padding-left: 22px; }
+    .meta { color: var(--muted); font-size: 14px; margin: 0; }
+    .summary { background: var(--box); border-radius: 10px; padding: 14px 18px; margin: 24px 0; }
+    .summary p { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>卡片居中检查 隐私政策</h1>
+  <p class="meta">更新日期：2026 年 9 月 28 日</p>
+  <p class="meta">生效日期：2026 年 9 月 28 日</p>
+
+  <div class="summary">
+    <p><strong>简要说明</strong></p>
+    <p>「卡片居中检查」完全在您的设备上离线运行。我们<strong>不收集、不上传、不存储、不共享</strong>您的任何个人信息，也不申请任何设备权限，不包含任何第三方 SDK。</p>
+  </div>
+
+  <p>「卡片居中检查」（以下简称“本应用”）由【开发者姓名】（以下简称“我们”）开发和运营。我们深知个人信息对您的重要性，并依据《中华人民共和国个人信息保护法》等法律法规制定本政策。请您在使用本应用前仔细阅读并了解本政策。</p>
+
+  <h2>一、我们收集的信息</h2>
+  <p>本应用<strong>不收集任何个人信息</strong>。具体来说：</p>
+  <ul>
+    <li>不需要注册或登录，没有账号体系；</li>
+    <li>不收集设备标识符（如 IMEI、OAID、Android ID、MAC 地址等）；</li>
+    <li>不收集位置、通讯录、通话记录、短信等信息；</li>
+    <li>不进行任何数据统计、行为分析或广告追踪。</li>
+  </ul>
+
+  <h2>二、照片的使用方式</h2>
+  <p>本应用的核心功能是测量卡牌照片的边框居中度。为此：</p>
+  <ul>
+    <li>本应用通过<strong>系统自带的照片选择器</strong>，由您主动选择一张照片。本应用只能读取您选中的那一张照片，无法浏览您的相册；</li>
+    <li>照片只在设备内存中用于显示和测量，<strong>不会上传到任何服务器</strong>，也不会发送给任何第三方；</li>
+    <li>部分系统在选图时会把照片复制一份到本应用的临时目录，本应用读取后会立即删除这份临时副本，<strong>不会保存您的照片</strong>；</li>
+    <li>测量结果只显示在屏幕上，不会被记录或保存。关闭页面或更换照片后，之前的照片和测量数据即从内存中清除。</li>
+  </ul>
+
+  <h2>三、设备权限</h2>
+  <p>本应用正式版<strong>不申请任何设备权限</strong>，包括网络权限、存储权限、相机权限和相册读取权限。</p>
+  <table>
+    <tr><th>平台</th><th>申请的权限</th><th>说明</th></tr>
+    <tr><td>Android</td><td>无</td><td>通过系统照片选择器选图，无需权限；不申请网络权限，无法联网</td></tr>
+    <tr><td>HarmonyOS</td><td>无</td><td>通过系统照片选择器选图，无需权限；不申请网络权限，无法联网</td></tr>
+    <tr><td>iOS</td><td>无</td><td>通过系统照片选择器选图，只读取您选中的照片</td></tr>
+  </table>
+
+  <h2>四、第三方 SDK</h2>
+  <p>本应用<strong>未接入任何第三方 SDK</strong>，包括广告、统计、推送、登录、支付和崩溃收集类 SDK。本应用使用开源的 Flutter 框架开发，该框架在本应用中不收集或传输任何数据。</p>
+
+  <h2>五、信息的共享、转让和公开披露</h2>
+  <p>由于本应用不收集任何个人信息，我们不会与任何公司、组织或个人共享、转让或公开披露您的个人信息。</p>
+
+  <h2>六、信息的存储</h2>
+  <p>本应用不在设备或服务器上存储您的个人信息或照片，不涉及个人信息的跨境传输。</p>
+
+  <h2>七、网页版说明</h2>
+  <p>如果您使用本应用的网页版，照片同样只在您的浏览器中处理，不会上传到服务器。网页托管服务器可能按常规记录访问日志（如访问时间、IP 地址、浏览器类型），这些日志仅用于保障网站正常运行和安全，不会与您的照片关联。</p>
+
+  <h2>八、您的权利</h2>
+  <p>由于我们不收集和存储您的个人信息，您无需申请查阅、更正、删除或注销。您可以随时卸载本应用，卸载后本应用在设备上不留下任何您的数据。</p>
+
+  <h2>九、未成年人保护</h2>
+  <p>本应用不收集任何人的个人信息，包括未满 14 周岁的未成年人。若您是未成年人，建议在监护人的陪同下阅读本政策并使用本应用。</p>
+
+  <h2>十、免责说明</h2>
+  <p>本应用给出的评级仅参考公开的评级标准，结果仅供参考。本应用与任何卡牌评级机构均无关联。</p>
+
+  <h2>十一、本政策的更新</h2>
+  <p>如果本应用的功能发生变化，涉及个人信息的处理方式，我们会更新本政策，并在应用内以弹窗等显著方式提示您。未经您的明确同意，我们不会削减您依据本政策享有的权利。</p>
+
+  <h2>十二、联系我们</h2>
+  <p>如果您对本政策有任何疑问、意见或建议，请通过以下方式联系我们，我们将在 15 个工作日内回复：</p>
+  <ul>
+    <li>开发者：【开发者姓名】</li>
+    <li>电子邮箱：【联系邮箱】</li>
+  </ul>
+</main>
+</body>
+</html>
