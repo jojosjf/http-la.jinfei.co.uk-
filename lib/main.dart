@@ -6,9 +6,12 @@ import 'app_config.dart';
 import 'l10n/app_localizations.dart';
 import 'logic/record_store.dart';
 import 'ui/home_shell.dart';
+import 'ui/web_fonts.dart';
 
 void main() {
   runApp(const CardCenteringApp());
+  // 网页版在后台加载常用汉字字体，不耽误首屏。
+  loadCommonChineseFont();
 }
 
 class CardCenteringApp extends StatefulWidget {

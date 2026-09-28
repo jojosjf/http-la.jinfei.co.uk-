@@ -59,7 +59,8 @@ css = urllib.request.urlopen(req).read().decode()
 full = OUT / 'NotoSansSC-Full.tmp.ttf'
 full.write_bytes(urllib.request.urlopen(
     re.search(r'url\((https://[^)]+)\)', css).group(1)).read())
-out = OUT / 'NotoSansSC-Common-400.ttf'
+# 放在 web/ 里：只随网页版部署，不打进手机安装包，启动后按需加载。
+out = ROOT / 'web' / 'fonts' / 'NotoSansSC-Common-400.ttf'
 ft_subset.main([
     str(full),
     '--text=' + ''.join(sorted(common)),
