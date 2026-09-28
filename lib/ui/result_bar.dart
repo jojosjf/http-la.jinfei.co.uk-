@@ -10,6 +10,10 @@ StrutStyle fixedLine(TextStyle? style) => StrutStyle(
       forceStrutHeight: true,
     );
 
+/// 一行文字的固定高度：按字号（含系统字体缩放）算，与实际用到的字体无关。
+double fixedLineHeight(BuildContext context, TextStyle? style) =>
+    MediaQuery.textScalerOf(context).scale(style?.fontSize ?? 14) * 1.5;
+
 String formatGrade(double g) =>
     g == g.roundToDouble() ? g.toInt().toString() : g.toString();
 
@@ -55,8 +59,10 @@ class ResultBar extends StatelessWidget {
                 ],
               ),
               // 临界提示始终占一行：出现或消失时结果栏高度不变，图片不会跳动。
-              Padding(
-                padding: const EdgeInsets.only(top: 6),
+              Container(
+                height: fixedLineHeight(context, theme.textTheme.bodyMedium),
+                margin: const EdgeInsets.only(top: 6),
+                alignment: Alignment.center,
                 child: Text(
                   r.borderline && near != null
                       ? l10n.borderline(formatGrade(near))
@@ -64,7 +70,7 @@ class ResultBar extends StatelessWidget {
                   key: const Key('borderline'),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  // 行高固定：中文和空行在有些系统上用不同字体，行高不同，
+                  // 高度固定：中文和空行在有些系统上用不同字体、行高不同，
                   // 提示出现或消失时结果栏会变高变矮，画布跟着跳动。
                   strutStyle: fixedLine(theme.textTheme.bodyMedium),
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -113,15 +119,18 @@ class _Cell extends StatelessWidget {
         children: [
           Text(label, style: theme.textTheme.labelMedium),
           const SizedBox(height: 2),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              value,
-              // “PSA 9”与“低于 PSA 3”字体不同，同样固定行高。
-              strutStyle: fixedLine(theme.textTheme.titleLarge),
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: emphasize ? theme.colorScheme.primary : null,
+          SizedBox(
+            height: fixedLineHeight(context, theme.textTheme.titleLarge),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                value,
+                // “PSA 9”与“低于 PSA 3”字体不同，同样固定高度。
+                strutStyle: fixedLine(theme.textTheme.titleLarge),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: emphasize ? theme.colorScheme.primary : null,
+                ),
               ),
             ),
           ),
