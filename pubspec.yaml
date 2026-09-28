@@ -74,6 +74,10 @@ flutter:
           weight: 600
         - asset: assets/fonts/NotoSansSC-Subset-700.ttf
           weight: 700
+    # 网页版的常用字备用字体：界面字体里没有的字（如用户输入的卡片名称）从这里取。
+    - family: NotoSansSCCommon
+      fonts:
+        - asset: assets/fonts/NotoSansSC-Common-400.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

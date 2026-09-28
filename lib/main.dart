@@ -45,6 +45,8 @@ class _CardCenteringAppState extends State<CardCenteringApp> {
         // 网页版用内置字体，不从谷歌服务器下载（国内常加载失败）；
         // 手机上用系统字体。
         fontFamily: kIsWeb ? 'NotoSansSCSubset' : null,
+        // 界面字体只含界面用到的字；用户输入的其他汉字用常用字字体显示。
+        fontFamilyFallback: kIsWeb ? const ['NotoSansSCCommon'] : null,
       ),
       localizationsDelegates: const [
         AppLocalizations.delegate,

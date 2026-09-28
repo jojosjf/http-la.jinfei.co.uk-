@@ -193,6 +193,7 @@ double _text(
         fontWeight: weight,
         // 网页版用内置的中文字体，与界面一致。
         fontFamily: kIsWeb ? 'NotoSansSCSubset' : null,
+        fontFamilyFallback: kIsWeb ? const ['NotoSansSCCommon'] : null,
       ),
     ),
     textAlign: center ? TextAlign.center : TextAlign.left,

@@ -76,8 +76,10 @@ dart run flutter_launcher_icons
 ### 网页版字体
 
 网页版默认会从谷歌服务器下载中文字体，国内常失败并显示方框。
-这里内置了只含界面文字的 Noto Sans SC 子集（`assets/fonts/`，约 220KB）。
-修改 `lib/l10n/*.arb` 里的文字后，运行 `python3 tool/subset_web_font.py` 重新生成。
+这里内置了只含界面文字的 Noto Sans SC 子集（`assets/fonts/`，4 种粗细共约 320KB），
+另加一个常用字备用字体（GB2312 一级汉字，约 1.1MB），用户输入的卡片名称等其他汉字从这里取。
+修改 `lib/l10n/*.arb` 里的文字后，运行 `python3 tool/subset_web_font.py` 重新生成
+（需要 `pip install fonttools`）。
 
 ## 代码结构
 
