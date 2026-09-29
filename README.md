@@ -1,4 +1,4 @@
-# 卡片居中检查（Card Centering Check）
+# 卡牌居中检查（Card Centering Check）
 
 测量卡片正面四边边框的居中比例，并参考 PSA 公开标准给出参考等级。
 一套 Flutter 代码，出安卓（国内商店 APK / Google Play AAB）、iOS、网页三个平台；

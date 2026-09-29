@@ -1,6 +1,6 @@
 {
-    "name": "卡片居中检查",
-    "short_name": "卡片居中检查",
+    "name": "卡牌居中检查",
+    "short_name": "卡牌居中检查",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#283593",

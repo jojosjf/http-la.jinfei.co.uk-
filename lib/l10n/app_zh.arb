@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "appTitle": "卡片居中检查",
+  "appTitle": "卡牌居中检查",
   "emptyTitle": "选择一张卡片照片",
   "emptyHint": "尽量正对卡片拍摄，让卡片四边完整入镜。",
   "pickPhoto": "从相册选择",
