@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 必须明确声明中文资源：安卓按首选语言列表逐个找 App 支持的语言，
+     只有默认资源时会跳过中文、选中排在后面的英文，界面也会跟着变成英文。 -->
+<resources>
+    <string name="app_name">卡牌居中检查</string>
+</resources>

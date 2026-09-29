@@ -54,9 +54,9 @@ void main() {
   }
 
   testWidgets('默认中文：非英文系统都显示中文', (tester) async {
-    expect(await titleFor(tester, const Locale('zh', 'CN')), '卡片居中检查');
-    expect(await titleFor(tester, const Locale('ja', 'JP')), '卡片居中检查');
-    expect(await titleFor(tester, const Locale('fr', 'FR')), '卡片居中检查');
+    expect(await titleFor(tester, const Locale('zh', 'CN')), '卡牌居中检查');
+    expect(await titleFor(tester, const Locale('ja', 'JP')), '卡牌居中检查');
+    expect(await titleFor(tester, const Locale('fr', 'FR')), '卡牌居中检查');
   });
 
   testWidgets('英文系统显示英文', (tester) async {
