@@ -113,7 +113,7 @@ abstract class AppLocalizations {
   /// No description provided for @emptyHint.
   ///
   /// In en, this message translates to:
-  /// **'Shoot straight-on, with all four edges of the card in the frame. The borders are detected automatically.'**
+  /// **'Shoot straight-on, with all four edges of the card in the frame.'**
   String get emptyHint;
 
   /// No description provided for @pickPhoto.
@@ -212,6 +212,12 @@ abstract class AppLocalizations {
   /// **'{line, select, outerLeft{OL} innerLeft{IL} innerRight{IR} outerRight{OR} outerTop{OT} innerTop{IT} innerBottom{IB} outerBottom{OB} other{?}}'**
   String handleLabel(String line);
 
+  /// No description provided for @nudgeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a handle to select a line for fine-tuning'**
+  String get nudgeHint;
+
   /// No description provided for @about.
   ///
   /// In en, this message translates to:
@@ -221,7 +227,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutBody.
   ///
   /// In en, this message translates to:
-  /// **'How to use: after you choose a photo, the card\'s outer edges and artwork border are detected and the 8 lines are placed for you. If they are off, drag the handles so the outer lines (long dashes) sit on the card\'s outer edges and the inner lines (short dashes) on the artwork border; while dragging, slide your finger along the line to magnify different parts of it; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×). If the photo is tilted by up to 6°, auto detect straightens it first; you can also tap \"Rotate\" in the toolbar and drag the dial (0.1° steps), then tap \"Auto detect\" to find the edges again.\n\nRecords: tap \"Save\" to add a note and keep the ratios and reference grade. In Records you can sort by date or grade to pick cards worth submitting; swipe left to delete.\n\nResult image: tap \"Image\" to make a picture with the lines, ratios and reference grade that you can save to Photos and share.\n\nPrivacy: your photo is processed only on this device and never uploaded. Records keep only numbers and your note, never the photo, and stay on this device.\n\nDisclaimer: the reference grade uses PSA\'s published front centering standards (back standards are looser, so for the back of a card only the ratios are meaningful). The result is for reference and is not an actual grade. This app is not affiliated with PSA.'**
+  /// **'How to use: drag the handles so the outer lines (long dashes) sit on the card\'s outer edges and the inner lines (short dashes) on the artwork border; while dragging, slide your finger along the line to magnify different parts of it; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×). If the photo is tilted, tap \"Rotate\" at the bottom and drag the dial to straighten the card (0.1° steps).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: the reference grade uses PSA\'s published front centering standards (back standards are looser, so for the back of a card only the ratios are meaningful). The result is for reference and is not an actual grade. This app is not affiliated with PSA.'**
   String get aboutBody;
 
   /// No description provided for @close.
@@ -229,198 +235,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
-
-  /// No description provided for @measureTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Measure'**
-  String get measureTab;
-
-  /// No description provided for @recordsTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Records'**
-  String get recordsTab;
-
-  /// No description provided for @records.
-  ///
-  /// In en, this message translates to:
-  /// **'Records'**
-  String get records;
-
-  /// No description provided for @more.
-  ///
-  /// In en, this message translates to:
-  /// **'More'**
-  String get more;
-
-  /// No description provided for @autoDetect.
-  ///
-  /// In en, this message translates to:
-  /// **'Auto detect'**
-  String get autoDetect;
-
-  /// No description provided for @autoDetectDone.
-  ///
-  /// In en, this message translates to:
-  /// **'Borders detected. Drag the handles to fine-tune.'**
-  String get autoDetectDone;
-
-  /// No description provided for @autoDetectStraightened.
-  ///
-  /// In en, this message translates to:
-  /// **'Straightened by {angle}° and detected the borders. Drag the handles to fine-tune.'**
-  String autoDetectStraightened(String angle);
-
-  /// No description provided for @autoDetectFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t find the card borders. Please drag the lines by hand.'**
-  String get autoDetectFailed;
-
-  /// No description provided for @saveRecord.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get saveRecord;
-
-  /// No description provided for @saveRecordTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Save measurement'**
-  String get saveRecordTitle;
-
-  /// No description provided for @noteLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Note (e.g. card name, optional)'**
-  String get noteLabel;
-
-  /// No description provided for @save.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
-
-  /// No description provided for @cancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get cancel;
-
-  /// No description provided for @recordSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved to Records'**
-  String get recordSaved;
-
-  /// No description provided for @noRecords.
-  ///
-  /// In en, this message translates to:
-  /// **'No measurements yet'**
-  String get noRecords;
-
-  /// No description provided for @noRecordsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'After measuring a card, tap \"Save\" in the toolbar and it will appear here.'**
-  String get noRecordsHint;
-
-  /// No description provided for @recordBelowStandard.
-  ///
-  /// In en, this message translates to:
-  /// **'Below 3'**
-  String get recordBelowStandard;
-
-  /// No description provided for @untitledCard.
-  ///
-  /// In en, this message translates to:
-  /// **'Untitled card'**
-  String get untitledCard;
-
-  /// No description provided for @sortNewest.
-  ///
-  /// In en, this message translates to:
-  /// **'Newest'**
-  String get sortNewest;
-
-  /// No description provided for @sortGrade.
-  ///
-  /// In en, this message translates to:
-  /// **'Grade'**
-  String get sortGrade;
-
-  /// No description provided for @clearAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear'**
-  String get clearAll;
-
-  /// No description provided for @clearAllConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete all records? This can\'t be undone.'**
-  String get clearAllConfirm;
-
-  /// No description provided for @recordDeleted.
-  ///
-  /// In en, this message translates to:
-  /// **'Record deleted'**
-  String get recordDeleted;
-
-  /// No description provided for @undo.
-  ///
-  /// In en, this message translates to:
-  /// **'Undo'**
-  String get undo;
-
-  /// No description provided for @delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
-
-  /// No description provided for @recordSummary.
-  ///
-  /// In en, this message translates to:
-  /// **'L/R {lr}  ·  T/B {tb}'**
-  String recordSummary(String lr, String tb);
-
-  /// No description provided for @resultImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Image'**
-  String get resultImage;
-
-  /// No description provided for @saveImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Save image'**
-  String get saveImage;
-
-  /// No description provided for @imageSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Saved to Photos'**
-  String get imageSaved;
-
-  /// No description provided for @imageShared.
-  ///
-  /// In en, this message translates to:
-  /// **'Done'**
-  String get imageShared;
-
-  /// No description provided for @imageDownloaded.
-  ///
-  /// In en, this message translates to:
-  /// **'Image downloaded'**
-  String get imageDownloaded;
-
-  /// No description provided for @imageSaveFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t save the image. Please try again.'**
-  String get imageSaveFailed;
 }
 
 class _AppLocalizationsDelegate

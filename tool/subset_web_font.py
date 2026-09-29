@@ -5,10 +5,6 @@
 随网页一起部署。修改 lib/l10n/*.arb 后运行：
 
     python3 tool/subset_web_font.py
-
-另外生成一个常用字备用字体（GB2312 一级汉字 3755 个 + 常用标点，只有常规
-粗细），网页版在界面字体里找不到的字（如用户输入的卡片名称）从这里取。
-需要先安装 fontTools：pip install fonttools
 """
 import json
 import pathlib
@@ -21,7 +17,7 @@ OUT = ROOT / 'assets' / 'fonts'
 WEIGHTS = [400, 500, 600, 700]
 
 chars = set(chr(c) for c in range(0x20, 0x7f))
-chars |= set('×·—…“”‘’：，。；！？（）、%°')
+chars |= set('×·—…“”‘’：，。；！？（）、%')
 for arb in (ROOT / 'lib' / 'l10n').glob('*.arb'):
     for key, value in json.loads(arb.read_text('utf-8')).items():
         if not key.startswith('@') and isinstance(value, str):
@@ -40,32 +36,3 @@ for w in WEIGHTS:
     (OUT / ('NotoSansSC-Subset-%d.ttf' % w)).write_bytes(data)
     print('weight %d: %d bytes' % (w, len(data)))
 print('%d characters' % len(text))
-
-# 常用字备用字体：下载完整的 Noto Sans SC，在本地裁成常用字。
-from fontTools import subset as ft_subset  # noqa: E402
-
-common = set(text)
-for hi in range(0xB0, 0xD8):
-    for lo in range(0xA1, 0xFF):
-        try:
-            common.add(bytes([hi, lo]).decode('gb2312'))
-        except UnicodeDecodeError:
-            pass
-common |= set('，。、；：？！“”‘’（）《》【】—…·～￥％＃＠＆＊＋－＝')
-req = urllib.request.Request(
-    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400',
-    headers={'User-Agent': 'Mozilla/4.0'})
-css = urllib.request.urlopen(req).read().decode()
-full = OUT / 'NotoSansSC-Full.tmp.ttf'
-full.write_bytes(urllib.request.urlopen(
-    re.search(r'url\((https://[^)]+)\)', css).group(1)).read())
-# 放在 web/ 里：只随网页版部署，不打进手机安装包，启动后按需加载。
-out = ROOT / 'web' / 'fonts' / 'NotoSansSC-Common-400.ttf'
-ft_subset.main([
-    str(full),
-    '--text=' + ''.join(sorted(common)),
-    '--output-file=' + str(out),
-    '--layout-features=*',
-])
-full.unlink()
-print('common: %d characters, %d bytes' % (len(common), out.stat().st_size))

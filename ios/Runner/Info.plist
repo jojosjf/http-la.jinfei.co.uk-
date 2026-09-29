@@ -13,8 +13,6 @@
 		<string>en</string>
 		<string>zh-Hans</string>
 	</array>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Used only to save the result image you choose to save. / 仅用于保存你选择保存的结果图。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used only to open the card photo you choose. Photos are processed on this device and never uploaded. / 仅用于打开你选择的卡片照片，照片只在本机处理，不会上传。</string>
 	<key>CFBundleExecutable</key>

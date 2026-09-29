@@ -2,7 +2,7 @@
   "@@locale": "en",
   "appTitle": "Card Centering Check",
   "emptyTitle": "Choose a photo of your card",
-  "emptyHint": "Shoot straight-on, with all four edges of the card in the frame. The borders are detected automatically.",
+  "emptyHint": "Shoot straight-on, with all four edges of the card in the frame.",
   "pickPhoto": "Choose photo",
   "changePhoto": "Change photo",
   "rotate": "Rotate",
@@ -47,56 +47,8 @@
       }
     }
   },
+  "nudgeHint": "Tap a handle to select a line for fine-tuning",
   "about": "About",
-  "aboutBody": "How to use: after you choose a photo, the card's outer edges and artwork border are detected and the 8 lines are placed for you. If they are off, drag the handles so the outer lines (long dashes) sit on the card's outer edges and the inner lines (short dashes) on the artwork border; while dragging, slide your finger along the line to magnify different parts of it; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×). If the photo is tilted by up to 6°, auto detect straightens it first; you can also tap \"Rotate\" in the toolbar and drag the dial (0.1° steps), then tap \"Auto detect\" to find the edges again.\n\nRecords: tap \"Save\" to add a note and keep the ratios and reference grade. In Records you can sort by date or grade to pick cards worth submitting; swipe left to delete.\n\nResult image: tap \"Image\" to make a picture with the lines, ratios and reference grade that you can save to Photos and share.\n\nPrivacy: your photo is processed only on this device and never uploaded. Records keep only numbers and your note, never the photo, and stay on this device.\n\nDisclaimer: the reference grade uses PSA's published front centering standards (back standards are looser, so for the back of a card only the ratios are meaningful). The result is for reference and is not an actual grade. This app is not affiliated with PSA.",
-  "close": "Close",
-  "measureTab": "Measure",
-  "recordsTab": "Records",
-  "records": "Records",
-  "more": "More",
-  "autoDetect": "Auto detect",
-  "autoDetectDone": "Borders detected. Drag the handles to fine-tune.",
-  "autoDetectStraightened": "Straightened by {angle}° and detected the borders. Drag the handles to fine-tune.",
-  "@autoDetectStraightened": {
-    "placeholders": {
-      "angle": {
-        "type": "String"
-      }
-    }
-  },
-  "autoDetectFailed": "Couldn't find the card borders. Please drag the lines by hand.",
-  "saveRecord": "Save",
-  "saveRecordTitle": "Save measurement",
-  "noteLabel": "Note (e.g. card name, optional)",
-  "save": "Save",
-  "cancel": "Cancel",
-  "recordSaved": "Saved to Records",
-  "noRecords": "No measurements yet",
-  "noRecordsHint": "After measuring a card, tap \"Save\" in the toolbar and it will appear here.",
-  "recordBelowStandard": "Below 3",
-  "untitledCard": "Untitled card",
-  "sortNewest": "Newest",
-  "sortGrade": "Grade",
-  "clearAll": "Clear",
-  "clearAllConfirm": "Delete all records? This can't be undone.",
-  "recordDeleted": "Record deleted",
-  "undo": "Undo",
-  "delete": "Delete",
-  "recordSummary": "L/R {lr}  ·  T/B {tb}",
-  "@recordSummary": {
-    "placeholders": {
-      "lr": {
-        "type": "String"
-      },
-      "tb": {
-        "type": "String"
-      }
-    }
-  },
-  "resultImage": "Image",
-  "saveImage": "Save image",
-  "imageSaved": "Saved to Photos",
-  "imageShared": "Done",
-  "imageDownloaded": "Image downloaded",
-  "imageSaveFailed": "Couldn't save the image. Please try again."
+  "aboutBody": "How to use: drag the handles so the outer lines (long dashes) sit on the card's outer edges and the inner lines (short dashes) on the artwork border; while dragging, slide your finger along the line to magnify different parts of it; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×). If the photo is tilted, tap \"Rotate\" at the bottom and drag the dial to straighten the card (0.1° steps).\n\nPrivacy: your photo is processed only on this device. It is never uploaded or saved, and is released when you leave the page.\n\nDisclaimer: the reference grade uses PSA's published front centering standards (back standards are looser, so for the back of a card only the ratios are meaningful). The result is for reference and is not an actual grade. This app is not affiliated with PSA.",
+  "close": "Close"
 }

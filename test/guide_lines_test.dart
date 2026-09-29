@@ -50,29 +50,4 @@ void main() {
     }
     expect(g.innerRight, 860);
   });
-
-  test('fromValues 夹在图片范围内并保持顺序', () {
-    final v = GuideLines.fromValues(
-      [-5, 30, 20, 1200, 100, 100, 100, 100],
-      width: w,
-      height: h,
-    );
-    expect(
-      [v.outerLeft, v.innerLeft, v.innerRight, v.outerRight],
-      [0, 30, 31, 1000],
-    );
-    expect(
-      [v.outerTop, v.innerTop, v.innerBottom, v.outerBottom],
-      [100, 101, 102, 103],
-    );
-    final end = GuideLines.fromValues(
-      [0, 10, 20, 30, 1400, 1400, 1400, 1400],
-      width: w,
-      height: h,
-    );
-    expect(
-      [end.outerTop, end.innerTop, end.innerBottom, end.outerBottom],
-      [1397, 1398, 1399, 1400],
-    );
-  });
 }
