@@ -367,4 +367,51 @@ void main() {
       expect(find.byKey(const Key('nudge-plus')), findsOneWidget);
     });
   });
+
+  group('平板', () {
+    for (final (name, size) in [
+      ('竖屏 8 寸', const Size(800, 1280)),
+      ('横屏 8 寸', const Size(1280, 800)),
+      ('横屏 11 寸', const Size(1194, 834)),
+      ('竖屏 13 寸', const Size(1024, 1366)),
+    ]) {
+      testWidgets('$name：布局不溢出，8 个手柄都在，拖动和微调正常', (tester) async {
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        final img = await testImage(tester);
+        await tester.pumpWidget(app(MeasureView(image: img)));
+        await tester.pump();
+        expect(tester.takeException(), isNull);
+        for (final id in [
+          'outerLeft',
+          'innerLeft',
+          'innerRight',
+          'outerRight',
+          'outerTop',
+          'innerTop',
+          'innerBottom',
+          'outerBottom',
+        ]) {
+          final r = tester.getRect(handle(id));
+          expect(
+            Offset.zero & size,
+            predicate<Rect>((v) => v.contains(r.center)),
+            reason: '$id 在屏幕内',
+          );
+        }
+        // 图片按比例放进画布，不变形。
+        final canvas = tester.getSize(find.byType(InteractiveViewer));
+        expect(canvas.width, greaterThan(300));
+        expect(canvas.height, greaterThan(300));
+        await tester.drag(handle('innerLeft'), const Offset(-2000, 0));
+        await tester.pump();
+        expect(find.text('98/2'), findsOneWidget);
+        await tester.tap(find.byKey(const Key('nudge-plus')));
+        await tester.pump();
+        expect(find.text('97/3'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
 }
