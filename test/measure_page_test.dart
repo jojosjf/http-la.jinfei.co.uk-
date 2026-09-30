@@ -7,13 +7,14 @@ import 'package:card_centering/ui/image_loader.dart';
 import 'package:card_centering/ui/measure_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget app(Widget child, {Locale locale = const Locale('zh')}) => MaterialApp(
-  locale: locale,
-  localizationsDelegates: AppLocalizations.localizationsDelegates,
-  supportedLocales: AppLocalizations.supportedLocales,
-  home: Scaffold(body: child),
-);
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(body: child),
+    );
 
 Future<LoadedImage> testImage(WidgetTester tester) async {
   final image = await tester.runAsync(
@@ -26,6 +27,10 @@ Future<LoadedImage> testImage(WidgetTester tester) async {
 Finder handle(String name) => find.byKey(ValueKey('handle-$name'));
 
 void main() {
+  // 已同意隐私政策，不弹首次启动提示。
+  setUp(() =>
+      SharedPreferences.setMockInitialValues({'privacy_agreed_version': 1}));
+
   testWidgets('空状态显示选图按钮', (tester) async {
     await tester.pumpWidget(const CardCenteringApp());
     await tester.pumpAndSettle();
@@ -60,12 +65,10 @@ void main() {
     await g.moveBy(const Offset(40, 0));
     await tester.pump();
     expect(find.text('50/50'), findsOneWidget, reason: '只剩上下仍为 50/50');
-    String lr() =>
-        (tester
-                .widgetList<Text>(find.textContaining('/'))
-                .map((t) => t.data!)
-                .where((t) => t != '50/50'))
-            .single;
+    String lr() => (tester
+        .widgetList<Text>(find.textContaining('/'))
+        .map((t) => t.data!)
+        .where((t) => t != '50/50')).single;
     final first = lr();
     await g.moveBy(const Offset(5, 0));
     await tester.pump();

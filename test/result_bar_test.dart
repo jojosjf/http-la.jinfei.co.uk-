@@ -4,31 +4,36 @@ import 'package:card_centering/main.dart';
 import 'package:card_centering/ui/result_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 CenteringResult result({required bool borderline}) => CenteringResult(
-  lrBig: borderline ? 56 : 52,
-  lrSmall: borderline ? 44 : 48,
-  tbBig: 50,
-  tbSmall: 50,
-  worse: borderline ? 56 : 52,
-  grade: borderline ? 9 : 10,
-  borderline: borderline,
-  nearGrade: borderline ? 10 : null,
-);
+      lrBig: borderline ? 56 : 52,
+      lrSmall: borderline ? 44 : 48,
+      tbBig: 50,
+      tbSmall: 50,
+      worse: borderline ? 56 : 52,
+      grade: borderline ? 9 : 10,
+      borderline: borderline,
+      nearGrade: borderline ? 10 : null,
+    );
 
 Widget bar(CenteringResult r) => MaterialApp(
-  locale: const Locale('zh'),
-  localizationsDelegates: AppLocalizations.localizationsDelegates,
-  supportedLocales: AppLocalizations.supportedLocales,
-  home: Scaffold(
-    body: Align(
-      alignment: Alignment.bottomCenter,
-      child: ResultBar(result: r),
-    ),
-  ),
-);
+      locale: const Locale('zh'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: Align(
+          alignment: Alignment.bottomCenter,
+          child: ResultBar(result: r),
+        ),
+      ),
+    );
 
 void main() {
+  // 已同意隐私政策，不弹首次启动提示。
+  setUp(() =>
+      SharedPreferences.setMockInitialValues({'privacy_agreed_version': 1}));
+
   testWidgets('临界提示出现与否，结果栏高度不变', (tester) async {
     await tester.pumpWidget(bar(result(borderline: false)));
     final plain = tester.getSize(find.byType(ResultBar)).height;

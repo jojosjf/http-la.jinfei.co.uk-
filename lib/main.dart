@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'l10n/app_localizations.dart';
 import 'ui/measure_page.dart';
+import 'ui/privacy.dart';
 
 void main() {
   runApp(const CardCenteringApp());
@@ -35,7 +36,7 @@ class CardCenteringApp extends StatelessWidget {
           locale?.languageCode == 'en'
               ? const Locale('en')
               : const Locale('zh'),
-      home: const MeasurePage(),
+      home: const PrivacyGate(child: MeasurePage()),
     );
   }
 }

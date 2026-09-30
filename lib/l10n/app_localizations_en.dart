@@ -116,4 +116,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get privacyPolicy => 'Privacy policy';
+
+  @override
+  String get privacyPromptTitle => 'Privacy notice';
+
+  @override
+  String get privacyPromptBody =>
+      'Welcome to Card Centering Check!\n\nThe app works entirely offline: it collects and uploads no personal information, requests no device permissions and contains no third-party SDKs. The photo you choose is processed only on this device and is never uploaded or saved.\n\nPlease read the full privacy policy for details. Tapping \"Agree\" means you have read and agree to the privacy policy.';
+
+  @override
+  String get privacyViewFull => 'Read the privacy policy';
+
+  @override
+  String get privacyAgree => 'Agree';
+
+  @override
+  String get privacyDisagree => 'Disagree';
+
+  @override
+  String get privacyDisagreeTitle => 'Before you go';
+
+  @override
+  String get privacyDisagreeBody =>
+      'The app collects none of your personal information, but you need to agree to the privacy policy to use it. If you still disagree, the app will close.';
+
+  @override
+  String get privacyExit => 'Close app';
+
+  @override
+  String get privacyBack => 'Go back';
+
+  @override
+  String get privacyPolicyBody =>
+      'Last updated: 30 September 2026\nEffective: 30 September 2026\nCard Centering Check (\"the app\", package com.saod.cardcentering) is developed and operated by the developer named at the end of this policy (\"we\"). Please read this policy before using the app.\n## 1. Personal information we collect\nThe app collects no personal information. There is no sign-up or login. It does not collect device identifiers (such as IMEI, OAID, Android ID or MAC address), location, contacts, call logs, messages or the list of installed apps. It does not read the clipboard and does no analytics, tracking or advertising.\n## 2. How your photo is used\nYou choose one photo with the system photo picker; the app can read only that photo and cannot browse your library.\nThe photo is used only in memory on your device for display and measuring. It is never uploaded or sent to anyone.\nSome systems copy the chosen photo into the app\'s temporary folder; the app deletes that copy right after reading it and never keeps your photo.\nMeasurements are only shown on screen and are not recorded.\n## 3. Device permissions\nThe app requests no device permissions, including network, storage, camera, photos, location and phone. Without network permission it cannot connect to the internet.\n## 4. Third-party SDKs\nThe app contains no third-party SDKs, including advertising, analytics, push, login, payment, sharing and crash reporting SDKs.\n## 5. Information kept on your device\nThe app keeps one setting on your device: whether you have agreed to this policy, so the notice is not shown every time. It contains no personal information and is removed when you uninstall the app.\n## 6. Auto-start and chained start\nThe app does not start by itself and does not start or get started by other apps. It runs only when you open it and does not stay in the background.\n## 7. Sharing and disclosure\nAs the app collects no personal information, we do not share, transfer or disclose any personal information.\n## 8. Your rights\nThere is no personal information for you to access, correct or delete, and no account to close. You can uninstall the app at any time. If you believe your rights have been harmed, you can contact us or complain to the relevant authorities.\n## 9. Children\nThe app collects no personal information from anyone, including children under 14. Minors should read this policy and use the app with a parent or guardian.\n## 10. Changes to this policy\nIf a change to the app affects how personal information is handled, we will update this policy and tell you in the app with a notice.\n## 11. Contact us\nIf you have any questions or complaints about this policy, contact us and we will reply within 15 working days:';
+
+  @override
+  String get privacyDeveloper => '[Developer name]';
+
+  @override
+  String get privacyEmail => '[Contact email]';
+
+  @override
+  String privacyContact(String developer, String email) {
+    return 'Developer: $developer\nEmail: $email';
+  }
 }

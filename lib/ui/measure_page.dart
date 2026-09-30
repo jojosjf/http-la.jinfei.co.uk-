@@ -12,6 +12,7 @@ import 'canvas_geometry.dart';
 import 'guide_painter.dart';
 import 'image_loader.dart';
 import 'picked_file_cleanup.dart';
+import 'privacy.dart';
 import 'result_bar.dart';
 
 /// 唯一的页面：空状态，或图片 + 参考线 + 结果栏。
@@ -84,6 +85,13 @@ class _MeasurePageState extends State<MeasurePage> {
         title: Text(l10n.about),
         content: SingleChildScrollView(child: Text(l10n.aboutBody)),
         actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              showPrivacyPolicy(this.context);
+            },
+            child: Text(l10n.privacyPolicy),
+          ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(l10n.close),
