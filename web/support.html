@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>卡牌居中检查 技术支持 · Support</title>
+  <title>Card Centering Check — Support</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -42,27 +42,25 @@
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
     th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .lang-switch { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px; }
+    .lang-switch button {
+      font: inherit; font-size: 14px; padding: 6px 14px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer;
+    }
+    .lang-switch button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .js [data-lang]:not(.active) { display: none; }
+    .nojs-divider { margin: 48px 0 0; border: 0; border-top: 2px solid var(--line); }
+    .js .nojs-divider { display: none; }
   </style>
 </head>
 <body>
 <main>
-  <h1>卡牌居中检查 · 技术支持</h1>
-  <p class="meta"><a href="#en">English below</a></p>
-
-  <div class="summary">
-    <p><strong>联系我们</strong></p>
-    <p>遇到问题或有建议，请发邮件到 <strong>【联系邮箱】</strong>，我们会在 15 个工作日内回复。来信时请注明设备型号、系统版本和 App 版本号。</p>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" data-set="en" aria-pressed="true">EN</button>
+    <button type="button" data-set="zh" aria-pressed="false">中文</button>
   </div>
-
-  <h2>常见问题</h2>
-  <p><strong>怎么测量？</strong><br>从相册选一张卡牌照片，App 会自动识别卡牌外边和图案边框，放好 8 条参考线。外框线（长虚线）对齐卡牌外边缘，内框线（短虚线）对齐图案边框，下方即显示左右、上下比例和参考等级。</p>
-  <p><strong>自动识别不准怎么办？</strong><br>拖动手柄调整参考线，拖动时有放大镜；点一下手柄可以选中该线，再用箭头每次移动 1 像素。照片拍歪时可以点“旋转”手动转正，再点“自动识别”重新找边。拍照时尽量正对卡牌、让四边完整入镜，识别会更准确。</p>
-  <p><strong>测量记录存在哪里？</strong><br>只存在您自己的设备上，不含照片，也不会上传。删除 App 后记录随之删除。</p>
-  <p><strong>结果图怎么保存？</strong><br>点“结果图”→“保存图片”，在系统分享面板中选择“存储图像”即可保存到“照片”，也可以直接分享。</p>
-  <p><strong>参考等级准确吗？</strong><br>参考等级依据公开的居中标准计算，仅供参考，不代表实际评级。本应用与任何卡牌评级机构均无关联。</p>
-  <p><strong>隐私</strong><br>本应用完全离线运行，不收集任何个人信息。详见<a href="privacy_ios.html">隐私政策</a>。</p>
-
-  <h1 id="en" style="margin-top:48px">Card Centering Check · Support</h1>
+  <section data-lang="en" data-title="Card Centering Check — Support" lang="en">
+  <h1>Card Centering Check · Support</h1>
 
   <div class="summary">
     <p><strong>Contact</strong></p>
@@ -75,7 +73,51 @@
   <p><strong>Where are my records stored?</strong><br>Only on your device. They contain no photos and are never uploaded. They are removed when you delete the app.</p>
   <p><strong>How do I save the result image?</strong><br>Tap "Image" → "Save image", then choose "Save Image" in the share sheet to save it to Photos, or share it directly.</p>
   <p><strong>Is the reference grade accurate?</strong><br>It is calculated from published centering standards and is for reference only; it is not an actual grade. This app is not affiliated with any card grading company.</p>
-  <p><strong>Privacy</strong><br>The app works fully offline and collects no personal information. See the <a href="privacy_ios.html">privacy policy</a>.</p>
+  <p><strong>Privacy</strong><br>The app works fully offline and collects no personal information. See the <a href="privacy_ios.html#en">privacy policy</a>.</p>
+  </section>
+  <hr class="nojs-divider">
+  <section data-lang="zh" data-title="卡牌居中检查 · 技术支持" lang="zh-CN">
+  <h1>卡牌居中检查 · 技术支持</h1>
+
+  <div class="summary">
+    <p><strong>联系我们</strong></p>
+    <p>遇到问题或有建议，请发邮件到 <strong>【联系邮箱】</strong>，我们会在 15 个工作日内回复。来信时请注明设备型号、系统版本和 App 版本号。</p>
+  </div>
+
+  <h2>常见问题</h2>
+  <p><strong>怎么测量？</strong><br>从相册选一张卡牌照片，App 会自动识别卡牌外边和图案边框，放好 8 条参考线。外框线（长虚线）对齐卡牌外边缘，内框线（短虚线）对齐图案边框，下方即显示左右、上下比例和参考等级。</p>
+  <p><strong>自动识别不准怎么办？</strong><br>拖动手柄调整参考线，拖动时有放大镜；点一下手柄可以选中该线，再用箭头每次移动 1 像素。照片拍歪时可以点“旋转”手动转正，再点“自动识别”重新找边。拍照时尽量正对卡牌、让四边完整入镜，识别会更准确。</p>
+  <p><strong>测量记录存在哪里？</strong><br>只存在您自己的设备上，不含照片，也不会上传。删除 App 后记录随之删除。</p>
+  <p><strong>结果图怎么保存？</strong><br>点“结果图”→“保存图片”，在系统分享面板中选择“存储图像”即可保存到“照片”，也可以直接分享。</p>
+  <p><strong>参考等级准确吗？</strong><br>参考等级依据公开的居中标准计算，仅供参考，不代表实际评级。本应用与任何卡牌评级机构均无关联。</p>
+  <p><strong>隐私</strong><br>本应用完全离线运行，不收集任何个人信息。详见<a href="privacy_ios.html#zh">隐私政策</a>。</p>
+
+  </section>
 </main>
+<script>
+  // 默认英文；点按钮切换并记住选择。网址带 #zh 或 #en 时按网址显示。
+  (function () {
+    document.documentElement.classList.add('js');
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    var hash = location.hash.replace('#', '');
+    var lang = (hash === 'zh' || hash === 'en') ? hash : (saved === 'zh' ? 'zh' : 'en');
+    function show(l) {
+      document.querySelectorAll('[data-lang]').forEach(function (el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === l);
+      });
+      document.querySelectorAll('.lang-switch button').forEach(function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-set') === l ? 'true' : 'false');
+      });
+      document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+      document.title = document.querySelector('[data-lang="' + l + '"]').getAttribute('data-title');
+      try { localStorage.setItem('lang', l); } catch (e) {}
+    }
+    document.querySelectorAll('.lang-switch button').forEach(function (b) {
+      b.addEventListener('click', function () { show(b.getAttribute('data-set')); });
+    });
+    show(lang);
+  })();
+</script>
 </body>
 </html>

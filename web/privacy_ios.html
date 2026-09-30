@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>卡牌居中检查 iOS 隐私政策</title>
+  <title>Card Centering Check — Privacy Policy (iOS)</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -42,14 +42,115 @@
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
     th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+    .lang-switch { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px; }
+    .lang-switch button {
+      font: inherit; font-size: 14px; padding: 6px 14px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer;
+    }
+    .lang-switch button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .js [data-lang]:not(.active) { display: none; }
+    .nojs-divider { margin: 48px 0 0; border: 0; border-top: 2px solid var(--line); }
+    .js .nojs-divider { display: none; }
   </style>
 </head>
 <body>
 <main>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button type="button" data-set="en" aria-pressed="true">EN</button>
+    <button type="button" data-set="zh" aria-pressed="false">中文</button>
+  </div>
+  <section data-lang="en" data-title="Card Centering Check — Privacy Policy (iOS)" lang="en">
+  <h1>Card Centering Check — Privacy Policy (iOS)</h1>
+  <p class="meta">Last updated: 1 October 2026</p>
+  <p class="meta">Effective: 1 October 2026</p>
+
+  <div class="summary">
+    <p><strong>Summary</strong></p>
+    <p>Card Centering Check works entirely offline on your iPhone or iPad. We <strong>do not collect, upload or share</strong> any personal information, the app contains no third-party SDKs, and it does no tracking. Measurements you choose to save stay on your own device and never include photos.</p>
+  </div>
+
+  <h2>1. Scope</h2>
+  <div class="table-wrap">
+  <table>
+    <tr><th>App name</th><td>Card Centering Check (卡牌居中检查)</td></tr>
+    <tr><th>Bundle ID</th><td>com.saod.cardcentering</td></tr>
+    <tr><th>Platform</th><td>iOS / iPadOS 15.0 or later, version 1.1.2 and later</td></tr>
+    <tr><th>Developer</th><td>[Developer name]</td></tr>
+    <tr><th>Contact</th><td>[Contact email]</td></tr>
+  </table>
+  </div>
+  <p>Card Centering Check (“the app”) is developed and operated by [Developer name] (“we”). This policy follows applicable data protection laws and Apple’s App Store Review Guidelines. Please read it before using the app.</p>
+
+  <h2>2. Information we collect</h2>
+  <p>The app <strong>collects no personal information</strong>:</p>
+  <ul>
+    <li>There is no sign-up or login and no user account;</li>
+    <li>It does not collect device identifiers (such as IDFA or IDFV), location, contacts, calendars or similar information;</li>
+    <li>It does no analytics, behavioural analysis, advertising or cross-app tracking;</li>
+    <li>It does not communicate with any server; photos and measurements never leave your device.</li>
+  </ul>
+
+  <h2>3. How your photo is used</h2>
+  <ul>
+    <li>You choose one card photo with the <strong>system photo picker</strong>. The app can read only that photo and cannot browse your photo library, so it does not need Photos access;</li>
+    <li>The photo is used only in memory on your device for display, measuring and edge detection. It is <strong>never uploaded</strong> or sent to anyone; edge detection runs entirely on the device;</li>
+    <li>The app <strong>does not save your photo</strong>. It is cleared from memory when you choose another photo or close the app.</li>
+  </ul>
+
+  <h2>4. Saved measurements</h2>
+  <p>Only when you tap “Save” does the app store a measurement record, containing only: the left/right and top/bottom ratios, the reference grade, the time, and an optional note you type (such as the card name).</p>
+  <ul>
+    <li>Records <strong>contain no photos</strong> and no device information;</li>
+    <li>Records are kept in the app’s private storage on your device and are <strong>never uploaded</strong>. If you use iCloud or computer backups, they are included in your device backup and handled by Apple under your backup settings; we cannot access them;</li>
+    <li>You can swipe left to delete a record or tap “Clear” to delete all records in Records. Deleting the app removes them.</li>
+  </ul>
+
+  <h2>5. Result image</h2>
+  <p>The result image is created on your device and shows the card, guide lines, ratios and reference grade. Only when you tap “Save image” does the app open the system share sheet, where you choose “Save Image” to save it to Photos or share it. The first time you save, iOS asks whether to allow the app to <strong>add photos</strong> (write-only; it cannot read your library). The app never saves or shares the image on its own.</p>
+
+  <h2>6. Device permissions</h2>
+  <div class="table-wrap">
+  <table>
+    <tr><th>Permission</th><th>Used</th><th>Notes</th></tr>
+    <tr><td>Photos (read)</td><td>No</td><td>The system photo picker gives the app only the photo you choose</td></tr>
+    <tr><td>Photos (add only)</td><td>Only when you save a result image</td><td>Asked by iOS; you can decline and still share the image from the share sheet</td></tr>
+    <tr><td>Camera, location, contacts, microphone, Bluetooth, tracking</td><td>No</td><td>Not used</td></tr>
+  </table>
+  </div>
+
+  <h2>7. Third-party SDKs</h2>
+  <p>The app contains <strong>no third-party SDKs</strong>, including advertising, analytics, push, login, payment, sharing and crash reporting SDKs. It is built with the open-source Flutter framework, which collects and transmits no data in this app.</p>
+
+  <h2>8. Sharing and disclosure</h2>
+  <p>As the app collects no personal information, we do not share, sell, transfer or disclose personal information to any company, organisation or individual.</p>
+
+  <h2>9. Storage</h2>
+  <p>The app stores nothing on any server and does not save your photos on the device. Measurements you choose to save stay on your device (see section 4). There is no cross-border transfer of personal information.</p>
+
+  <h2>10. Your rights</h2>
+  <p>As we hold no personal information about you, there is nothing for you to request access to, correct or delete, and no account to close. You can delete records in the app or delete the app at any time; the app then leaves none of your data on the device (except result images you saved to Photos). If you believe your rights have been harmed, you can contact us or complain to the relevant authority.</p>
+
+  <h2>11. Children</h2>
+  <p>The app collects no personal information from anyone, including children under 14. Minors should read this policy and use the app with a parent or guardian.</p>
+
+  <h2>12. Disclaimer</h2>
+  <p>The reference grade is calculated from published centering standards and is for reference only; it is not an actual grade. The app is not affiliated with any card grading company.</p>
+
+  <h2>13. Changes to this policy</h2>
+  <p>If a change to the app affects how personal information is handled, we will update this policy and the date on this page. We will not reduce your rights under this policy without your explicit consent.</p>
+
+  <h2>14. Contact us</h2>
+  <p>If you have any questions, comments or complaints about this policy, contact us and we will reply within 15 working days:</p>
+  <ul>
+    <li>Developer: [Developer name]</li>
+    <li>Email: [Contact email]</li>
+  </ul>
+  </section>
+  <hr class="nojs-divider">
+  <section data-lang="zh" data-title="卡牌居中检查 隐私政策（iOS 版）" lang="zh-CN">
   <h1>卡牌居中检查 隐私政策（iOS 版）</h1>
   <p class="meta">更新日期：2026 年 10 月 1 日</p>
   <p class="meta">生效日期：2026 年 10 月 1 日</p>
-  <p class="meta"><a href="#en">English version below</a></p>
 
   <div class="summary">
     <p><strong>简要说明</strong></p>
@@ -133,37 +234,32 @@
     <li>电子邮箱：【联系邮箱】</li>
   </ul>
 
-  <h1 id="en" style="margin-top:48px">Card Centering Check — Privacy Policy (iOS)</h1>
-  <p class="meta">Last updated: 1 October 2026</p>
-
-  <div class="summary">
-    <p><strong>Summary</strong></p>
-    <p>Card Centering Check works entirely offline on your iPhone or iPad. We <strong>do not collect, upload or share</strong> any personal information, the app contains no third-party SDKs, and it does no tracking. Measurements you choose to save stay on your device and never include photos.</p>
-  </div>
-
-  <h2>1. Information we collect</h2>
-  <p>None. There is no sign-up or login. The app does not collect device identifiers (such as IDFA or IDFV), location, contacts or any other personal information, does no analytics, advertising or cross-app tracking, and does not communicate with any server.</p>
-
-  <h2>2. Photos</h2>
-  <p>You choose one photo with the system photo picker; the app can read only that photo and cannot browse your library, so it does not need Photos access. The photo is used only in memory on your device for display, measuring and edge detection. It is never uploaded, shared or saved by the app.</p>
-
-  <h2>3. Saved measurements</h2>
-  <p>Only when you tap “Save”, the app stores the ratios, reference grade, time and an optional note you type. Records contain no photos or device information and stay in the app’s private storage on your device; they may be included in your iCloud or computer backup under your own backup settings, which we cannot access. You can delete records in the app at any time, and they are removed when you delete the app.</p>
-
-  <h2>4. Result image</h2>
-  <p>The result image is created on your device. When you tap “Save image”, the system share sheet opens and you choose to save it to Photos or share it. The first time you save, iOS asks whether to allow the app to <strong>add</strong> photos (write-only). The app never saves or shares the image on its own.</p>
-
-  <h2>5. Third parties</h2>
-  <p>The app contains no third-party SDKs. It is built with the open-source Flutter framework, which collects and transmits no data in this app. We do not share, sell or disclose any personal information.</p>
-
-  <h2>6. Children</h2>
-  <p>The app collects no personal information from anyone, including children.</p>
-
-  <h2>7. Disclaimer</h2>
-  <p>The reference grade is calculated from published centering standards and is for reference only; it is not an actual grade. The app is not affiliated with any card grading company.</p>
-
-  <h2>8. Changes and contact</h2>
-  <p>If a change to the app affects how information is handled, we will update this page and its date. For any questions, contact [Developer name] at [Contact email]; we will reply within 15 working days.</p>
+  </section>
 </main>
+<script>
+  // 默认英文；点按钮切换并记住选择。网址带 #zh 或 #en 时按网址显示。
+  (function () {
+    document.documentElement.classList.add('js');
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    var hash = location.hash.replace('#', '');
+    var lang = (hash === 'zh' || hash === 'en') ? hash : (saved === 'zh' ? 'zh' : 'en');
+    function show(l) {
+      document.querySelectorAll('[data-lang]').forEach(function (el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === l);
+      });
+      document.querySelectorAll('.lang-switch button').forEach(function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-set') === l ? 'true' : 'false');
+      });
+      document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+      document.title = document.querySelector('[data-lang="' + l + '"]').getAttribute('data-title');
+      try { localStorage.setItem('lang', l); } catch (e) {}
+    }
+    document.querySelectorAll('.lang-switch button').forEach(function (b) {
+      b.addEventListener('click', function () { show(b.getAttribute('data-set')); });
+    });
+    show(lang);
+  })();
+</script>
 </body>
 </html>
