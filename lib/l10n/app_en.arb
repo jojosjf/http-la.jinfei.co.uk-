@@ -12,7 +12,7 @@
   "leftRight": "Left / Right",
   "topBottom": "Top / Bottom",
   "referenceGrade": "Reference grade",
-  "gradeValue": "PSA {grade}",
+  "gradeValue": "P{grade}",
   "@gradeValue": {
     "placeholders": {
       "grade": {
@@ -20,8 +20,8 @@
       }
     }
   },
-  "belowStandard": "Below PSA 3",
-  "borderline": "Borderline: close to PSA {grade}",
+  "belowStandard": "Below P3",
+  "borderline": "Borderline: close to P{grade}",
   "@borderline": {
     "placeholders": {
       "grade": {
@@ -29,7 +29,7 @@
       }
     }
   },
-  "disclaimer": "Based on PSA standards · for reference only · not affiliated with PSA",
+  "disclaimer": "Based on published centering standards · for reference only",
   "lineName": "{line, select, outerLeft{Outer left} innerLeft{Inner left} innerRight{Inner right} outerRight{Outer right} outerTop{Outer top} innerTop{Inner top} innerBottom{Inner bottom} outerBottom{Outer bottom} other{Line}}",
   "@lineName": {
     "placeholders": {

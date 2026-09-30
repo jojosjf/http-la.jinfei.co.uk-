@@ -48,20 +48,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String gradeValue(String grade) {
-    return 'PSA $grade';
+    return 'P$grade';
   }
 
   @override
-  String get belowStandard => 'Below PSA 3';
+  String get belowStandard => 'Below P3';
 
   @override
   String borderline(String grade) {
-    return 'Borderline: close to PSA $grade';
+    return 'Borderline: close to P$grade';
   }
 
   @override
   String get disclaimer =>
-      'Based on PSA standards · for reference only · not affiliated with PSA';
+      'Based on published centering standards · for reference only';
 
   @override
   String lineName(String line) {

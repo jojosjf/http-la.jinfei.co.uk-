@@ -36,7 +36,7 @@ void main() {
 
     await tester.pumpWidget(bar(result(borderline: true)));
     final withHint = tester.getSize(find.byType(ResultBar)).height;
-    expect(find.text('临界：接近 PSA 10'), findsOneWidget);
+    expect(find.text('临界：接近 P10'), findsOneWidget);
 
     expect(withHint, plain);
   });

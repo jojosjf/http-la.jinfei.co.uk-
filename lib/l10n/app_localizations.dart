@@ -173,25 +173,25 @@ abstract class AppLocalizations {
   /// No description provided for @gradeValue.
   ///
   /// In en, this message translates to:
-  /// **'PSA {grade}'**
+  /// **'P{grade}'**
   String gradeValue(String grade);
 
   /// No description provided for @belowStandard.
   ///
   /// In en, this message translates to:
-  /// **'Below PSA 3'**
+  /// **'Below P3'**
   String get belowStandard;
 
   /// No description provided for @borderline.
   ///
   /// In en, this message translates to:
-  /// **'Borderline: close to PSA {grade}'**
+  /// **'Borderline: close to P{grade}'**
   String borderline(String grade);
 
   /// No description provided for @disclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Based on PSA standards · for reference only · not affiliated with PSA'**
+  /// **'Based on published centering standards · for reference only'**
   String get disclaimer;
 
   /// No description provided for @lineName.
@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutBody.
   ///
   /// In en, this message translates to:
-  /// **'How to use: after you choose a photo, the card\'s outer edges and artwork border are detected and the 8 lines are placed for you. If they are off, drag the handles so the outer lines (long dashes) sit on the card\'s outer edges and the inner lines (short dashes) on the artwork border; while dragging, slide your finger along the line to magnify different parts of it; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×). If the photo is tilted by up to 6°, auto detect straightens it first; you can also tap \"Rotate\" in the toolbar and drag the dial (0.1° steps), then tap \"Auto detect\" to find the edges again.\n\nRecords: tap \"Save\" to add a note and keep the ratios and reference grade. In Records you can sort by date or grade to pick cards worth submitting; swipe left to delete.\n\nResult image: tap \"Image\" to make a picture with the lines, ratios and reference grade that you can save to Photos and share.\n\nPrivacy: your photo is processed only on this device and never uploaded. Records keep only numbers and your note, never the photo, and stay on this device.\n\nDisclaimer: the reference grade uses PSA\'s published front centering standards (back standards are looser, so for the back of a card only the ratios are meaningful). The result is for reference and is not an actual grade. This app is not affiliated with PSA.'**
+  /// **'How to use: after you choose a photo, the card\'s outer edges and artwork border are detected and the 8 lines are placed for you. If they are off, drag the handles so the outer lines (long dashes) sit on the card\'s outer edges and the inner lines (short dashes) on the artwork border; while dragging, slide your finger along the line to magnify different parts of it; the small picture on each handle shows which edge that line belongs on. Tap a handle to select its line, then use the arrows to move it 1 pixel at a time. Pinch to zoom (up to 8×). If the photo is tilted by up to 6°, auto detect straightens it first; you can also tap \"Rotate\" in the toolbar and drag the dial (0.1° steps), then tap \"Auto detect\" to find the edges again.\n\nRecords: tap \"Save\" to add a note and keep the ratios and reference grade. In Records you can sort by date or grade to pick cards worth submitting; swipe left to delete.\n\nResult image: tap \"Image\" to make a picture with the lines, ratios and reference grade that you can save to Photos and share.\n\nPrivacy: your photo is processed only on this device and never uploaded. Records keep only numbers and your note, never the photo, and stay on this device.'**
   String get aboutBody;
 
   /// No description provided for @close.

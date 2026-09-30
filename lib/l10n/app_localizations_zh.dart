@@ -46,19 +46,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String gradeValue(String grade) {
-    return 'PSA $grade';
+    return 'P$grade';
   }
 
   @override
-  String get belowStandard => '低于 PSA 3';
+  String get belowStandard => '低于 P3';
 
   @override
   String borderline(String grade) {
-    return '临界：接近 PSA $grade';
+    return '临界：接近 P$grade';
   }
 
   @override
-  String get disclaimer => '参考 PSA 公开标准，仅供参考，与 PSA 无关联';
+  String get disclaimer => '参考公开的居中标准，仅供参考';
 
   @override
   String lineName(String line) {

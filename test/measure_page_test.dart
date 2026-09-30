@@ -33,11 +33,11 @@ void main() {
     expect(find.text('Choose photo'), findsOneWidget);
   });
 
-  testWidgets('默认线位置为 50/50，PSA 10', (tester) async {
+  testWidgets('默认线位置为 50/50，P10', (tester) async {
     final img = await testImage(tester);
     await tester.pumpWidget(app(MeasureView(image: img)));
     expect(find.text('50/50'), findsNWidgets(2));
-    expect(find.text('PSA 10'), findsOneWidget);
+    expect(find.text('P10'), findsOneWidget);
     for (final n in [
       'outerLeft',
       'innerLeft',
@@ -129,7 +129,7 @@ void main() {
     await tester.pump();
     // B = 1288 - 197 = 1091，T = 84 → 93/7。
     expect(find.text('93/7'), findsOneWidget);
-    expect(find.text('Below PSA 3'), findsNothing);
+    expect(find.text('Below P3'), findsNothing);
   });
 
   testWidgets('点手柄选中出现微调按钮，点空白取消', (tester) async {
