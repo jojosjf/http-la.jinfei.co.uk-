@@ -1,0 +1,37 @@
+{
+  "store": "https://uk.topps.com",
+
+  "poll_seconds": 120,
+  "hot_poll_seconds": 5,
+  "hot_window_before_min": 3,
+  "hot_window_after_min": 30,
+  "remind_before_min": [60, 5],
+
+  "include_keywords": ["hobby", "jumbo", "breaker", "delight", "sapphire", "dynasty", "museum",
+                       "definitive", "sterling", "tier one", "finest", "inception", "transcendent",
+                       "chrome", "tribute", "gold label", "f1", "formula 1"],
+  "exclude_keywords": ["match attax", "sticker", "album", "starter", "binder", "sleeve",
+                       "multipack", "blaster", "gravity feeder", "hanger", "single card"],
+  "min_price": 60,
+  "max_price": 1500,
+
+  "default_quantity": 1,
+  "auto_open_checkout": true,
+
+  "watchlist": [
+    {"handle": "例子-2026-topps-chrome-uefa-club-competitions-hobby-box", "quantity": 2, "always_hot": false}
+  ],
+
+  "schedule": [
+    {"handle": "例子-2026-topps-chrome-uefa-club-competitions-hobby-box",
+     "name": "2026 Topps Chrome UCC Hobby Box",
+     "time": "2026-10-15 10:00"}
+  ],
+
+  "notify": {
+    "mac":        {"enabled": true},
+    "ntfy":       {"enabled": true,  "topic": "改成你自己的随机名字-topps-abc123", "priority": 5},
+    "telegram":   {"enabled": false, "bot_token": "", "chat_id": ""},
+    "serverchan": {"enabled": false, "send_key": ""}
+  }
+}

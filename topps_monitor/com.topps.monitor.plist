@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- 让监控在 Mac 开机后自动在后台运行、崩溃自动重启。
+     把 /Users/你的用户名/topps 改成你实际放代码的目录。 -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.topps.monitor</string>
+  <key>WorkingDirectory</key><string>/Users/你的用户名/topps</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/caffeinate</string><string>-i</string>
+    <string>/usr/bin/python3</string><string>-m</string><string>topps_monitor.monitor</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardOutPath</key><string>/tmp/topps-monitor.out</string>
+  <key>StandardErrorPath</key><string>/tmp/topps-monitor.err</string>
+</dict>
+</plist>

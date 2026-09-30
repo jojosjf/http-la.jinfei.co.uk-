@@ -1,0 +1,5 @@
+topps_monitor/config.json
+topps_monitor/state.json
+topps_monitor/monitor.log
+*.tmp
+__pycache__/
