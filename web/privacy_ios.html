@@ -256,7 +256,17 @@
       try { localStorage.setItem('lang', l); } catch (e) {}
     }
     document.querySelectorAll('.lang-switch button').forEach(function (b) {
-      b.addEventListener('click', function () { show(b.getAttribute('data-set')); });
+      b.addEventListener('click', function () {
+        var l = b.getAttribute('data-set');
+        show(l);
+        // Keep the language in the address bar so a copied link opens the same language.
+        history.replaceState(null, '', '#' + l);
+      });
+    });
+    // Typing #zh or #en on an open page does not reload it, so follow hash changes too.
+    window.addEventListener('hashchange', function () {
+      var h = location.hash.replace('#', '');
+      if (h === 'zh' || h === 'en') show(h);
     });
     show(lang);
   })();
