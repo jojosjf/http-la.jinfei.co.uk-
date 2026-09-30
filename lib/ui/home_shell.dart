@@ -28,13 +28,21 @@ class _HomeShellState extends State<HomeShell> {
     }
     final l10n = AppLocalizations.of(context);
     return Scaffold(
-      // 切换页面时保留测量页的图片和参考线。
-      body: IndexedStack(
-        index: _index,
+      // 切换页面时保留测量页的图片和参考线。隐藏的页面不绘制，动画也暂停
+      // （IndexedStack 会让隐藏页面的动画继续运行，白白耗电）。
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          MeasurePage(store: widget.store),
-          RecordsPage(store: widget.store),
-          const AboutPage(),
+          for (final (i, page) in [
+            MeasurePage(store: widget.store),
+            RecordsPage(store: widget.store),
+            const AboutPage(),
+          ].indexed)
+            Offstage(
+              key: ValueKey('tab-$i'),
+              offstage: i != _index,
+              child: TickerMode(enabled: i == _index, child: page),
+            ),
         ],
       ),
       bottomNavigationBar: NavigationBar(
