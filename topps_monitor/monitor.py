@@ -23,8 +23,10 @@ import time
 import urllib.error
 import urllib.request
 import webbrowser
+
 from datetime import datetime, timedelta, timezone
 
+from .net import SSL_CONTEXT
 from .notifiers import Notifier
 
 log = logging.getLogger("topps")
@@ -85,7 +87,7 @@ class Shop:
     def get_json(self, path):
         req = urllib.request.Request(self.base + path, headers={
             "User-Agent": USER_AGENT, "Accept": "application/json", "Cache-Control": "no-cache"})
-        with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+        with urllib.request.urlopen(req, timeout=self.timeout, context=SSL_CONTEXT) as resp:
             return json.loads(resp.read().decode("utf-8"))
 
     def all_products(self, max_pages=10):

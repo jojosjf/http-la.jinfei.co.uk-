@@ -10,6 +10,8 @@ import sys
 import urllib.parse
 import urllib.request
 
+from .net import SSL_CONTEXT
+
 log = logging.getLogger("topps.notify")
 
 
@@ -20,7 +22,7 @@ def _post(url, data=None, headers=None, json_body=None, timeout=15):
     elif isinstance(data, dict):
         data = urllib.parse.urlencode(data).encode("utf-8")
     req = urllib.request.Request(url, data=data, headers=headers or {}, method="POST")
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
+    with urllib.request.urlopen(req, timeout=timeout, context=SSL_CONTEXT) as resp:
         return resp.status
 
 

@@ -66,6 +66,11 @@ launchctl load ~/Library/LaunchAgents/com.topps.monitor.plist
 
 全自动下单技术上可以做（用浏览器自动化在你自己的账号里完成付款），但 Topps 的条款很可能禁止机器人下单，被识别后订单可能被取消或账号被封；遇到排队和验证码也仍需人工。建议先用半自动跑几次发售，看看速度是否够用再决定。
 
+## 常见问题
+
+- **`No module named 'topps_monitor'`**：要在项目根目录（能看到 `topps_monitor` 文件夹的那一层）运行，并确认下载的是 `claude/zealous-hopper-uqjrv6` 分支。
+- **`CERTIFICATE_VERIFY_FAILED`**：程序已自动使用 macOS 系统证书；若仍报错，运行一次 `open "/Applications/Python 3.13/Install Certificates.command"`。
+
 ## 测试
 
 ```bash
