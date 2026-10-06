@@ -18,7 +18,7 @@ pnpm test:watch   # Vitest 监听模式
 - `src/data/` 静态数据 JSON（地形 / 机体 / 驾驶员 / 武器 / 关卡）+ `validateData()` 交叉校验。数值改动只改 JSON，不改代码。
 - `src/ai/` 敌方 AI 与防御选择，只依赖 core。
 - `src/art/` 程序化地图绘制：`mapArt.ts` 按邻接关系把整张地图画进一张 CanvasTexture（水岸、桥、道路连接、树林、建筑、机库），调色板在 `palette.ts`。布娃娃机体：`dollRegistry.ts` 读 `public/mechs/index.json` 并加载每台机体的 doll.json 与 PNG；`dollActor.ts` 把布娃娃（或占位方块）渲染成战斗画面用的 `BattleActor`。
-- `src/core/doll.ts` 布娃娃格式（部件 / 布局 / 挂点 / 动作）、校验与姿势解析，纯逻辑。`tools/aseprite-to-doll.mjs` 把 Aseprite 导出转成 doll.json；`tools/gen-sample-doll.mjs` 生成样例机体 `public/mechs/cangqiong`。导入规范见 `docs/art-spec.md`「机体导入格式」。
+- `src/core/doll.ts` 布娃娃格式（部件 / 布局 / 挂点 / 动作）、校验与姿势解析，纯逻辑。`tools/aseprite-to-doll.mjs` 把 Aseprite 导出转成 doll.json；`tools/sheet-to-doll.mjs` 把整帧精灵表（一行一动作）转成单部件布娃娃；`tools/gen-sample-doll.mjs` 生成样例机体 `public/mechs/cangqiong`。外部美术交付说明在 `docs/art-brief-for-chatgpt.md`。导入规范见 `docs/art-spec.md`「机体导入格式」。
 - `src/scenes/` Phaser 场景：`BootScene` 程序化生成机体 / 光标占位贴图；`MapScene` 玩家阶段状态机、敌方阶段、先结算后演出（`applyStrike` → `BattleScript`）；`BattleScene` 切出式战斗画面（双方机体走 `createActor()`：有导入的布娃娃就用布娃娃，否则用占位 `mech_<unitId>`；HP/EN 面板、光束 / 弹幕 / 炮弹 / 格斗四类攻击动画、命中 / 回避 / 防御 / 击坠效果，按确认键 25 倍速快进，可在系统菜单里关闭，设置存 localStorage）。
 - `src/scenes/DollViewerScene.ts` 机体预览页（`?view=dolls`），给美术检查导入结果。
 - `src/ui/Hud.ts` 固定在屏幕上的面板、菜单、预览、横幅。

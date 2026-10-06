@@ -127,3 +127,38 @@ describe('convertAseprite', () => {
     expect(doll.poses.idle.fps).toBe(8);
   });
 });
+
+describe('sheetToDoll', () => {
+  it('turns a row-per-pose sheet into a single-part doll', async () => {
+    // @ts-expect-error plain ESM tool script without types
+    const { sheetToDoll, pngSize } = await import('../../tools/sheet-to-doll.mjs');
+    const spec = {
+      id: 'robo',
+      cell: [128, 128],
+      origin: [64, 128],
+      poses: { idle: 2, shoot: 3, melee: 3, hit: 2, down: 1 },
+      fps: { shoot: 10 },
+      muzzle: [110, 56],
+    };
+    const doll = sheetToDoll(spec, 384, 640) as DollDef;
+    expect(validateDoll(doll)).toEqual([]);
+    expect(doll.image).toBe('robo_sheet.png');
+    expect(doll.parts.body.frames).toHaveLength(11);
+    expect(doll.parts.body.frames[2]).toEqual({ x: 0, y: 128, w: 128, h: 128 });
+    expect(doll.poses.shoot.keys.map((k) => k.body?.frame)).toEqual([2, 3, 4]);
+    expect(doll.poses.shoot.fps).toBe(10);
+    expect(doll.poses.idle.loop).toBe(true);
+    expect(doll.poses.hit.loop).toBe(false);
+    expect(doll.sockets?.muzzle).toEqual({ part: 'body', x: 110, y: 56 });
+    expect(() => sheetToDoll(spec, 256, 640)).toThrow(/columns/);
+    expect(() => sheetToDoll({ ...spec, poses: { shoot: 1 } }, 384, 640)).toThrow(/idle/);
+
+    const header = Buffer.alloc(24);
+    header.write('\x89PNG\r\n\x1a\n', 0, 'binary');
+    header.writeUInt32BE(13, 8);
+    header.write('IHDR', 12, 'ascii');
+    header.writeUInt32BE(384, 16);
+    header.writeUInt32BE(640, 20);
+    expect(pngSize(header)).toEqual({ width: 384, height: 640 });
+  });
+});

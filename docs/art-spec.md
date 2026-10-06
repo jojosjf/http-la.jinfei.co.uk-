@@ -44,6 +44,8 @@
 
 ## 机体导入格式（布娃娃系统）
 
+> 给外部美术 / 美术 AI 的可粘贴版说明：`docs/art-brief-for-chatgpt.md`。
+
 游戏里的机体是**布娃娃**：头、躯干、手臂、腿、背包、武器各是一张图层，动作 = 每帧对部件做整数平移 / 换帧 / 显隐，没有旋转缩放，像素不会糊。
 一台机体放在 `public/mechs/<id>/`，并在 `public/mechs/index.json` 登记：
 
@@ -69,6 +71,10 @@ node tools/aseprite-to-doll.mjs cangqiong.ase.json public/mechs/cangqiong/cangqi
 ```
 
 转换脚本会把图层变成部件、Tag 变成动作、Slice 变成挂点，并自动算出每帧的位移。
+
+### 交付方式 A2：整帧精灵表（已有整台机体动作帧时）
+
+一行一个动作、一列一帧的 `<id>_sheet.png` + `<id>_sheet.json`，用 `node tools/sheet-to-doll.mjs <id>_sheet.json` 转成单部件布娃娃。字段说明见 `docs/art-brief-for-chatgpt.md` 方式 A。
 
 ### 交付方式 B：一部件一张 PNG
 
