@@ -106,7 +106,9 @@ export class MapScene extends Phaser.Scene {
   private cursorImg!: Phaser.GameObjects.Image;
   private hl!: Phaser.GameObjects.Graphics;
   private hud!: Hud;
-  private state: State = 'idle';
+  private _state: State = 'idle';
+  /** Recent state transitions ("ms:state"), surfaced through the debug hook for test diagnostics. */
+  private history: string[] = [];
   private sel: Selection | null = null;
   private menu: Menu | null = null;
   private turn = 1;
@@ -119,6 +121,16 @@ export class MapScene extends Phaser.Scene {
 
   constructor() {
     super('Map');
+  }
+
+  private get state(): State {
+    return this._state;
+  }
+
+  private set state(v: State) {
+    this._state = v;
+    this.history.push(`${Math.round(performance.now())}:${v}`);
+    if (this.history.length > 60) this.history.shift();
   }
 
   init(params: { scenarioId?: string; seed?: number } = {}): void {
@@ -171,6 +183,9 @@ export class MapScene extends Phaser.Scene {
         if (this.state === 'idle' || this.state === 'unitSelected') this.setCursor(x, y);
       },
       setBattleAnim: (on) => this.setBattleAnim(on),
+      confirm: () => this.onConfirm(),
+      cancel: () => this.onCancel(),
+      endTurn: () => this.onEndTurn(),
     });
 
     void this.startPlayerTurn(true);
@@ -269,6 +284,7 @@ export class MapScene extends Phaser.Scene {
   private snapshot(): DebugState {
     return {
       state: this.state,
+      history: [...this.history],
       inBattle: this.inBattle,
       battleAnim: this.battleAnim,
       stoppable: this.sel ? [...this.sel.stoppable] : [],

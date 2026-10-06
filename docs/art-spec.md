@@ -40,3 +40,55 @@
 
 ## 占位期约定
 程序目前用 `src/art/mapArt.ts` 按邻接关系程序化绘制整张地图（草地色块、河岸沙滩、木桥、道路连接、树林、建筑、机库 / 停机坪），机体图标由 `src/scenes/BootScene.ts` 生成。正式地块到位后改为 Tiled 图层渲染；机体 / 光标按贴图 key 替换：`unit_<unitId>`、`cursor`、`team_player`、`team_enemy`。
+
+
+## 机体导入格式（布娃娃系统）
+
+游戏里的机体是**布娃娃**：头、躯干、手臂、腿、背包、武器各是一张图层，动作 = 每帧对部件做整数平移 / 换帧 / 显隐，没有旋转缩放，像素不会糊。
+一台机体放在 `public/mechs/<id>/`，并在 `public/mechs/index.json` 登记：
+
+```json
+{ "dolls": [ { "id": "cangqiong", "doll": "mechs/cangqiong/cangqiong.doll.json", "icon": "mechs/cangqiong/icon.png" } ] }
+```
+
+`id` 必须等于 `src/data/units.json` 里的机体 id；`icon` 可选（32×32 地图图标，替换占位）。没有登记的机体继续用程序生成的占位方块。
+
+### 推荐交付方式 A：Aseprite 源文件按约定导出
+
+1. 一个 `.aseprite`，画布建议 128×128（LL 级 160×160），机体朝右站立，脚底中心在画布底边中点。
+2. **一个图层 = 一个部件**，图层名用英文：`backpack` `legs` `arm_back` `torso` `head` `arm_front` `rifle` `saber`……图层顺序就是叠放顺序（下面的先画）。以 `_` 开头的图层会被忽略（参考线、草稿）。
+3. **一个 Tag = 一个动作**，必须有 `idle`；战斗用到 `idle` `shoot` `melee` `hit` `down`，缺的会退回 `idle`。每个动作 1–6 帧即可。
+4. 挂点用 Slice，命名 `挂点@部件`，例如 `muzzle@rifle`（枪口，光束 / 子弹从这里出发）。
+5. 导出命令（也可在导出对话框里勾同样的选项）：
+
+```bash
+aseprite -b cangqiong.aseprite --split-layers --trim --list-layers --list-tags --list-slices \
+  --filename-format '{layer}#{frame}' --format json-array \
+  --sheet cangqiong.png --data cangqiong.ase.json
+node tools/aseprite-to-doll.mjs cangqiong.ase.json public/mechs/cangqiong/cangqiong.doll.json cangqiong
+```
+
+转换脚本会把图层变成部件、Tag 变成动作、Slice 变成挂点，并自动算出每帧的位移。
+
+### 交付方式 B：一部件一张 PNG
+
+不用 Aseprite 时，把每个部件单独导出成透明 PNG（朝右，不要留多余空白），告诉我每个部件在 128×128 画布上的左上角位置和叠放顺序，我来写 `doll.json`。`public/mechs/cangqiong/` 就是这种形式的样例，直接照抄结构即可。
+
+### doll.json 结构速览
+
+```json
+{
+  "id": "cangqiong", "version": 1,
+  "canvas": { "w": 128, "h": 128 }, "origin": { "x": 64, "y": 128 },
+  "parts":   { "head": { "z": 4, "pivot": { "x": 0, "y": 0 }, "frames": [ { "image": "head.png", "x": 0, "y": 0, "w": 20, "h": 20 } ] } },
+  "layout":  { "head": { "x": 54, "y": 27 } },
+  "sockets": { "muzzle": { "part": "rifle", "x": 36, "y": 5 } },
+  "poses":   { "idle": { "fps": 3, "loop": true, "keys": [ {}, { "head": { "dy": 1 } } ] } }
+}
+```
+
+`frames` 可以指向一张总表（配合 `image` 字段和 x/y 裁切）或各自的 PNG。`layout` 是每个部件 pivot 在画布上的静止位置；`keys` 里每帧只写有变化的部件：`dx` `dy` 位移、`frame` 换帧、`hidden` 显隐。
+
+### 检查方法
+
+启动后访问 `?view=dolls` 进入机体预览页：左右键切换机体，上下键切换动作，F 翻转，G 显示画布框和原点。`pnpm test` 会校验 `public/mechs` 下每个 doll.json 的引用是否完整。

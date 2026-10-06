@@ -6,16 +6,24 @@ async function state(page: Page): Promise<DebugState> {
 }
 
 async function waitState(page: Page, wanted: string[], timeout = 20_000): Promise<DebugState> {
-  await page.waitForFunction(
-    (list) => {
-      const st = window.__srpg?.getState().state;
-      return st !== undefined && list.includes(st);
-    },
-    wanted,
-    { timeout },
-  );
+  try {
+    await page.waitForFunction(
+      (list) => {
+        const st = window.__srpg?.getState().state;
+        return st !== undefined && list.includes(st);
+      },
+      wanted,
+      { timeout },
+    );
+  } catch (e) {
+    const s = await state(page).catch(() => null);
+    throw new Error(`${(e as Error).message}\nwanted ${wanted.join('|')}, state ${s?.state}\nhistory: ${s?.history.join(' ')}`);
+  }
   return state(page);
 }
+
+/** Confirm through the debug hook: synchronous, so no key-queue timing races in the auto-player. */
+const confirm = (page: Page): Promise<void> => page.evaluate(() => window.__srpg!.confirm());
 
 const dist = (a: { x: number; y: number }, b: { x: number; y: number }): number => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
@@ -43,12 +51,12 @@ async function playOneAction(page: Page, onTarget?: () => Promise<void>): Promis
   const s = await waitState(page, ['idle'], 90_000);
   const unit = s.units.find((u) => u.team === 'player' && u.alive && !u.acted);
   if (!unit) {
-    await page.keyboard.press('KeyE');
+    await page.evaluate(() => window.__srpg!.endTurn());
     return 'endTurn';
   }
   const enemies = s.units.filter((u) => u.team === 'enemy' && u.alive);
   await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [unit.x, unit.y] as const);
-  await page.keyboard.press('KeyZ');
+  await confirm(page);
   const sel = await waitState(page, ['unitSelected']);
   const tiles = sel.stoppable.map((k) => {
     const [x, y] = k.split(',').map(Number);
@@ -62,15 +70,15 @@ async function playOneAction(page: Page, onTarget?: () => Promise<void>): Promis
     { t: { x: unit.x, y: unit.y }, d: Infinity },
   );
   await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [best.t.x, best.t.y] as const);
-  await page.keyboard.press('KeyZ');
+  await confirm(page);
   await waitState(page, ['actionMenu']);
-  await page.keyboard.press('KeyZ'); // first enabled item: 攻击 when a target exists, else 待机
+  await confirm(page); // first enabled item: 攻击 when a target exists, else 待机
   const after = await waitState(page, ['weaponSelect', 'idle', 'busy', 'gameOver', 'enemyPhase']);
   if (after.state !== 'weaponSelect') return 'waited';
-  await page.keyboard.press('KeyZ');
+  await confirm(page);
   const ts = await waitState(page, ['targetSelect']);
   expect(ts.targets.length).toBeGreaterThan(0);
-  await page.keyboard.press('KeyZ');
+  await confirm(page);
   if (onTarget) await onTarget();
   return 'attacked';
 }
@@ -170,5 +178,26 @@ test('auto-plays the stage to the end without wedging (battle animation off)', a
   await page.screenshot({ path: 'test-results/06-autoplay-end.png' });
   expect(battles).toBeGreaterThan(0);
   expect(final.state === 'gameOver' || final.turn >= 3).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('doll viewer shows the imported sample mech and cycles poses', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/?view=dolls');
+  await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
+  const ids = await page.evaluate(() => window.__dolls!.ids);
+  expect(ids).toContain('cangqiong');
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: 'test-results/09-doll-idle.png' });
+
+  await page.evaluate(() => window.__dolls!.setPose('shoot'));
+  await page.waitForTimeout(150);
+  expect(await page.evaluate(() => window.__dolls!.current().pose)).toBe('shoot');
+  await page.screenshot({ path: 'test-results/10-doll-shoot.png' });
+
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(150);
+  expect(await page.evaluate(() => window.__dolls!.current().pose)).toBe('melee');
+  await page.screenshot({ path: 'test-results/11-doll-melee.png' });
   expect(errors).toEqual([]);
 });

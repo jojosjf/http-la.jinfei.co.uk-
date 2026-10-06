@@ -1,0 +1,8 @@
+{
+  "dolls": [
+    {
+      "id": "cangqiong",
+      "doll": "mechs/cangqiong/cangqiong.doll.json"
+    }
+  ]
+}

@@ -21,6 +21,10 @@ pnpm e2e        # Playwright 自动试玩
 
 操作：方向键 / 鼠标移动光标，Z / 回车 / 左键 确定，X / Esc / 右键 取消，E 结束回合，R 结束后重开。战斗画面中按任意确认键快进；在空地上按 Z 打开系统菜单可切换「战斗演出 开/关」。`?seed=123` 固定随机种子。
 
+## 导入机体美术
+
+机体是布娃娃（分部件图层）。把 PNG + `doll.json` 放进 `public/mechs/<id>/` 并登记到 `public/mechs/index.json`，启动后访问 `?view=dolls` 预览。Aseprite 用户按 [docs/art-spec.md](docs/art-spec.md) 的约定导出，再跑 `node tools/aseprite-to-doll.mjs`。样例：`public/mechs/cangqiong/`。
+
 ## 文档
 
 - 制作计划、技术选型、资源清单、分工与任务表：[docs/game-plan.md](docs/game-plan.md)

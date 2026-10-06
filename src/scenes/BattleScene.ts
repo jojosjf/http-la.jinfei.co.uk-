@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { createActor, type BattleActor } from '../art/dollActor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config';
 import type { DefenseAction, StrikeResult } from '../core/battle';
 import type { Domain, PilotDef, Team, TerrainDef, UnitDef, WeaponDef } from '../core/types';
@@ -60,7 +61,7 @@ interface SidePanel {
 export class BattleScene extends Phaser.Scene {
   private script!: BattleScript;
   private onDone!: () => void;
-  private mechs!: Record<BattleSideId, Phaser.GameObjects.Image>;
+  private mechs!: Record<BattleSideId, BattleActor>;
   private panels!: Record<BattleSideId, SidePanel>;
   private message!: Phaser.GameObjects.Text;
   private sparks!: Phaser.GameObjects.Particles.ParticleEmitter;
@@ -150,6 +151,7 @@ export class BattleScene extends Phaser.Scene {
     this.setMessage(`${attacker.pilot.name}：${s.weapon.name}！`);
     this.setEn(s.side, s.attackerEnAfter);
     await this.wait(420);
+    A.play(s.weapon.kind === 'melee' ? 'melee' : 'shoot');
 
     if (s.defense === 'defend' && s.result.hit) this.setMessage('防御！');
     else if (s.defense === 'evade') this.setMessage('回避！');
@@ -167,11 +169,13 @@ export class BattleScene extends Phaser.Scene {
     }
 
     if (s.defense === 'defend') this.shield(D, dir);
+    D.play('hit');
     await this.impact(D, dir, s.result.crit);
     this.popDamage(D, s.result.damage, s.result.crit);
     this.setMessage(s.result.crit ? `会心一击！  ${s.result.damage} 伤害` : `命中！  ${s.result.damage} 伤害`);
     await this.drainHp(defSide, s.targetHpAfter);
     if (s.targetDestroyed) {
+      D.play('down');
       await this.destroy(D);
       this.setMessage(`${this.script[defSide].def.name} 击坠！`);
       await this.wait(500);
@@ -180,9 +184,9 @@ export class BattleScene extends Phaser.Scene {
 
   // ------------------------------------------------------------------ attacks
 
-  private async melee(A: Phaser.GameObjects.Image, D: Phaser.GameObjects.Image, dir: number): Promise<void> {
+  private async melee(A: BattleActor, D: BattleActor, dir: number): Promise<void> {
     const home = A.x;
-    await this.tween({ targets: A, x: D.x - dir * 64, duration: 220, ease: 'Quad.easeIn' });
+    await this.tween({ targets: A.node, x: D.x - dir * 64, duration: 220, ease: 'Quad.easeIn' });
     const g = this.add.graphics().setDepth(35);
     g.lineStyle(3, 0xffffff, 1);
     for (let i = 0; i < 3; i++) {
@@ -194,12 +198,11 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.shake(90, 0.004);
     await this.wait(120);
     g.destroy();
-    this.tweens.add({ targets: A, x: home, duration: 260, ease: 'Quad.easeOut', delay: 180 });
+    this.tweens.add({ targets: A.node, x: home, duration: 260, ease: 'Quad.easeOut', delay: 180 });
   }
 
-  private async beam(A: Phaser.GameObjects.Image, D: Phaser.GameObjects.Image, dir: number): Promise<void> {
-    const gx = A.x + dir * 34;
-    const gy = A.y - 44;
+  private async beam(A: BattleActor, D: BattleActor, dir: number): Promise<void> {
+    const { x: gx, y: gy } = A.socket('muzzle', dir);
     const flash = this.add.circle(gx, gy, 7, 0xffffff, 1).setDepth(36);
     await this.wait(80);
     flash.destroy();
@@ -219,9 +222,8 @@ export class BattleScene extends Phaser.Scene {
     core.destroy();
   }
 
-  private async burst(A: Phaser.GameObjects.Image, D: Phaser.GameObjects.Image, dir: number): Promise<void> {
-    const gx = A.x + dir * 34;
-    const gy = A.y - 46;
+  private async burst(A: BattleActor, D: BattleActor, dir: number): Promise<void> {
+    const { x: gx, y: gy } = A.socket('muzzle', dir);
     const shots: Promise<void>[] = [];
     for (let i = 0; i < 6; i++) {
       const b = this.add.rectangle(gx, gy + (i % 2) * 3, 6, 2, 0xfff1a8, 1).setDepth(35);
@@ -234,11 +236,12 @@ export class BattleScene extends Phaser.Scene {
     await Promise.all(shots);
   }
 
-  private async shell(A: Phaser.GameObjects.Image, D: Phaser.GameObjects.Image, dir: number): Promise<void> {
-    const sx = A.x + dir * 20;
-    const sy = A.y - 60;
+  private async shell(A: BattleActor, D: BattleActor, dir: number): Promise<void> {
+    const muzzle = A.socket('muzzle', dir);
+    const sx = muzzle.x - dir * 14;
+    const sy = muzzle.y - 16;
     const ex = D.x;
-    const ey = D.y - 46;
+    const ey = D.y - D.height * 0.45;
     const m = this.add.rectangle(sx, sy, 10, 4, 0xd8dee9, 1).setDepth(35);
     const fire = this.add.rectangle(sx, sy, 5, 3, 0xffb347, 1).setDepth(34);
     const trail: Phaser.GameObjects.Arc[] = [];
@@ -268,58 +271,60 @@ export class BattleScene extends Phaser.Scene {
 
   // ------------------------------------------------------------------ results
 
-  private async impact(D: Phaser.GameObjects.Image, dir: number, crit: boolean): Promise<void> {
+  private async impact(D: BattleActor, dir: number, crit: boolean): Promise<void> {
     const home = D.x;
-    D.setTintFill(0xffffff);
-    this.sparks.explode(crit ? 26 : 14, D.x, D.y - 46);
-    const boom = this.add.circle(D.x, D.y - 46, 6, 0xffffff, 0.9).setDepth(36);
+    const cy = D.y - D.height * 0.45;
+    D.flash(0xffffff);
+    this.sparks.explode(crit ? 26 : 14, D.x, cy);
+    const boom = this.add.circle(D.x, cy, 6, 0xffffff, 0.9).setDepth(36);
     this.tweens.add({ targets: boom, radius: crit ? 34 : 22, alpha: 0, duration: 260, onComplete: () => boom.destroy() });
     this.cameras.main.shake(crit ? 220 : 140, crit ? 0.012 : 0.006);
-    await this.tween({ targets: D, x: home + dir * (crit ? 16 : 10), duration: 70, yoyo: true, ease: 'Quad.easeOut' });
-    D.clearTint();
+    await this.tween({ targets: D.node, x: home + dir * (crit ? 16 : 10), duration: 70, yoyo: true, ease: 'Quad.easeOut' });
+    D.unflash();
     await this.wait(80);
   }
 
-  private shield(D: Phaser.GameObjects.Image, dir: number): void {
-    const sh = this.add.rectangle(D.x - dir * 34, D.y - 48, 10, 70, 0x7fb4ff, 0.55).setDepth(34);
+  private shield(D: BattleActor, dir: number): void {
+    const sh = this.add.rectangle(D.x - dir * 34, D.y - D.height * 0.5, 10, D.height * 0.75, 0x7fb4ff, 0.55).setDepth(34);
     this.tweens.add({ targets: sh, alpha: 0, duration: 420, onComplete: () => sh.destroy() });
   }
 
-  private async dodge(D: Phaser.GameObjects.Image, dir: number): Promise<void> {
+  private async dodge(D: BattleActor, dir: number): Promise<void> {
     const home = { x: D.x, y: D.y };
-    const ghost = this.add.image(D.x, D.y, D.texture.key).setOrigin(0.5, 1).setFlipX(D.flipX).setAlpha(0.45).setDepth(D.depth - 1);
+    const ghost = D.ghost();
     this.tweens.add({ targets: ghost, alpha: 0, duration: 300, onComplete: () => ghost.destroy() });
-    await this.tween({ targets: D, x: home.x + dir * 36, y: home.y - 28, duration: 140, ease: 'Quad.easeOut' });
+    await this.tween({ targets: D.node, x: home.x + dir * 36, y: home.y - 28, duration: 140, ease: 'Quad.easeOut' });
     await this.wait(200);
-    await this.tween({ targets: D, x: home.x, y: home.y, duration: 220, ease: 'Quad.easeInOut' });
+    await this.tween({ targets: D.node, x: home.x, y: home.y, duration: 220, ease: 'Quad.easeInOut' });
   }
 
-  private popDamage(D: Phaser.GameObjects.Image, damage: number, crit: boolean): void {
+  private popDamage(D: BattleActor, damage: number, crit: boolean): void {
     const t = this.add
-      .text(D.x, D.y - 104, `${damage}`, { ...TEXT_STYLE, fontSize: '24px', color: crit ? '#ff6b6b' : '#ffffff' })
+      .text(D.x, D.y - D.height - 8, `${damage}`, { ...TEXT_STYLE, fontSize: '24px', color: crit ? '#ff6b6b' : '#ffffff' })
       .setOrigin(0.5, 1)
       .setDepth(50);
     this.tweens.add({ targets: t, y: t.y - 18, duration: 500, ease: 'Quad.easeOut' });
     this.tweens.add({ targets: t, alpha: 0, duration: 300, delay: 700, onComplete: () => t.destroy() });
     if (crit) {
-      const c = this.add.text(D.x, D.y - 128, 'CRITICAL', { ...TEXT_STYLE, color: '#ffd60a' }).setOrigin(0.5, 1).setDepth(50);
+      const c = this.add.text(D.x, D.y - D.height - 32, 'CRITICAL', { ...TEXT_STYLE, color: '#ffd60a' }).setOrigin(0.5, 1).setDepth(50);
       this.tweens.add({ targets: c, alpha: 0, y: c.y - 10, duration: 900, delay: 300, onComplete: () => c.destroy() });
     }
   }
 
-  private async destroy(D: Phaser.GameObjects.Image): Promise<void> {
-    await this.tween({ targets: D, alpha: 0.2, duration: 70, yoyo: true, repeat: 3 });
+  private async destroy(D: BattleActor): Promise<void> {
+    await this.tween({ targets: D.node, alpha: 0.2, duration: 70, yoyo: true, repeat: 3 });
+    const cy = D.y - D.height * 0.45;
     const flash = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0xffffff, 0.85).setOrigin(0).setDepth(90);
     this.tweens.add({ targets: flash, alpha: 0, duration: 500, onComplete: () => flash.destroy() });
     this.cameras.main.shake(400, 0.015);
     for (let i = 0; i < 6; i++) {
       const ox = D.x + Phaser.Math.Between(-30, 30);
-      const oy = D.y - 46 + Phaser.Math.Between(-36, 30);
+      const oy = cy + Phaser.Math.Between(-36, 30);
       const ring = this.add.circle(ox, oy, 4, i % 2 ? 0xffb347 : 0xff6b3d, 0.95).setDepth(45);
       this.tweens.add({ targets: ring, radius: 30 + i * 4, alpha: 0, duration: 520, delay: i * 70, onComplete: () => ring.destroy() });
     }
-    this.sparks.explode(40, D.x, D.y - 46);
-    await this.tween({ targets: D, alpha: 0, y: D.y + 6, duration: 600, delay: 120 });
+    this.sparks.explode(40, D.x, cy);
+    await this.tween({ targets: D.node, alpha: 0, y: D.y + 6, duration: 600, delay: 120 });
   }
 
   // ------------------------------------------------------------------ hud
@@ -411,15 +416,15 @@ export class BattleScene extends Phaser.Scene {
 
   // ------------------------------------------------------------------ stage
 
-  private placeMech(side: BattleSideId): Phaser.GameObjects.Image {
+  private placeMech(side: BattleSideId): BattleActor {
     const s = this.script[side];
     const airborne = s.domain === 'air';
     const y = airborne ? GROUND_Y - 26 : GROUND_Y;
     if (!airborne) this.add.ellipse(POS_X[side], GROUND_Y - 2, 70, 12, 0x000000, 0.3).setDepth(9);
-    const img = this.add.image(POS_X[side], y, `mech_${s.def.id}`).setOrigin(0.5, 1).setDepth(10);
-    if (side === 'right') img.setFlipX(true);
+    const actor = createActor(this, s.def.id, POS_X[side], y, { flip: side === 'right' });
+    actor.setDepth(10);
     if (airborne) {
-      this.tweens.add({ targets: img, y: y - 4, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      this.tweens.add({ targets: actor.node, y: y - 4, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       for (const dx of [-12, 12]) {
         const flame = this.add.rectangle(POS_X[side] + dx, y + 2, 6, 10, 0xffb347, 0.9).setOrigin(0.5, 0).setDepth(9);
         const core = this.add.rectangle(POS_X[side] + dx, y + 2, 3, 6, 0xfff1a8, 1).setOrigin(0.5, 0).setDepth(9);
@@ -427,7 +432,7 @@ export class BattleScene extends Phaser.Scene {
         this.tweens.add({ targets: [flame, core], y: y - 2, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       }
     }
-    return img;
+    return actor;
   }
 
   private drawBackground(terrain: TerrainDef, domain: Domain): void {

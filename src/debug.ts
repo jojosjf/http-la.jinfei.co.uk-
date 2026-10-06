@@ -16,6 +16,8 @@ export interface DebugUnit {
 
 export interface DebugState {
   state: string;
+  /** Recent state transitions, oldest first. */
+  history: string[];
   /** Tiles the selected unit may stop on (state unitSelected), as "x,y" keys. */
   stoppable: string[];
   /** Targets offered in targetSelect, by uid. */
@@ -37,6 +39,10 @@ export interface DebugApi {
   getState(): DebugState;
   setCursor(x: number, y: number): void;
   setBattleAnim(on: boolean): void;
+  /** Same as pressing the confirm / cancel / end-turn keys, but applied synchronously. */
+  confirm(): void;
+  cancel(): void;
+  endTurn(): void;
 }
 
 declare global {

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { TILE } from '../config';
 import type { UnitDef } from '../core/types';
+import { loadMechAssets } from '../art/dollRegistry';
 import { loadData, validateData } from '../data';
 
 type Rect = [number, number, number, number];
@@ -42,18 +43,22 @@ export class BootScene extends Phaser.Scene {
     super('Boot');
   }
 
-  create(): void {
+  async create(): Promise<void> {
     const gd = loadData();
     const problems = validateData(gd);
     if (problems.length) console.warn('[data] problems:\n' + problems.join('\n'));
 
+    // Imported art first (public/mechs); placeholders fill whatever is missing.
+    await loadMechAssets(this);
     for (const u of Object.values(gd.units)) {
-      this.makeUnit(u);
+      if (!this.textures.exists(`unit_${u.id}`)) this.makeUnit(u);
       this.makeMech(u);
     }
     this.makeMisc();
 
-    this.scene.start('Map', { scenarioId: 's01' });
+    const view = new URLSearchParams(window.location.search).get('view');
+    if (view === 'dolls') this.scene.start('DollViewer');
+    else this.scene.start('Map', { scenarioId: 's01' });
   }
 
   private makeUnit(u: UnitDef): void {

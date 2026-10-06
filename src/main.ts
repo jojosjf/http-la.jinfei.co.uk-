@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import { FONT_FAMILY, GAME_HEIGHT, GAME_WIDTH } from './config';
 import { BattleScene } from './scenes/BattleScene';
 import { BootScene } from './scenes/BootScene';
+import { DollViewerScene } from './scenes/DollViewerScene';
 import { MapScene } from './scenes/MapScene';
 
 /** Largest integer zoom that fits the window, so pixels stay square and crisp. */
@@ -26,7 +27,7 @@ async function boot(): Promise<void> {
     pixelArt: true,
     roundPixels: true,
     scale: { mode: Phaser.Scale.NONE, zoom: computeZoom() },
-    scene: [BootScene, MapScene, BattleScene],
+    scene: [BootScene, MapScene, BattleScene, DollViewerScene],
   });
 
   window.addEventListener('resize', () => game.scale.setZoom(computeZoom()));

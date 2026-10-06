@@ -1,0 +1,371 @@
+{
+  "id": "cangqiong",
+  "version": 1,
+  "canvas": {
+    "w": 128,
+    "h": 128
+  },
+  "origin": {
+    "x": 64,
+    "y": 128
+  },
+  "parts": {
+    "backpack": {
+      "z": 0,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "backpack.png",
+          "x": 0,
+          "y": 0,
+          "w": 40,
+          "h": 34
+        }
+      ]
+    },
+    "legs": {
+      "z": 1,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "legs.png",
+          "x": 0,
+          "y": 0,
+          "w": 44,
+          "h": 50
+        }
+      ]
+    },
+    "arm_back": {
+      "z": 2,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "arm_back.png",
+          "x": 0,
+          "y": 0,
+          "w": 16,
+          "h": 36
+        }
+      ]
+    },
+    "torso": {
+      "z": 3,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "torso.png",
+          "x": 0,
+          "y": 0,
+          "w": 36,
+          "h": 40
+        }
+      ]
+    },
+    "head": {
+      "z": 4,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "head.png",
+          "x": 0,
+          "y": 0,
+          "w": 20,
+          "h": 20
+        }
+      ]
+    },
+    "arm_front": {
+      "z": 5,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "arm_front.png",
+          "x": 0,
+          "y": 0,
+          "w": 16,
+          "h": 36
+        },
+        {
+          "image": "arm_front_aim.png",
+          "x": 0,
+          "y": 0,
+          "w": 38,
+          "h": 14
+        }
+      ]
+    },
+    "rifle": {
+      "z": 6,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "rifle.png",
+          "x": 0,
+          "y": 0,
+          "w": 36,
+          "h": 12
+        }
+      ],
+      "visible": false
+    },
+    "saber": {
+      "z": 6,
+      "pivot": {
+        "x": 0,
+        "y": 0
+      },
+      "frames": [
+        {
+          "image": "saber.png",
+          "x": 0,
+          "y": 0,
+          "w": 10,
+          "h": 44
+        }
+      ],
+      "visible": false
+    }
+  },
+  "layout": {
+    "backpack": {
+      "x": 44,
+      "y": 42
+    },
+    "legs": {
+      "x": 42,
+      "y": 78
+    },
+    "arm_back": {
+      "x": 36,
+      "y": 48
+    },
+    "torso": {
+      "x": 46,
+      "y": 44
+    },
+    "head": {
+      "x": 54,
+      "y": 27
+    },
+    "arm_front": {
+      "x": 76,
+      "y": 48
+    },
+    "rifle": {
+      "x": 100,
+      "y": 47
+    },
+    "saber": {
+      "x": 84,
+      "y": 8
+    }
+  },
+  "sockets": {
+    "muzzle": {
+      "part": "rifle",
+      "x": 36,
+      "y": 5
+    }
+  },
+  "poses": {
+    "idle": {
+      "fps": 3,
+      "loop": true,
+      "keys": [
+        {},
+        {
+          "torso": {
+            "dy": 1
+          },
+          "head": {
+            "dy": 1
+          },
+          "arm_back": {
+            "dy": 1
+          },
+          "arm_front": {
+            "dy": 1
+          },
+          "backpack": {
+            "dy": 1
+          }
+        }
+      ]
+    },
+    "shoot": {
+      "fps": 8,
+      "loop": false,
+      "keys": [
+        {
+          "arm_front": {
+            "frame": 1
+          },
+          "rifle": {
+            "hidden": false
+          }
+        },
+        {
+          "arm_front": {
+            "frame": 1,
+            "dx": -2
+          },
+          "rifle": {
+            "hidden": false,
+            "dx": -3
+          },
+          "torso": {
+            "dx": -1
+          },
+          "head": {
+            "dx": -1
+          }
+        },
+        {
+          "arm_front": {
+            "frame": 1
+          },
+          "rifle": {
+            "hidden": false
+          }
+        }
+      ]
+    },
+    "melee": {
+      "fps": 8,
+      "loop": false,
+      "keys": [
+        {
+          "saber": {
+            "hidden": false,
+            "dy": -6
+          },
+          "arm_front": {
+            "dy": -8
+          },
+          "torso": {
+            "dx": 2
+          }
+        },
+        {
+          "saber": {
+            "hidden": false,
+            "dx": 8,
+            "dy": 12
+          },
+          "arm_front": {
+            "dx": 4,
+            "dy": 6
+          },
+          "torso": {
+            "dx": 4
+          },
+          "head": {
+            "dx": 3
+          }
+        },
+        {
+          "saber": {
+            "hidden": false,
+            "dx": 4,
+            "dy": 4
+          },
+          "arm_front": {
+            "dx": 2,
+            "dy": 2
+          }
+        }
+      ]
+    },
+    "hit": {
+      "fps": 8,
+      "loop": false,
+      "keys": [
+        {
+          "torso": {
+            "dx": -4
+          },
+          "head": {
+            "dx": -6,
+            "dy": 2
+          },
+          "arm_front": {
+            "dx": -4
+          },
+          "arm_back": {
+            "dx": -4
+          },
+          "backpack": {
+            "dx": -4
+          }
+        },
+        {
+          "torso": {
+            "dx": -2
+          },
+          "head": {
+            "dx": -3,
+            "dy": 1
+          },
+          "arm_front": {
+            "dx": -2
+          },
+          "arm_back": {
+            "dx": -2
+          },
+          "backpack": {
+            "dx": -2
+          }
+        }
+      ]
+    },
+    "down": {
+      "fps": 4,
+      "loop": false,
+      "keys": [
+        {
+          "torso": {
+            "dy": 6
+          },
+          "head": {
+            "dx": -2,
+            "dy": 8
+          },
+          "arm_front": {
+            "dy": 8
+          },
+          "arm_back": {
+            "dy": 8
+          },
+          "backpack": {
+            "dy": 6
+          },
+          "legs": {
+            "dy": 3
+          }
+        }
+      ]
+    }
+  }
+}
