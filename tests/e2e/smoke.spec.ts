@@ -28,40 +28,83 @@ function collectErrors(page: Page): string[] {
   return errors;
 }
 
+async function boot(page: Page, seed: number): Promise<void> {
+  await page.goto(`/?seed=${seed}`);
+  await page.waitForFunction(() => window.__srpg?.ready === true, null, { timeout: 30_000 });
+}
+
+/**
+ * Plays one player action with a crude policy: pick the first unit that has not acted,
+ * move to the reachable tile nearest an enemy, attack with the first usable weapon if any,
+ * otherwise wait. Returns 'attacked' | 'waited' | 'endTurn'. `onTarget` runs right before the
+ * attack is confirmed so tests can observe the targetSelect / battle states.
+ */
+async function playOneAction(page: Page, onTarget?: () => Promise<void>): Promise<'attacked' | 'waited' | 'endTurn'> {
+  const s = await waitState(page, ['idle'], 90_000);
+  const unit = s.units.find((u) => u.team === 'player' && u.alive && !u.acted);
+  if (!unit) {
+    await page.keyboard.press('KeyE');
+    return 'endTurn';
+  }
+  const enemies = s.units.filter((u) => u.team === 'enemy' && u.alive);
+  await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [unit.x, unit.y] as const);
+  await page.keyboard.press('KeyZ');
+  const sel = await waitState(page, ['unitSelected']);
+  const tiles = sel.stoppable.map((k) => {
+    const [x, y] = k.split(',').map(Number);
+    return { x, y };
+  });
+  const best = tiles.reduce(
+    (acc, t) => {
+      const d = Math.min(...enemies.map((e) => dist(t, e)));
+      return d < acc.d ? { t, d } : acc;
+    },
+    { t: { x: unit.x, y: unit.y }, d: Infinity },
+  );
+  await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [best.t.x, best.t.y] as const);
+  await page.keyboard.press('KeyZ');
+  await waitState(page, ['actionMenu']);
+  await page.keyboard.press('KeyZ'); // first enabled item: 攻击 when a target exists, else 待机
+  const after = await waitState(page, ['weaponSelect', 'idle', 'busy', 'gameOver', 'enemyPhase']);
+  if (after.state !== 'weaponSelect') return 'waited';
+  await page.keyboard.press('KeyZ');
+  const ts = await waitState(page, ['targetSelect']);
+  expect(ts.targets.length).toBeGreaterThan(0);
+  await page.keyboard.press('KeyZ');
+  if (onTarget) await onTarget();
+  return 'attacked';
+}
+
 test('boots, moves a unit, undoes, and survives an enemy phase', async ({ page }) => {
   const errors = collectErrors(page);
-  await page.goto('/?seed=42');
-  await page.waitForFunction(() => window.__srpg?.ready === true, null, { timeout: 30_000 });
+  await boot(page, 42);
   await waitState(page, ['idle']);
 
   let s = await state(page);
   expect(s.turn).toBe(1);
   expect(s.phase).toBe('player');
   expect(s.units).toHaveLength(8);
+  expect(s.battleAnim).toBe(true);
   await page.screenshot({ path: 'test-results/01-boot.png' });
 
-  // Select 苍穹 at (2,10) and show its movement range.
   await page.evaluate(() => window.__srpg!.setCursor(2, 10));
   await page.keyboard.press('KeyZ');
   s = await waitState(page, ['unitSelected']);
   expect(s.stoppable).toContain('6,10');
   await page.screenshot({ path: 'test-results/02-move-range.png' });
 
-  // Move 4 tiles right along the open ground, then open the action menu.
   await page.evaluate(() => window.__srpg!.setCursor(6, 10));
   await page.keyboard.press('KeyZ');
   s = await waitState(page, ['actionMenu']);
   expect(s.units.find((u) => u.unitId === 'cangqiong')).toMatchObject({ x: 6, y: 10 });
   await page.screenshot({ path: 'test-results/03-action-menu.png' });
 
-  // Cancel undoes the move.
   await page.keyboard.press('KeyX');
   s = await waitState(page, ['unitSelected']);
   expect(s.units.find((u) => u.unitId === 'cangqiong')).toMatchObject({ x: 2, y: 10 });
   await page.keyboard.press('KeyX');
   await waitState(page, ['idle']);
 
-  // End the turn: the enemy phase runs and turn 2 begins.
   await page.keyboard.press('KeyE');
   await page.waitForFunction(() => window.__srpg?.getState().phase === 'enemy', null, { timeout: 10_000 });
   await page.waitForFunction(
@@ -79,56 +122,48 @@ test('boots, moves a unit, undoes, and survives an enemy phase', async ({ page }
   expect(errors).toEqual([]);
 });
 
-test('auto-plays the stage to the end without wedging', async ({ page }) => {
+test('shows the cut-away battle scene and fast-forwards it on a key press', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = collectErrors(page);
+  await boot(page, 7);
+
+  let sawBattle = false;
+  for (let i = 0; i < 20 && !sawBattle; i++) {
+    const outcome = await playOneAction(page, async () => {
+      await page.waitForFunction(() => window.__srpg?.getState().inBattle === true, null, { timeout: 10_000 });
+      sawBattle = true;
+      await page.waitForTimeout(1300);
+      await page.screenshot({ path: 'test-results/07-battle-scene.png' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({ path: 'test-results/08-battle-hit.png' });
+      await page.keyboard.press('KeyZ'); // fast-forward
+      await page.waitForFunction(() => window.__srpg?.getState().inBattle === false, null, { timeout: 20_000 });
+    });
+    if (outcome === 'endTurn') await waitState(page, ['idle', 'gameOver'], 120_000);
+  }
+  expect(sawBattle).toBe(true);
+  const s = await waitState(page, ['idle', 'enemyPhase', 'gameOver', 'busy'], 60_000);
+  expect(['idle', 'enemyPhase', 'gameOver', 'busy']).toContain(s.state);
+  expect(errors).toEqual([]);
+});
+
+test('auto-plays the stage to the end without wedging (battle animation off)', async ({ page }) => {
   test.setTimeout(300_000);
   const errors = collectErrors(page);
-  await page.goto('/?seed=7');
-  await page.waitForFunction(() => window.__srpg?.ready === true, null, { timeout: 30_000 });
+  await boot(page, 7);
+  await page.evaluate(() => window.__srpg!.setBattleAnim(false));
 
-  let previewShot = false;
   let battles = 0;
+  let previewShot = false;
   for (let round = 0; round < 60; round++) {
     const s = await waitState(page, ['idle', 'gameOver'], 90_000);
     if (s.state === 'gameOver') break;
-
-    const unit = s.units.find((u) => u.team === 'player' && u.alive && !u.acted);
-    if (!unit) {
-      await page.keyboard.press('KeyE');
-      continue;
-    }
-    const enemies = s.units.filter((u) => u.team === 'enemy' && u.alive);
-
-    await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [unit.x, unit.y] as const);
-    await page.keyboard.press('KeyZ');
-    const sel = await waitState(page, ['unitSelected']);
-
-    // Pick the reachable tile closest to the nearest enemy (but not adjacent to the heavy unit, keep it simple).
-    const tiles = sel.stoppable.map((k) => {
-      const [x, y] = k.split(',').map(Number);
-      return { x, y };
-    });
-    const best = tiles.reduce((acc, t) => {
-      const d = Math.min(...enemies.map((e) => dist(t, e)));
-      return d < acc.d ? { t, d } : acc;
-    }, { t: { x: unit.x, y: unit.y }, d: Infinity });
-    await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [best.t.x, best.t.y] as const);
-    await page.keyboard.press('KeyZ');
-    await waitState(page, ['actionMenu']);
-
-    // First enabled item: 攻击 when a target exists, otherwise 待机.
-    await page.keyboard.press('KeyZ');
-    const after = await waitState(page, ['weaponSelect', 'idle', 'busy', 'gameOver', 'enemyPhase']);
-    if (after.state === 'weaponSelect') {
-      await page.keyboard.press('KeyZ');
-      const ts = await waitState(page, ['targetSelect']);
-      expect(ts.targets.length).toBeGreaterThan(0);
+    const outcome = await playOneAction(page, async () => {
       if (!previewShot) {
-        await page.screenshot({ path: 'test-results/05-battle-preview.png' });
         previewShot = true;
       }
-      await page.keyboard.press('KeyZ');
-      battles++;
-    }
+    });
+    if (outcome === 'attacked') battles++;
   }
 
   const final = await state(page);

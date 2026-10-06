@@ -30,6 +30,7 @@ import {
 import { loadData, type GameData } from '../data';
 import { installDebugHook, type DebugState } from '../debug';
 import { Hud, TEXT_STYLE, type Menu, type PreviewSide, type UnitInfo } from '../ui/Hud';
+import type { BattleScript, BattleSide, BattleStrike } from './BattleScene';
 
 type State =
   | 'idle'
@@ -89,6 +90,7 @@ const IDLE_HINT = '方向键 移动   Z 选择   E 结束回合';
 const LEVEL_EXP = 100;
 /** Fixed seed for the procedural map art so a stage always looks the same. */
 const ART_SEED = 20261006;
+const BATTLE_ANIM_KEY = 'sf.battleAnim';
 
 /**
  * The tactical map: player phase state machine, enemy phase, on-map battle animation v0.
@@ -112,6 +114,8 @@ export class MapScene extends Phaser.Scene {
   private money = 0;
   private seed = 0;
   private rng: () => number = Math.random;
+  private battleAnim = true;
+  private inBattle = false;
 
   constructor() {
     super('Map');
@@ -133,6 +137,12 @@ export class MapScene extends Phaser.Scene {
     this.phase = 'player';
     this.money = 0;
     this.state = 'busy';
+    this.inBattle = false;
+    try {
+      this.battleAnim = localStorage.getItem(BATTLE_ANIM_KEY) !== 'off';
+    } catch {
+      this.battleAnim = true;
+    }
   }
 
   create(): void {
@@ -160,6 +170,7 @@ export class MapScene extends Phaser.Scene {
       setCursor: (x, y) => {
         if (this.state === 'idle' || this.state === 'unitSelected') this.setCursor(x, y);
       },
+      setBattleAnim: (on) => this.setBattleAnim(on),
     });
 
     void this.startPlayerTurn(true);
@@ -258,6 +269,8 @@ export class MapScene extends Phaser.Scene {
   private snapshot(): DebugState {
     return {
       state: this.state,
+      inBattle: this.inBattle,
+      battleAnim: this.battleAnim,
       stoppable: this.sel ? [...this.sel.stoppable] : [],
       targets: this.sel ? this.sel.targets.map((t) => t.uid) : [],
       turn: this.turn,
@@ -662,24 +675,43 @@ export class MapScene extends Phaser.Scene {
   }
 
   private openSystemMenu(): void {
+    this.closeMenu();
     this.state = 'systemMenu';
-    const width = 90;
+    const width = 120;
     const pos = this.menuPos(width);
     this.menu = this.hud.openMenu(
       [
         { label: '结束回合', enabled: true },
+        { label: `战斗演出：${this.battleAnim ? '开' : '关'}`, enabled: true },
         { label: '返回', enabled: true },
       ],
       {
         ...pos,
         width,
         onSelect: (i) => {
-          this.closeMenu();
-          if (i === 0) void this.endPlayerTurn();
-          else this.state = 'idle';
+          if (i === 0) {
+            this.closeMenu();
+            void this.endPlayerTurn();
+          } else if (i === 1) {
+            this.setBattleAnim(!this.battleAnim);
+            this.openSystemMenu();
+            this.menu?.move(1);
+          } else {
+            this.closeMenu();
+            this.state = 'idle';
+          }
         },
       },
     );
+  }
+
+  private setBattleAnim(on: boolean): void {
+    this.battleAnim = on;
+    try {
+      localStorage.setItem(BATTLE_ANIM_KEY, on ? 'on' : 'off');
+    } catch {
+      // storage unavailable: setting lasts for this session only
+    }
   }
 
   // ---------------------------------------------------------------- turns
@@ -813,24 +845,73 @@ export class MapScene extends Phaser.Scene {
     this.showPreview(attacker, defender, weapon, choice);
     this.setCursor(defender.x, defender.y);
     await this.delay(300);
-    await this.strike(a, d, weapon, choice.action);
-    this.showPreview(attacker, defender, weapon, choice);
+
+    // The player's unit always stands on the left of the battle screen.
+    const left = attacker.team === 'player' ? attacker : defender;
+    const sideOf = (u: UnitState): 'left' | 'right' => (u === left ? 'left' : 'right');
+    const script: BattleScript = {
+      left: this.battleSide(left),
+      right: this.battleSide(left === attacker ? defender : attacker),
+      strikes: [],
+    };
+
+    // Resolve everything up front; the presentation below only shows the numbers.
+    const first = this.applyStrike(a, d, weapon, choice.action);
+    script.strikes.push({ side: sideOf(attacker), weapon, ...first });
     if (attacker.alive && defender.alive && choice.action === 'counter' && choice.weapon) {
-      await this.delay(200);
-      await this.strike(d, a, choice.weapon, 'counter');
-      this.showPreview(attacker, defender, weapon, choice);
+      const counter = this.applyStrike(d, a, choice.weapon, 'counter');
+      script.strikes.push({ side: sideOf(defender), weapon: choice.weapon, ...counter });
     }
-    await this.delay(300);
+
+    if (this.battleAnim) {
+      this.hud.hidePreview();
+      await this.playBattleScene(script);
+      for (const u of [attacker, defender]) {
+        this.refreshView(u);
+        if (!u.alive) this.views.get(u.uid)?.container.setVisible(false);
+      }
+    } else {
+      for (const s of script.strikes) {
+        const att = s.side === sideOf(attacker) ? attacker : defender;
+        const def = att === attacker ? defender : attacker;
+        await this.animateStrike(att, def, s.weapon, s.result);
+        this.refreshView(att);
+        this.refreshView(def);
+        this.showPreview(attacker, defender, weapon, choice);
+        if (s.targetDestroyed) await this.destroyUnit(def);
+      }
+      await this.delay(300);
+    }
     this.hud.hidePreview();
     this.updateCursorInfo();
   }
 
-  private async strike(a: Combatant, d: Combatant, weapon: WeaponDef, defense: DefenseAction): Promise<void> {
+  private battleSide(u: UnitState): BattleSide {
+    const c = this.combatant(u);
+    return {
+      def: c.def,
+      pilot: c.pilot,
+      team: u.team,
+      hp: u.hp,
+      maxHp: c.def.hp,
+      en: u.en,
+      maxEn: c.def.en,
+      terrain: c.terrain,
+      domain: c.domain,
+    };
+  }
+
+  /** Rolls one strike and applies it to both unit states; returns what the presentation needs. */
+  private applyStrike(
+    a: Combatant,
+    d: Combatant,
+    weapon: WeaponDef,
+    defense: DefenseAction,
+  ): Omit<BattleStrike, 'side' | 'weapon'> {
     consumeWeapon(a.state, weapon);
-    const r = resolveStrike({ attacker: a, defender: d, weapon, defense }, this.rng);
-    await this.animateStrike(a.state, d.state, weapon, r);
-    if (r.hit) {
-      d.state.hp = Math.max(0, d.state.hp - r.damage);
+    const result = resolveStrike({ attacker: a, defender: d, weapon, defense }, this.rng);
+    if (result.hit) {
+      d.state.hp = Math.max(0, d.state.hp - result.damage);
       addMorale(a.state, MORALE.onHit);
       addMorale(d.state, MORALE.onDamaged);
       if (d.state.hp === 0) {
@@ -844,9 +925,26 @@ export class MapScene extends Phaser.Scene {
     } else {
       addMorale(d.state, MORALE.onEvade);
     }
-    this.refreshView(d.state);
-    this.refreshView(a.state);
-    if (!d.state.alive) await this.destroyUnit(d.state);
+    return {
+      result,
+      defense,
+      targetHpAfter: d.state.hp,
+      attackerEnAfter: a.state.en,
+      targetDestroyed: !d.state.alive,
+    };
+  }
+
+  private playBattleScene(script: BattleScript): Promise<void> {
+    return new Promise((resolve) => {
+      this.inBattle = true;
+      this.scene.launch('Battle', {
+        script,
+        onDone: () => {
+          this.inBattle = false;
+          resolve();
+        },
+      });
+    });
   }
 
   private grantRewards(killer: UnitState, victim: UnitDef): void {

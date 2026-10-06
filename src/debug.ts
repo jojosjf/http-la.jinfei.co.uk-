@@ -22,6 +22,10 @@ export interface DebugState {
   targets: string[];
   turn: number;
   phase: string;
+  /** True while the cut-away battle scene is playing. */
+  inBattle: boolean;
+  /** Battle animation setting (false = resolve on the map only). */
+  battleAnim: boolean;
   cursor: Vec2;
   money: number;
   seed: number;
@@ -32,6 +36,7 @@ export interface DebugApi {
   ready: boolean;
   getState(): DebugState;
   setCursor(x: number, y: number): void;
+  setBattleAnim(on: boolean): void;
 }
 
 declare global {

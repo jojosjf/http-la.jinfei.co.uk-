@@ -18,7 +18,7 @@ pnpm test:watch   # Vitest 监听模式
 - `src/data/` 静态数据 JSON（地形 / 机体 / 驾驶员 / 武器 / 关卡）+ `validateData()` 交叉校验。数值改动只改 JSON，不改代码。
 - `src/ai/` 敌方 AI 与防御选择，只依赖 core。
 - `src/art/` 程序化地图绘制：`mapArt.ts` 按邻接关系把整张地图画进一张 CanvasTexture（水岸、桥、道路连接、树林、建筑、机库），调色板在 `palette.ts`。
-- `src/scenes/` Phaser 场景：`BootScene` 程序化生成机体 / 光标占位贴图；`MapScene` 玩家阶段状态机、敌方阶段、地图上的战斗演出 v0。
+- `src/scenes/` Phaser 场景：`BootScene` 程序化生成机体 / 光标占位贴图；`MapScene` 玩家阶段状态机、敌方阶段、先结算后演出（`applyStrike` → `BattleScript`）；`BattleScene` 切出式战斗画面（双方大机体 `mech_<unitId>`、HP/EN 面板、光束 / 弹幕 / 炮弹 / 格斗四类攻击动画、命中 / 回避 / 防御 / 击坠效果，按确认键 25 倍速快进，可在系统菜单里关闭，设置存 localStorage）。
 - `src/ui/Hud.ts` 固定在屏幕上的面板、菜单、预览、横幅。
 - `tests/unit/` Vitest；`tests/e2e/` Playwright，通过 `window.__srpg`（见 `src/debug.ts`）读取状态并操控光标。
 - `docs/game-plan.md` 总体制作计划与任务表；`docs/art-spec.md` 美术规格。
