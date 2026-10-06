@@ -2,6 +2,14 @@
 
 一款 2D 像素风、回合制方格战棋的**原创**机器人 SRPG，核心玩法对标《第四次超级机器人大战》/《超级机器人大战 F·F 完结篇》。网页优先，Phaser 3 + TypeScript。
 
+## 在线试玩
+
+正式网址走 GitHub Pages，由 `.github/workflows/deploy.yml` 在推送到 `master` 时自动构建发布：
+
+1. 仓库 Settings → Pages → Build and deployment → Source 选 **GitHub Actions**（只需一次）。
+2. 把开发分支合并到 `master`（或在 Actions 页手动运行 Deploy to GitHub Pages）。
+3. 几分钟后访问 https://jojosjf.github.io/http-la.jinfei.co.uk-/ 。想用自己的域名（如 la.jinfei.co.uk）在 Pages 设置里填 Custom domain 并加一条 CNAME 记录即可。
+
 ## 运行
 
 ```bash
