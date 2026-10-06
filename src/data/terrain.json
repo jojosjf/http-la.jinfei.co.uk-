@@ -1,0 +1,10 @@
+{
+  "plain":    { "id": "plain",    "name": "平原", "domain": "land", "cost": { "land": 1, "air": 1 },           "evade": 0,   "defense": 0,  "hpRecover": 0,  "enRecover": 0,  "color": "#6b9e4a" },
+  "road":     { "id": "road",     "name": "道路", "domain": "land", "cost": { "land": 1, "air": 1 },           "evade": 0,   "defense": 0,  "hpRecover": 0,  "enRecover": 0,  "color": "#a89b7a" },
+  "forest":   { "id": "forest",   "name": "森林", "domain": "land", "cost": { "land": 2, "air": 1 },           "evade": 10,  "defense": 10, "hpRecover": 0,  "enRecover": 0,  "color": "#3f7a3a" },
+  "mountain": { "id": "mountain", "name": "山地", "domain": "land", "cost": { "land": 3, "air": 1 },           "evade": 20,  "defense": 20, "hpRecover": 0,  "enRecover": 0,  "color": "#8a7a5a" },
+  "city":     { "id": "city",     "name": "市街", "domain": "land", "cost": { "land": 1, "air": 1 },           "evade": 10,  "defense": 10, "hpRecover": 0,  "enRecover": 0,  "color": "#8f8f9a" },
+  "base":     { "id": "base",     "name": "基地", "domain": "land", "cost": { "land": 1, "air": 1 },           "evade": 10,  "defense": 20, "hpRecover": 20, "enRecover": 20, "color": "#c0b060" },
+  "sea":      { "id": "sea",      "name": "海洋", "domain": "sea",  "cost": { "sea": 1, "air": 1 },            "evade": 0,   "defense": 10, "hpRecover": 0,  "enRecover": 0,  "color": "#2f6fb0" },
+  "river":    { "id": "river",    "name": "河川", "domain": "sea",  "cost": { "land": 3, "sea": 1, "air": 1 }, "evade": -10, "defense": 0,  "hpRecover": 0,  "enRecover": 0,  "color": "#4f8fd0" }
+}

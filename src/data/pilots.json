@@ -1,0 +1,11 @@
+{
+  "linkai":  { "id": "linkai",  "name": "林凯",   "level": 5, "melee": 140, "ranged": 155, "hit": 160, "evade": 165, "skill": 150, "defense": 120, "sp": 60, "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "spirits": ["集中", "必中", "热血"] },
+  "shiyan":  { "id": "shiyan",  "name": "石岩",   "level": 5, "melee": 170, "ranged": 120, "hit": 145, "evade": 120, "skill": 130, "defense": 165, "sp": 55, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": ["气合", "铁壁", "热血"] },
+  "zhouyu":  { "id": "zhouyu",  "name": "周雨",   "level": 5, "melee": 110, "ranged": 165, "hit": 170, "evade": 160, "skill": 160, "defense": 110, "sp": 65, "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "spirits": ["集中", "必中", "幸运"] },
+
+  "grunt_a": { "id": "grunt_a", "name": "敌兵A",  "level": 3, "melee": 110, "ranged": 115, "hit": 120, "evade": 115, "skill": 105, "defense": 110, "sp": 20, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
+  "grunt_b": { "id": "grunt_b", "name": "敌兵B",  "level": 3, "melee": 115, "ranged": 110, "hit": 118, "evade": 118, "skill": 100, "defense": 112, "sp": 20, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
+  "grunt_c": { "id": "grunt_c", "name": "敌兵C",  "level": 3, "melee": 108, "ranged": 120, "hit": 122, "evade": 112, "skill": 108, "defense": 108, "sp": 20, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
+  "heavy":   { "id": "heavy",   "name": "重装兵", "level": 4, "melee": 135, "ranged": 120, "hit": 125, "evade": 100, "skill": 115, "defense": 140, "sp": 25, "adapt": { "air": "C", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
+  "captain": { "id": "captain", "name": "敌队长", "level": 7, "melee": 150, "ranged": 150, "hit": 155, "evade": 150, "skill": 145, "defense": 130, "sp": 40, "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "spirits": [], "moraleStart": 105 }
+}
