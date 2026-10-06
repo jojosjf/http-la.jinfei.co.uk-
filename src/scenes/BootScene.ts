@@ -58,7 +58,10 @@ export class BootScene extends Phaser.Scene {
     this.makeMisc();
 
     const params = new URLSearchParams(window.location.search);
-    const view = params.get('view');
+    // `?view=` locally; `#dolls` / `#battle` / `#battle-kill` also work where the query string is stripped.
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'battle-kill') params.set('kill', '1');
+    const view = params.get('view') ?? (hash.startsWith('battle') ? 'battle' : hash || null);
     if (view === 'dolls') this.scene.start('DollViewer');
     else if (view === 'battle') startBattleDemo(this, params);
     else this.scene.start('Map', { scenarioId: 's01' });
