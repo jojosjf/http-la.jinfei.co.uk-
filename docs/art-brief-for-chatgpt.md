@@ -92,8 +92,56 @@ aseprite -b <id>.aseprite --split-layers --trim --list-layers --list-tags --list
 
 === 结束 ===
 
+## 六、部件已经拆好时：先这样问（可直接粘贴）
+
+=== 提问开始 ===
+
+我们的程序是「布娃娃」渲染：每个部件一张图层，动作 = 每帧对部件做整数像素平移、换图、显隐，不做旋转缩放。你已经把机体拆成部件了，很好。为了让程序直接导入，请先回答下面 11 个问题，并先发**一台完整的样例机体**（所有部件、所有动作、以及你现有的任何说明文件，原样打包），确认导入没问题后再批量给。
+
+1. **清单**：现在有哪些机体？每台的部件列表（文件名、像素尺寸）。
+2. **坐标系**：部件图是「整画布同尺寸、位置已对齐」（例如全部 128×128，其余透明），还是「按部件紧裁切」？如果是紧裁切，每个部件在画布上的左上角坐标是多少？画布多大？脚底中心在哪个像素？
+3. **叠放顺序**：从底到顶列出部件顺序（例如 backpack → legs → arm_back → torso → head → arm_front → weapon）。
+4. **动作怎么表达**，三选一：A 每帧每个部件的位移 / 换图 / 显隐表；B 每个部件每帧一张整画布 PNG（如 `torso_shoot_1.png`）；C 只有合成后的整帧图。A 或 B 最好；C 也能用，但做不了部件级动作。
+5. **部件变体**：哪些部件有多张图（抬枪的手臂、张开的手、受损的躯干等）？分别用在哪些动作？
+6. **武器与挂点**：武器是独立部件吗？枪口像素坐标（光束 / 子弹起点）、持握点坐标？近战武器有没有单独的挥砍帧？
+7. **像素比例**：是 1:1 真像素吗？若放大过，倍数是多少？有没有抗锯齿或半透明边缘？
+8. **配色**：每台机体的主色 / 副色 / 发光色色值？是否方便做换色量产机？
+9. **朝向**：全部朝右还是朝左？左右是否对称（有没有单侧武器、不对称肩甲）？
+10. **地图图标**：有没有 32×32 小图标？没有的话能否按同一配色出 2 帧待机？
+11. **现有描述文件**：你那边已有的任何 JSON / TXT / 表格（部件位置、动画表、调色板）请原样给我，我来适配格式，不需要你改。
+
+回答尽量用表格或 JSON。文件按 `mechs/<机体id>/` 目录打包，机体 id 用小写英文加下划线（敌方加 `e_` 前缀）。如果你能直接输出下面这个 manifest 就最省事：
+
+```json
+{
+  "id": "cangqiong",
+  "canvas": [128, 128],
+  "origin": [64, 128],
+  "facing": "right",
+  "scale": 1,
+  "parts": {
+    "torso":       { "file": "torso.png",     "pos": [46, 44], "z": 3 },
+    "arm_front":   { "file": "arm_front.png", "pos": [76, 48], "z": 5, "variants": { "aim": "arm_front_aim.png" } },
+    "weapon_main": { "file": "rifle.png",     "pos": [100, 47], "z": 6, "hidden": true, "muzzle": [36, 5] }
+  },
+  "poses": {
+    "idle":  { "fps": 3, "loop": true,  "keys": [ {}, { "torso": { "dy": 1 } } ] },
+    "shoot": { "fps": 8, "loop": false, "keys": [
+      { "arm_front": { "variant": "aim" }, "weapon_main": { "hidden": false } },
+      { "arm_front": { "variant": "aim", "dx": -2 }, "weapon_main": { "hidden": false, "dx": -3 } },
+      { "arm_front": { "variant": "aim" }, "weapon_main": { "hidden": false } }
+    ] }
+  },
+  "palette": { "main": "#4aa3ff", "sub": "#2f74c4", "glow": "#7ff0ff" }
+}
+```
+
+`pos` 是部件左上角在画布上的坐标；`keys` 每帧只写有变化的部件：`dx` / `dy` 位移（右为正、下为正，单位像素）、`variant` 换图、`hidden` 显隐。
+
+=== 提问结束 ===
+
 ## 给我们自己的备注
 
 - 方式 A 的文件用 `node tools/sheet-to-doll.mjs public/mechs/<id>/<id>_sheet.json` 转成 `doll.json`，再登记到 `public/mechs/index.json`。
-- 方式 B 的 `parts.json` 由 Claude Code 转成 `doll.json`（结构见 `public/mechs/cangqiong/`），动作关键帧也由 Claude 写。
+- 方式 B 的 `parts.json` / 第六节的 manifest 由 Claude Code 转成 `doll.json`（结构见 `public/mechs/cangqiong/`）；如果对方给的是「整画布对齐的部件逐帧 PNG」，Claude 用边界框自动算出位置和每帧位移（需要时加一个 PNG 解码依赖写转换脚本）。
 - AI 出图常见问题：假像素（网格不齐、抗锯齿）、白底、尺寸不一致。收到后先在 `?view=dolls` 预览页检查；如需清洗（网格对齐、量化颜色、抠底）告诉 Claude 写工具。
