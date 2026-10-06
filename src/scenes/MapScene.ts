@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { renderMapTexture } from '../art/mapArt';
 import { chooseDefense, planAction, type DefenseChoice } from '../ai/simple';
 import { GAME_WIDTH, TILE } from '../config';
 import {
@@ -84,8 +85,10 @@ const CONFIRM_KEYS = new Set(['KeyZ', 'Enter', 'Space']);
 const CANCEL_KEYS = new Set(['KeyX', 'Escape', 'Backspace']);
 const END_TURN_KEYS = new Set(['KeyE', 'Tab']);
 
-const IDLE_HINT = '方向键/鼠标 移动光标   Z/左键 选择   E 结束回合';
+const IDLE_HINT = '方向键 移动   Z 选择   E 结束回合';
 const LEVEL_EXP = 100;
+/** Fixed seed for the procedural map art so a stage always looks the same. */
+const ART_SEED = 20261006;
 
 /**
  * The tactical map: player phase state machine, enemy phase, on-map battle animation v0.
@@ -165,11 +168,8 @@ export class MapScene extends Phaser.Scene {
   // ---------------------------------------------------------------- setup
 
   private buildTiles(): void {
-    for (let y = 0; y < this.map.height; y++) {
-      for (let x = 0; x < this.map.width; x++) {
-        this.add.image(x * TILE, y * TILE, `tile_${this.map.tiles[y][x]}`).setOrigin(0).setDepth(0);
-      }
-    }
+    const key = renderMapTexture(this, this.map, this.gd.terrain, ART_SEED, `map_${this.scenario.id}`);
+    this.add.image(0, 0, key).setOrigin(0).setDepth(0);
   }
 
   private spawn(d: Deployment): void {
@@ -695,7 +695,8 @@ export class MapScene extends Phaser.Scene {
       if (!first) this.applyRecovery(u);
       this.refreshView(u);
     }
-    this.hud.setTurn(`${this.scenario.title}   第${this.turn}回合   资金 ${this.money}`);
+    this.hud.setTurn(`第${this.turn}回合   资金 ${this.money}`);
+    if (first) await this.hud.banner(this.scenario.title, 900);
     await this.hud.banner(`第 ${this.turn} 回合   我方行动`);
     const firstUnit = this.units.find((u) => u.alive && u.team === 'player');
     if (firstUnit) this.setCursor(firstUnit.x, firstUnit.y);
@@ -857,7 +858,7 @@ export class MapScene extends Phaser.Scene {
     }
     if (killer.team === 'player' && victim.money > 0) {
       this.money += victim.money;
-      this.hud.setTurn(`${this.scenario.title}   第${this.turn}回合   资金 ${this.money}`);
+      this.hud.setTurn(`第${this.turn}回合   资金 ${this.money}`);
     }
   }
 

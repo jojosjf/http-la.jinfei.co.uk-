@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { TILE } from '../config';
-import type { TerrainDef, UnitDef } from '../core/types';
+import type { UnitDef } from '../core/types';
 import { loadData, validateData } from '../data';
 
 type Rect = [number, number, number, number];
@@ -47,82 +47,10 @@ export class BootScene extends Phaser.Scene {
     const problems = validateData(gd);
     if (problems.length) console.warn('[data] problems:\n' + problems.join('\n'));
 
-    for (const t of Object.values(gd.terrain)) this.makeTile(t);
     for (const u of Object.values(gd.units)) this.makeUnit(u);
     this.makeMisc();
 
     this.scene.start('Map', { scenarioId: 's01' });
-  }
-
-  private makeTile(t: TerrainDef): void {
-    const base = hexToInt(t.color);
-    const c = Phaser.Display.Color.IntegerToColor(base);
-    const dark = c.clone().darken(25).color;
-    const light = c.clone().lighten(20).color;
-    const g = this.make.graphics({ x: 0, y: 0 }, false);
-    g.fillStyle(base, 1);
-    g.fillRect(0, 0, TILE, TILE);
-    g.fillStyle(dark, 0.5);
-    g.fillRect(0, TILE - 1, TILE, 1);
-    g.fillRect(TILE - 1, 0, 1, TILE);
-
-    switch (t.id) {
-      case 'forest':
-        g.fillStyle(dark, 1);
-        g.fillCircle(10, 12, 5);
-        g.fillCircle(21, 17, 6);
-        g.fillCircle(12, 23, 4);
-        break;
-      case 'mountain':
-        g.fillStyle(dark, 1);
-        g.fillTriangle(3, 27, 16, 5, 29, 27);
-        g.fillStyle(light, 1);
-        g.fillTriangle(13, 10, 16, 5, 19, 10);
-        break;
-      case 'city':
-        g.fillStyle(dark, 1);
-        g.fillRect(5, 10, 8, 17);
-        g.fillRect(17, 5, 9, 22);
-        g.fillStyle(light, 1);
-        for (let y = 12; y < 26; y += 4) {
-          g.fillRect(7, y, 2, 2);
-          g.fillRect(19, y - 4, 2, 2);
-          g.fillRect(23, y - 4, 2, 2);
-        }
-        break;
-      case 'base':
-        g.lineStyle(2, dark, 1);
-        g.strokeRect(4, 4, 24, 24);
-        g.fillStyle(light, 1);
-        g.fillRect(9, 9, 4, 14);
-        g.fillRect(19, 9, 4, 14);
-        g.fillRect(13, 15, 6, 3);
-        break;
-      case 'sea':
-      case 'river':
-        g.lineStyle(1, light, 1);
-        for (const y of [10, 21]) {
-          g.beginPath();
-          g.moveTo(3, y + 1);
-          g.lineTo(9, y - 1);
-          g.lineTo(15, y + 1);
-          g.lineTo(21, y - 1);
-          g.lineTo(27, y + 1);
-          g.strokePath();
-        }
-        break;
-      case 'road':
-        g.fillStyle(light, 0.55);
-        g.fillRect(0, 12, TILE, 8);
-        break;
-      default:
-        g.fillStyle(dark, 0.6);
-        g.fillRect(8, 8, 2, 2);
-        g.fillRect(22, 19, 2, 2);
-        g.fillRect(14, 25, 2, 2);
-    }
-    g.generateTexture(`tile_${t.id}`, TILE, TILE);
-    g.destroy();
   }
 
   private makeUnit(u: UnitDef): void {

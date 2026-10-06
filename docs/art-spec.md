@@ -39,4 +39,4 @@
 - 面板 9-slice（含四角 / 边 / 中心），光标 4 角框，范围格纹理（移动蓝 / 攻击红），精神指令图标 16×16 ×30，地形图标 16×16。
 
 ## 占位期约定
-程序目前用 `src/scenes/BootScene.ts` 程序化生成所有占位图。正式图按贴图 key 替换：`tile_<terrainId>`、`unit_<unitId>`、`cursor`、`team_player`、`team_enemy`。
+程序目前用 `src/art/mapArt.ts` 按邻接关系程序化绘制整张地图（草地色块、河岸沙滩、木桥、道路连接、树林、建筑、机库 / 停机坪），机体图标由 `src/scenes/BootScene.ts` 生成。正式地块到位后改为 Tiled 图层渲染；机体 / 光标按贴图 key 替换：`unit_<unitId>`、`cursor`、`team_player`、`team_enemy`。

@@ -4,8 +4,10 @@ import { FONT_FAMILY, GAME_HEIGHT, GAME_WIDTH } from '../config';
 export const TEXT_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
   fontFamily: `"${FONT_FAMILY}", sans-serif`,
   fontSize: '12px',
+  fontStyle: 'bold',
   color: '#ffffff',
   resolution: 1,
+  shadow: { offsetX: 1, offsetY: 1, color: '#000000', blur: 0, fill: true, stroke: false },
 };
 const DISABLED = '#8a8a8a';
 const HUD_DEPTH = 1000;
@@ -63,10 +65,14 @@ export interface PreviewSide {
 
 function drawBox(g: Phaser.GameObjects.Graphics, w: number, h: number): void {
   g.clear();
-  g.fillStyle(0x101418, 0.9);
+  g.fillStyle(0x0e1730, 0.94);
   g.fillRect(0, 0, w, h);
-  g.lineStyle(1, 0xd8dee9, 1);
+  g.fillStyle(0x1b2a52, 1);
+  g.fillRect(2, 2, w - 4, 3);
+  g.lineStyle(1, 0xe8eef8, 1);
   g.strokeRect(0.5, 0.5, w - 1, h - 1);
+  g.lineStyle(1, 0x4d6aa8, 1);
+  g.strokeRect(1.5, 1.5, w - 3, h - 3);
 }
 
 /** A boxed text panel that stays fixed on screen. */
@@ -111,8 +117,8 @@ export class Hud {
   private menuRoot: Phaser.GameObjects.Container | null = null;
 
   constructor(private readonly scene: Phaser.Scene) {
-    this.terrainPanel = new Panel(scene, 4, 4, SIDE_W, 32);
-    this.unitPanel = new Panel(scene, 4, 40, SIDE_W, 64).show(false);
+    this.terrainPanel = new Panel(scene, 4, 4, SIDE_W, 40);
+    this.unitPanel = new Panel(scene, 4, 48, SIDE_W, 78).show(false);
 
     const hintBg = scene.add.graphics().setScrollFactor(0).setDepth(HUD_DEPTH);
     hintBg.fillStyle(0x000000, 0.6);
@@ -128,14 +134,14 @@ export class Hud {
       .setDepth(HUD_DEPTH);
 
     const pw = 330;
-    const ph = 64;
+    const ph = 78;
     const pbg = scene.add.graphics();
     drawBox(pbg, pw, ph);
     const left = scene.add.text(6, 4, '', TEXT_STYLE).setLineSpacing(2);
     const right = scene.add.text(pw / 2 + 10, 4, '', TEXT_STYLE).setLineSpacing(2);
     const vs = scene.add.text(pw / 2, ph / 2, 'VS', { ...TEXT_STYLE, color: '#ffd60a' }).setOrigin(0.5);
     const root = scene.add
-      .container((GAME_WIDTH - pw) / 2, GAME_HEIGHT - ph - 22, [pbg, left, right, vs])
+      .container((GAME_WIDTH - pw) / 2, GAME_HEIGHT - ph - 18, [pbg, left, right, vs])
       .setDepth(HUD_DEPTH + 1)
       .setVisible(false);
     root.setScrollFactor(0, 0, true);
@@ -175,7 +181,7 @@ export class Hud {
     }
     const tag = unit.team === 'player' ? '我方' : '敌方';
     this.unitPanel
-      .at(x, 40)
+      .at(x, 48)
       .show(true)
       .set(
         `${unit.unit}\n${unit.pilot}  Lv${unit.level}  [${tag}]\nHP ${unit.hp}/${unit.maxHp}\nEN ${unit.en}/${unit.maxEn}  气力 ${unit.morale}`,
