@@ -104,12 +104,12 @@ test('boots, moves a unit, undoes, and survives an enemy phase', async ({ page }
   await page.evaluate(() => window.__srpg!.setCursor(6, 10));
   await page.keyboard.press('KeyZ');
   s = await waitState(page, ['actionMenu']);
-  expect(s.units.find((u) => u.unitId === 'cangqiong')).toMatchObject({ x: 6, y: 10 });
+  expect(s.units.find((u) => u.unitId === 'zhaoye')).toMatchObject({ x: 6, y: 10 });
   await page.screenshot({ path: 'test-results/03-action-menu.png' });
 
   await page.keyboard.press('KeyX');
   s = await waitState(page, ['unitSelected']);
-  expect(s.units.find((u) => u.unitId === 'cangqiong')).toMatchObject({ x: 2, y: 10 });
+  expect(s.units.find((u) => u.unitId === 'zhaoye')).toMatchObject({ x: 2, y: 10 });
   await page.keyboard.press('KeyX');
   await waitState(page, ['idle']);
 
@@ -187,6 +187,7 @@ test('doll viewer shows the imported sample mech and cycles poses', async ({ pag
   await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
   const ids = await page.evaluate(() => window.__dolls!.ids);
   expect(ids).toContain('cangqiong');
+  await page.evaluate(() => window.__dolls!.select('cangqiong'));
   await page.waitForTimeout(400);
   await page.screenshot({ path: 'test-results/09-doll-idle.png' });
 
@@ -199,5 +200,61 @@ test('doll viewer shows the imported sample mech and cycles poses', async ({ pag
   await page.waitForTimeout(150);
   expect(await page.evaluate(() => window.__dolls!.current().pose)).toBe('melee');
   await page.screenshot({ path: 'test-results/11-doll-melee.png' });
+  expect(errors).toEqual([]);
+});
+
+test('照夜 rig: poses, weapon knock-off and ragdoll death in the viewer', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/?view=dolls');
+  await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
+  await page.evaluate(() => window.__dolls!.select('zhaoye'));
+  expect(await page.evaluate(() => window.__dolls!.current())).toMatchObject({ id: 'zhaoye', kind: 'rig', pose: 'idle' });
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: 'test-results/12-rig-idle.png' });
+
+  await page.evaluate(() => window.__dolls!.setPose('melee'));
+  await page.waitForTimeout(230);
+  await page.screenshot({ path: 'test-results/13-rig-melee-windup.png' });
+  await page.waitForTimeout(160);
+  await page.screenshot({ path: 'test-results/14-rig-melee-strike.png' });
+
+  await page.evaluate(() => window.__dolls!.setPose('shoot'));
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: 'test-results/15-rig-cast.png' });
+
+  await page.evaluate(() => window.__dolls!.reset());
+  await page.evaluate(() => window.__dolls!.dropWeapon());
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: 'test-results/16-rig-weapon-dropped.png' });
+
+  await page.evaluate(() => window.__dolls!.die(true));
+  expect(await page.evaluate(() => window.__dolls!.current().ragdoll)).toBe(true);
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: 'test-results/17-rig-ragdoll-falling.png' });
+  await page.waitForTimeout(2200);
+  await page.screenshot({ path: 'test-results/18-rig-ragdoll-rest.png' });
+  expect(errors).toEqual([]);
+});
+
+test('battle demo: 照夜 slashes and the target ragdolls; spell exchange with counter', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/?view=battle&a=zhaoye&d=e_liaoya&w=guandao&kill=1');
+  await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
+  await page.waitForTimeout(1050);
+  await page.screenshot({ path: 'test-results/19-demo-slash.png' });
+  await page.waitForTimeout(2600);
+  await page.screenshot({ path: 'test-results/20-demo-kill.png' });
+
+  await page.goto('/?view=battle&a=e_liaoya&d=zhaoye&w=e_beam_gun&cw=lingguang&kill=0');
+  await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
+  await page.waitForTimeout(2600);
+  await page.screenshot({ path: 'test-results/21-demo-zhaoye-hit-and-cast.png' });
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: 'test-results/22-demo-zhaoye-cast.png' });
+
+  await page.goto('/?view=battle&a=e_liaoya&d=zhaoye&w=e_beam_blade&kill=1');
+  await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
+  await page.waitForTimeout(3800);
+  await page.screenshot({ path: 'test-results/23-demo-zhaoye-destroyed.png' });
   expect(errors).toEqual([]);
 });

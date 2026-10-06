@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { poseName, resolvePose, resolveSocket, type BattlePose } from '../core/doll';
 import { dollFrameRef, dollRegistry, type LoadedDoll } from './dollRegistry';
+import { RigActor } from './rigActor';
 
 /**
  * What the battle screen needs from a mech on stage, whether it is a placeholder image
@@ -20,6 +21,8 @@ export interface BattleActor {
   socket(name: string, dir: number): { x: number; y: number };
   /** Semi-transparent copy at the current position; the caller destroys it. */
   ghost(): Phaser.GameObjects.GameObject & { alpha: number };
+  /** Physical death (ragdoll). Actors without physics leave this undefined. */
+  collapse?(dir: number, severe: boolean): void;
   destroy(): void;
 }
 
@@ -221,8 +224,10 @@ export class DollActor implements BattleActor {
   }
 }
 
-/** A doll when one was imported for this unit, otherwise the procedural placeholder block mech. */
+/** A skeletal rig, else a paper doll, else the procedural placeholder block mech. */
 export function createActor(scene: Phaser.Scene, unitId: string, x: number, y: number, opts: ActorOptions = {}): BattleActor {
+  const rig = dollRegistry.getRig(unitId);
+  if (rig) return new RigActor(scene, rig, x, y, { flip: opts.flip, pose: opts.pose });
   const doll = dollRegistry.get(unitId);
   if (doll) return new DollActor(scene, doll, x, y, opts);
   return new ImageActor(scene, x, y, `mech_${unitId}`, opts);

@@ -42,6 +42,16 @@
 程序目前用 `src/art/mapArt.ts` 按邻接关系程序化绘制整张地图（草地色块、河岸沙滩、木桥、道路连接、树林、建筑、机库 / 停机坪），机体图标由 `src/scenes/BootScene.ts` 生成。正式地块到位后改为 Tiled 图层渲染；机体 / 光标按贴图 key 替换：`unit_<unitId>`、`cursor`、`team_player`、`team_enemy`。
 
 
+## 机体导入：天工仙甲骨架原型（当前采用）
+
+外部美术交付的是 `mecha-ragdoll-v1`：每台机甲一张 4×4 透明部件图集 + `rigs/<id>.json`（部件中心、显示尺寸、层级、质量、关节锚点和角度范围）。导入：
+
+```bash
+node tools/import-rig.mjs <mecha-ragdoll-v1 目录> zhaoye      # 不写 id 就导入全部 24 台
+```
+
+脚本会把部件缩到游戏尺寸（默认 rig 坐标 ×0.32，最高 140px）、硬化透明边、全机统一 48 色、武器在左的机体整体镜像让武器朝前，打包成 `public/mechs/<id>/<id>.png` + `<id>.rig.json` + `icon.png`，登记到 `index.json`，并逐台报告越界和缺件。动作由 `src/core/rig.ts` 的通用动作库驱动，击坠和武器脱手走 Matter 刚体。检查：`?view=dolls`（骨架、动作、击坠）和 `?view=battle&a=zhaoye&d=e_liaoya&kill=1`（战斗画面）。
+
 ## 机体导入格式（布娃娃系统）
 
 > 给外部美术 / 美术 AI 的可粘贴版说明：`docs/art-brief-for-chatgpt.md`。

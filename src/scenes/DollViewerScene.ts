@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
-import { createActor, DollActor, ImageActor, type BattleActor } from '../art/dollActor';
+import { createActor, ImageActor, type BattleActor } from '../art/dollActor';
 import { dollRegistry } from '../art/dollRegistry';
+import { addGround, RigActor, stepRagdolls } from '../art/rigActor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config';
+import { poseNames } from '../core/rig';
 import { loadData } from '../data';
 import { TEXT_STYLE } from '../ui/Hud';
 
@@ -9,17 +11,23 @@ declare global {
   interface Window {
     __dolls?: {
       ids: string[];
-      current(): { id: string | null; pose: string | null; key: number };
+      current(): { id: string | null; pose: string | null; kind: 'rig' | 'doll' | null; ragdoll: boolean };
       setPose(name: string): void;
       select(id: string): void;
+      die(severe?: boolean): void;
+      dropWeapon(): void;
+      reset(): void;
     };
   }
 }
 
+const GROUND_Y = 236;
+const SCALE_DOLL = 1.5;
+
 /**
- * Artist preview page: `?view=dolls`. Shows each imported paper doll next to its placeholder,
- * cycles poses, draws the design canvas and origin. Left/Right = mech, Up/Down = pose,
- * F = flip, G = grid, Space = replay.
+ * Artist preview page: `?view=dolls`. Shows each imported mech (skeletal rig or paper doll)
+ * next to its placeholder. Left/Right = mech, Up/Down = pose, F = flip, G = frame,
+ * D = destroy (ragdoll), S = destroy with severed arm, W = knock the weapon away, R = reset.
  */
 export class DollViewerScene extends Phaser.Scene {
   private ids: string[] = [];
@@ -29,11 +37,22 @@ export class DollViewerScene extends Phaser.Scene {
   private grid = true;
   private actor: BattleActor | null = null;
   private placeholder: BattleActor | null = null;
+  private placeholderLabel: Phaser.GameObjects.Text | null = null;
   private overlay!: Phaser.GameObjects.Graphics;
   private info!: Phaser.GameObjects.Text;
 
   constructor() {
-    super('DollViewer');
+    super({
+      key: 'DollViewer',
+      physics: {
+        default: 'matter',
+        matter: { gravity: { x: 0, y: 0.9 }, autoUpdate: false, enableSleeping: false, positionIterations: 10, velocityIterations: 8, constraintIterations: 10 },
+      },
+    });
+  }
+
+  update(_t: number, delta: number): void {
+    stepRagdolls(this, delta);
   }
 
   create(): void {
@@ -43,55 +62,60 @@ export class DollViewerScene extends Phaser.Scene {
     bg.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     bg.fillStyle(0x24364a, 1);
     for (let x = 0; x < GAME_WIDTH; x += 16) for (let y = (x / 16) % 2 ? 16 : 0; y < GAME_HEIGHT; y += 32) bg.fillRect(x, y, 16, 16);
+    bg.fillStyle(0x2c3e50, 1);
+    bg.fillRect(0, GROUND_Y, GAME_WIDTH, GAME_HEIGHT - GROUND_Y);
+    bg.fillStyle(0x3d5266, 1);
+    bg.fillRect(0, GROUND_Y, GAME_WIDTH, 1);
+    addGround(this, GROUND_Y, GAME_WIDTH);
     this.overlay = this.add.graphics().setDepth(20);
     this.info = this.add.text(8, 6, '', TEXT_STYLE).setDepth(30).setLineSpacing(2);
     this.add
-      .text(GAME_WIDTH - 8, GAME_HEIGHT - 14, '←→ 机体   ↑↓ 动作   F 翻转   G 网格   空格 重播', { ...TEXT_STYLE, color: '#cfd8dc' })
+      .text(GAME_WIDTH - 8, GAME_HEIGHT - 14, '←→机体 ↑↓动作 F翻转 D击坠 S断臂击坠 W武器脱手 R复原', { ...TEXT_STYLE, color: '#cfd8dc' })
       .setOrigin(1, 0)
       .setDepth(30);
 
     this.input.keyboard?.on('keydown', (ev: KeyboardEvent) => {
-      switch (ev.code) {
-        case 'ArrowRight':
-          this.select(this.index + 1);
-          break;
-        case 'ArrowLeft':
-          this.select(this.index - 1);
-          break;
-        case 'ArrowDown':
-          this.setPoseIndex(this.poseIndex + 1);
-          break;
-        case 'ArrowUp':
-          this.setPoseIndex(this.poseIndex - 1);
-          break;
-        case 'KeyF':
+      const k: Record<string, () => void> = {
+        ArrowRight: () => this.select(this.index + 1),
+        ArrowLeft: () => this.select(this.index - 1),
+        ArrowDown: () => this.setPoseIndex(this.poseIndex + 1),
+        ArrowUp: () => this.setPoseIndex(this.poseIndex - 1),
+        KeyF: () => {
           this.flip = !this.flip;
           this.rebuild();
-          break;
-        case 'KeyG':
+        },
+        KeyG: () => {
           this.grid = !this.grid;
           this.drawOverlay();
-          break;
-        case 'Space':
-          this.rebuild();
-          break;
-        default:
-          break;
-      }
+        },
+        KeyD: () => this.die(false),
+        KeyS: () => this.die(true),
+        KeyW: () => this.dropWeapon(),
+        KeyR: () => this.rebuild(),
+        Space: () => this.rebuild(),
+      };
+      k[ev.code]?.();
     });
 
     window.__dolls = {
       ids: this.ids,
-      current: () => ({ id: this.currentId(), pose: this.currentPoseName(), key: this.poseIndex }),
+      current: () => ({
+        id: this.currentId(),
+        pose: this.currentPoseName(),
+        kind: this.kind(),
+        ragdoll: this.actor instanceof RigActor && this.actor.isRagdoll,
+      }),
       setPose: (name) => {
-        const names = this.poseNames();
-        const i = names.indexOf(name);
+        const i = this.poseNames().indexOf(name);
         if (i >= 0) this.setPoseIndex(i);
       },
       select: (id) => {
         const i = this.ids.indexOf(id);
         if (i >= 0) this.select(i);
       },
+      die: (severe = false) => this.die(severe),
+      dropWeapon: () => this.dropWeapon(),
+      reset: () => this.rebuild(),
     };
 
     this.rebuild();
@@ -101,9 +125,18 @@ export class DollViewerScene extends Phaser.Scene {
     return this.ids[this.index] ?? null;
   }
 
+  private kind(): 'rig' | 'doll' | null {
+    const id = this.currentId();
+    if (!id) return null;
+    return dollRegistry.getRig(id) ? 'rig' : 'doll';
+  }
+
   private poseNames(): string[] {
     const id = this.currentId();
-    const doll = id ? dollRegistry.get(id) : undefined;
+    if (!id) return [];
+    const rig = dollRegistry.getRig(id);
+    if (rig) return poseNames(rig.def);
+    const doll = dollRegistry.get(id);
     return doll ? Object.keys(doll.def.poses) : [];
   }
 
@@ -122,42 +155,71 @@ export class DollViewerScene extends Phaser.Scene {
     const n = this.poseNames().length;
     if (n === 0) return;
     this.poseIndex = ((i % n) + n) % n;
-    this.rebuild();
+    if (this.actor instanceof RigActor && !this.actor.isRagdoll) {
+      this.actor.play(this.currentPoseName() ?? 'idle');
+      this.refreshInfo();
+    } else {
+      this.rebuild();
+    }
+  }
+
+  private die(severe: boolean): void {
+    if (!(this.actor instanceof RigActor)) return;
+    this.actor.collapse(this.flip ? 1 : -1, severe);
+    this.refreshInfo();
+  }
+
+  private dropWeapon(): void {
+    if (this.actor instanceof RigActor) this.actor.drop('weapon');
   }
 
   private rebuild(): void {
     this.actor?.destroy();
     this.placeholder?.destroy();
+    this.placeholderLabel?.destroy();
     this.actor = null;
     this.placeholder = null;
+    this.placeholderLabel = null;
     const id = this.currentId();
     if (!id) {
-      this.info.setText('没有找到导入的机体。\n把 PNG + doll.json 放进 public/mechs/<id>/ 并登记到 public/mechs/index.json。');
+      this.info.setText('没有找到导入的机体。\n运行 node tools/import-rig.mjs <原型目录> 或把 doll.json 登记到 public/mechs/index.json。');
       this.overlay.clear();
       return;
     }
-    const doll = dollRegistry.get(id)!;
     const pose = this.currentPoseName() ?? 'idle';
-    const scale = 1.5;
-    const a = createActor(this, id, 150, 228, { scale, flip: this.flip });
+    const isRig = this.kind() === 'rig';
+    const a = createActor(this, id, 150, GROUND_Y, { scale: isRig ? 1 : SCALE_DOLL, flip: this.flip });
     a.setDepth(10);
     a.play(pose as never);
     this.actor = a;
     const gd = loadData();
     if (gd.units[id] && this.textures.exists(`mech_${id}`)) {
-      this.placeholder = new ImageActor(this, 360, 228, `mech_${id}`, { scale: 1, flip: this.flip });
+      this.placeholder = new ImageActor(this, 380, GROUND_Y, `mech_${id}`, { scale: 1, flip: this.flip });
       this.placeholder.setDepth(10);
-      this.add.text(360, 236, '占位方块（对照）', { ...TEXT_STYLE, color: '#9ad0ff' }).setOrigin(0.5, 0).setDepth(30);
+      this.placeholderLabel = this.add.text(380, GROUND_Y + 4, '占位方块（对照）', { ...TEXT_STYLE, color: '#9ad0ff' }).setOrigin(0.5, 0).setDepth(30);
     }
-    const p = doll.def.poses[pose];
-    const unit = gd.units[id];
-    this.info.setText(
-      `${unit?.name ?? id}  [${this.index + 1}/${this.ids.length}]\n` +
-        `动作 ${pose}  (${this.poseIndex + 1}/${this.poseNames().length})  ${p.keys.length} 帧  ${p.fps} fps${p.loop ? ' 循环' : ''}\n` +
-        `部件 ${Object.keys(doll.def.parts).length}   画布 ${doll.def.canvas.w}x${doll.def.canvas.h}   原点 (${doll.def.origin.x},${doll.def.origin.y})`,
-    );
+    this.refreshInfo();
     this.drawOverlay();
-    void (a instanceof DollActor);
+  }
+
+  private refreshInfo(): void {
+    const id = this.currentId();
+    if (!id) return;
+    const unit = loadData().units[id];
+    const rig = dollRegistry.getRig(id);
+    const pose = this.currentPoseName() ?? 'idle';
+    const head = `${unit?.name ?? rig?.def.name ?? id}  [${this.index + 1}/${this.ids.length}]`;
+    if (rig) {
+      const state = this.actor instanceof RigActor && this.actor.isRagdoll ? '布娃娃物理' : `动作 ${pose} (${this.poseIndex + 1}/${this.poseNames().length})`;
+      this.info.setText(`${head}  骨架\n${state}\n部件 ${rig.def.parts.length}  关节 ${rig.def.joints.length}  高 ${rig.def.height}px`);
+      return;
+    }
+    const doll = dollRegistry.get(id)!;
+    const p = doll.def.poses[pose];
+    this.info.setText(
+      `${head}  布娃娃\n动作 ${pose}  (${this.poseIndex + 1}/${this.poseNames().length})  ${p.keys.length} 帧  ${p.fps} fps${p.loop ? ' 循环' : ''}\n` +
+        `部件 ${Object.keys(doll.def.parts).length}   画布 ${doll.def.canvas.w}x${doll.def.canvas.h}`,
+    );
   }
 
   private drawOverlay(): void {
@@ -165,14 +227,14 @@ export class DollViewerScene extends Phaser.Scene {
     g.clear();
     const id = this.currentId();
     if (!id || !this.grid || !this.actor) return;
-    const def = dollRegistry.get(id)!.def;
-    const s = 1.5;
     const ox = this.actor.x;
     const oy = this.actor.y;
-    const left = ox - def.origin.x * s;
-    const top = oy - def.origin.y * s;
-    g.lineStyle(1, 0x9ad0ff, 0.6);
-    g.strokeRect(left + 0.5, top + 0.5, def.canvas.w * s, def.canvas.h * s);
+    const doll = dollRegistry.get(id);
+    if (doll && !dollRegistry.getRig(id)) {
+      const def = doll.def;
+      g.lineStyle(1, 0x9ad0ff, 0.6);
+      g.strokeRect(ox - def.origin.x * SCALE_DOLL + 0.5, oy - def.origin.y * SCALE_DOLL + 0.5, def.canvas.w * SCALE_DOLL, def.canvas.h * SCALE_DOLL);
+    }
     g.lineStyle(1, 0xffd60a, 0.9);
     g.lineBetween(ox - 6, oy, ox + 6, oy);
     g.lineBetween(ox, oy - 6, ox, oy + 6);

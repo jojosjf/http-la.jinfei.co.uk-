@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { createActor, type BattleActor } from '../art/dollActor';
+import { addGround, stepRagdolls } from '../art/rigActor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config';
 import type { DefenseAction, StrikeResult } from '../core/battle';
 import type { Domain, PilotDef, Team, TerrainDef, UnitDef, WeaponDef } from '../core/types';
@@ -69,7 +70,17 @@ export class BattleScene extends Phaser.Scene {
   private finished = false;
 
   constructor() {
-    super('Battle');
+    super({
+      key: 'Battle',
+      physics: {
+        default: 'matter',
+        matter: { gravity: { x: 0, y: 0.9 }, autoUpdate: false, enableSleeping: false, positionIterations: 10, velocityIterations: 8, constraintIterations: 10 },
+      },
+    });
+  }
+
+  update(_time: number, delta: number): void {
+    stepRagdolls(this, delta);
   }
 
   init(data: BattleSceneData): void {
@@ -82,6 +93,7 @@ export class BattleScene extends Phaser.Scene {
 
   create(): void {
     this.drawBackground(this.script.right.terrain, this.script.right.domain);
+    addGround(this, GROUND_Y, GAME_WIDTH);
     this.mechs = { left: this.placeMech('left'), right: this.placeMech('right') };
     this.panels = { left: this.makePanel('left'), right: this.makePanel('right') };
 
@@ -169,14 +181,14 @@ export class BattleScene extends Phaser.Scene {
     }
 
     if (s.defense === 'defend') this.shield(D, dir);
-    D.play('hit');
+    D.play(s.defense === 'defend' ? 'block' : 'hit');
     await this.impact(D, dir, s.result.crit);
     this.popDamage(D, s.result.damage, s.result.crit);
     this.setMessage(s.result.crit ? `会心一击！  ${s.result.damage} 伤害` : `命中！  ${s.result.damage} 伤害`);
     await this.drainHp(defSide, s.targetHpAfter);
     if (s.targetDestroyed) {
-      D.play('down');
-      await this.destroy(D);
+      if (!D.collapse) D.play('down');
+      await this.destroy(D, -dir, s.result.crit);
       this.setMessage(`${this.script[defSide].def.name} 击坠！`);
       await this.wait(500);
     }
@@ -311,7 +323,23 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private async destroy(D: BattleActor): Promise<void> {
+  private async destroy(D: BattleActor, dir: number, severe: boolean): Promise<void> {
+    if (D.collapse) {
+      // Physical death: the rig falls apart as a ragdoll and stays on the ground as a wreck.
+      const cy0 = D.y - D.height * 0.45;
+      D.flash(0xffffff);
+      this.cameras.main.shake(300, 0.012);
+      this.sparks.explode(30, D.x, cy0);
+      await this.wait(90);
+      D.unflash();
+      D.collapse(-dir, severe);
+      for (let i = 0; i < 5; i++) {
+        const ring = this.add.circle(D.x + Phaser.Math.Between(-24, 24), cy0 + Phaser.Math.Between(-30, 30), 4, i % 2 ? 0xffb347 : 0xff6b3d, 0.95).setDepth(45);
+        this.tweens.add({ targets: ring, radius: 26 + i * 4, alpha: 0, duration: 520, delay: 200 + i * 110, onComplete: () => ring.destroy() });
+      }
+      await this.wait(1500);
+      return;
+    }
     await this.tween({ targets: D.node, alpha: 0.2, duration: 70, yoyo: true, repeat: 3 });
     const cy = D.y - D.height * 0.45;
     const flash = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0xffffff, 0.85).setOrigin(0).setDepth(90);

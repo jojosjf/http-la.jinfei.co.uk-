@@ -1,9 +1,198 @@
 {
-  "cangqiong": { "id": "cangqiong", "name": "苍穹 VX-01",  "hp": 4200, "en": 120, "armor": 1000, "mobility": 120, "limit": 340, "move": 6, "size": "M", "moveTypes": ["land", "air"], "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "weapons": ["beam_saber", "beam_rifle", "missile_pod"], "money": 0,    "exp": 0,  "color": "#4aa3ff" },
-  "tiejuren":  { "id": "tiejuren",  "name": "铁巨人 ZX-7", "hp": 6500, "en": 150, "armor": 1500, "mobility": 65,  "limit": 250, "move": 5, "size": "L", "moveTypes": ["land"],        "adapt": { "air": "B", "land": "A", "sea": "C", "space": "B" }, "weapons": ["rocket_punch", "giant_blow", "chest_flame"], "money": 0, "exp": 0, "color": "#e05a3a" },
-  "jifeng":    { "id": "jifeng",    "name": "疾风 SF-3",   "hp": 3600, "en": 110, "armor": 850,  "mobility": 125, "limit": 350, "move": 7, "size": "M", "moveTypes": ["air", "land"], "adapt": { "air": "A", "land": "B", "sea": "B", "space": "A" }, "weapons": ["vulcan", "sniper_rifle"], "money": 0, "exp": 0, "color": "#7fd36b" },
-
-  "e_quanya":  { "id": "e_quanya",  "name": "犬牙",        "hp": 2800, "en": 100, "armor": 800,  "mobility": 80,  "limit": 260, "move": 5, "size": "M", "moveTypes": ["land", "air"], "adapt": { "air": "B", "land": "A", "sea": "B", "space": "A" }, "weapons": ["e_vulcan", "e_missile"], "money": 3000, "exp": 30, "color": "#9a9aa8" },
-  "e_yeniu":   { "id": "e_yeniu",   "name": "野牛",        "hp": 4500, "en": 120, "armor": 1200, "mobility": 60,  "limit": 240, "move": 4, "size": "L", "moveTypes": ["land"],        "adapt": { "air": "C", "land": "A", "sea": "C", "space": "B" }, "weapons": ["e_claw", "e_cannon"], "money": 4500, "exp": 45, "color": "#7a6a5a" },
-  "e_liaoya":  { "id": "e_liaoya",  "name": "獠牙",        "hp": 3800, "en": 130, "armor": 950,  "mobility": 105, "limit": 300, "move": 6, "size": "M", "moveTypes": ["land", "air"], "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "weapons": ["e_beam_blade", "e_beam_gun"], "money": 6000, "exp": 60, "color": "#c04a9a" }
+  "zhaoye": {
+    "id": "zhaoye",
+    "name": "照夜",
+    "hp": 5200,
+    "en": 130,
+    "armor": 1350,
+    "mobility": 95,
+    "limit": 300,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "guandao",
+      "lingguang",
+      "leiting_zhan"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#e8b04a"
+  },
+  "cangqiong": {
+    "id": "cangqiong",
+    "name": "苍穹 VX-01",
+    "hp": 4200,
+    "en": 120,
+    "armor": 1000,
+    "mobility": 120,
+    "limit": 340,
+    "move": 6,
+    "size": "M",
+    "moveTypes": [
+      "land",
+      "air"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "beam_saber",
+      "beam_rifle",
+      "missile_pod"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#4aa3ff"
+  },
+  "tiejuren": {
+    "id": "tiejuren",
+    "name": "铁巨人 ZX-7",
+    "hp": 6500,
+    "en": 150,
+    "armor": 1500,
+    "mobility": 65,
+    "limit": 250,
+    "move": 5,
+    "size": "L",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "weapons": [
+      "rocket_punch",
+      "giant_blow",
+      "chest_flame"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#e05a3a"
+  },
+  "jifeng": {
+    "id": "jifeng",
+    "name": "疾风 SF-3",
+    "hp": 3600,
+    "en": 110,
+    "armor": 850,
+    "mobility": 125,
+    "limit": 350,
+    "move": 7,
+    "size": "M",
+    "moveTypes": [
+      "air",
+      "land"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "B",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "vulcan",
+      "sniper_rifle"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#7fd36b"
+  },
+  "e_quanya": {
+    "id": "e_quanya",
+    "name": "犬牙",
+    "hp": 2800,
+    "en": 100,
+    "armor": 800,
+    "mobility": 80,
+    "limit": 260,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "land",
+      "air"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "e_vulcan",
+      "e_missile"
+    ],
+    "money": 3000,
+    "exp": 30,
+    "color": "#9a9aa8"
+  },
+  "e_yeniu": {
+    "id": "e_yeniu",
+    "name": "野牛",
+    "hp": 4500,
+    "en": 120,
+    "armor": 1200,
+    "mobility": 60,
+    "limit": 240,
+    "move": 4,
+    "size": "L",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "weapons": [
+      "e_claw",
+      "e_cannon"
+    ],
+    "money": 4500,
+    "exp": 45,
+    "color": "#7a6a5a"
+  },
+  "e_liaoya": {
+    "id": "e_liaoya",
+    "name": "獠牙",
+    "hp": 3800,
+    "en": 130,
+    "armor": 950,
+    "mobility": 105,
+    "limit": 300,
+    "move": 6,
+    "size": "M",
+    "moveTypes": [
+      "land",
+      "air"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "e_beam_blade",
+      "e_beam_gun"
+    ],
+    "money": 6000,
+    "exp": 60,
+    "color": "#c04a9a"
+  }
 }

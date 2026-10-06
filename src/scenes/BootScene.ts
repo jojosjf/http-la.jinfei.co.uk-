@@ -3,6 +3,7 @@ import { TILE } from '../config';
 import type { UnitDef } from '../core/types';
 import { loadMechAssets } from '../art/dollRegistry';
 import { loadData, validateData } from '../data';
+import { startBattleDemo } from './battleDemo';
 
 type Rect = [number, number, number, number];
 
@@ -56,8 +57,10 @@ export class BootScene extends Phaser.Scene {
     }
     this.makeMisc();
 
-    const view = new URLSearchParams(window.location.search).get('view');
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get('view');
     if (view === 'dolls') this.scene.start('DollViewer');
+    else if (view === 'battle') startBattleDemo(this, params);
     else this.scene.start('Map', { scenarioId: 's01' });
   }
 

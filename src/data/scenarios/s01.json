@@ -3,7 +3,16 @@
   "title": "第1话 河畔遭遇战",
   "width": 20,
   "height": 15,
-  "legend": { ".": "plain", "r": "road", "f": "forest", "m": "mountain", "c": "city", "b": "base", "~": "sea", "w": "river" },
+  "legend": {
+    ".": "plain",
+    "r": "road",
+    "f": "forest",
+    "m": "mountain",
+    "c": "city",
+    "b": "base",
+    "~": "sea",
+    "w": "river"
+  },
   "rows": [
     "mmm.........ff......",
     "mm..........ff..cc..",
@@ -22,14 +31,62 @@
     "mmm..www...........m"
   ],
   "deploy": [
-    { "unit": "cangqiong", "pilot": "linkai",  "team": "player", "x": 2,  "y": 10 },
-    { "unit": "tiejuren",  "pilot": "shiyan",  "team": "player", "x": 1,  "y": 11 },
-    { "unit": "jifeng",    "pilot": "zhouyu",  "team": "player", "x": 2,  "y": 12 },
-    { "unit": "e_quanya",  "pilot": "grunt_a", "team": "enemy",  "x": 16, "y": 2 },
-    { "unit": "e_quanya",  "pilot": "grunt_b", "team": "enemy",  "x": 17, "y": 3 },
-    { "unit": "e_quanya",  "pilot": "grunt_c", "team": "enemy",  "x": 15, "y": 4 },
-    { "unit": "e_yeniu",   "pilot": "heavy",   "team": "enemy",  "x": 18, "y": 2 },
-    { "unit": "e_liaoya",  "pilot": "captain", "team": "enemy",  "x": 17, "y": 1 }
+    {
+      "unit": "zhaoye",
+      "pilot": "linkai",
+      "team": "player",
+      "x": 2,
+      "y": 10
+    },
+    {
+      "unit": "tiejuren",
+      "pilot": "shiyan",
+      "team": "player",
+      "x": 1,
+      "y": 11
+    },
+    {
+      "unit": "jifeng",
+      "pilot": "zhouyu",
+      "team": "player",
+      "x": 2,
+      "y": 12
+    },
+    {
+      "unit": "e_quanya",
+      "pilot": "grunt_a",
+      "team": "enemy",
+      "x": 16,
+      "y": 2
+    },
+    {
+      "unit": "e_quanya",
+      "pilot": "grunt_b",
+      "team": "enemy",
+      "x": 17,
+      "y": 3
+    },
+    {
+      "unit": "e_quanya",
+      "pilot": "grunt_c",
+      "team": "enemy",
+      "x": 15,
+      "y": 4
+    },
+    {
+      "unit": "e_yeniu",
+      "pilot": "heavy",
+      "team": "enemy",
+      "x": 18,
+      "y": 2
+    },
+    {
+      "unit": "e_liaoya",
+      "pilot": "captain",
+      "team": "enemy",
+      "x": 17,
+      "y": 1
+    }
   ],
   "win": "annihilate",
   "lose": "annihilate"

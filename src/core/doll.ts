@@ -58,7 +58,7 @@ export interface DollDef {
 }
 
 export const REQUIRED_POSES = ['idle'] as const;
-export const BATTLE_POSES = ['idle', 'shoot', 'melee', 'hit', 'down'] as const;
+export const BATTLE_POSES = ['idle', 'shoot', 'melee', 'hit', 'block', 'down'] as const;
 export type BattlePose = (typeof BATTLE_POSES)[number];
 
 export interface ResolvedPart {

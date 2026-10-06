@@ -3,6 +3,11 @@
     {
       "id": "cangqiong",
       "doll": "mechs/cangqiong/cangqiong.doll.json"
+    },
+    {
+      "id": "zhaoye",
+      "rig": "mechs/zhaoye/zhaoye.rig.json",
+      "icon": "mechs/zhaoye/icon.png"
     }
   ]
 }
