@@ -1,3 +1,4 @@
+import { FOCUS_BONUS, GUTS_DAMAGE, WALL_MULT } from './spirit';
 import type { Adapt, Domain, Grade, PilotDef, TerrainDef, UnitDef, UnitState, WeaponDef } from './types';
 
 /**
@@ -81,7 +82,14 @@ export function hitChance(i: StrikeInput): number {
     GRADE_HIT[gradeOf(d)] -
     d.terrain.evade +
     sizeMod;
+  const as = a.state.spirit ?? {};
+  const ds = d.state.spirit ?? {};
+  if (as.focus) hit += FOCUS_BONUS;
+  if (ds.focus) hit -= FOCUS_BONUS;
   if (i.defense === 'evade') hit *= EVADE_HIT_MULT;
+  // 身法 beats 破妄; 破妄 beats everything else.
+  if (ds.dodge) return 0;
+  if (as.sureHit) return 100;
   return Math.round(clamp(hit, 0, 100));
 }
 
@@ -103,7 +111,10 @@ export function finalDamage(i: StrikeInput, crit: boolean): number {
     (1 + d.terrain.defense / 100);
   let dmg = Math.max(atk - def, MIN_DAMAGE);
   if (crit) dmg *= CRIT_MULT;
+  dmg *= a.state.spirit?.power ?? 1;
   if (i.defense === 'defend') dmg *= DEFEND_MULT;
+  if (d.state.spirit?.wall) dmg *= WALL_MULT;
+  if (d.state.spirit?.guts) return GUTS_DAMAGE;
   return Math.floor(dmg);
 }
 

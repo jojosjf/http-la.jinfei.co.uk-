@@ -17,6 +17,18 @@ import { MORALE, addMorale } from '../core/morale';
 import { movementRange, pathTo, stoppableTiles, type Reach } from '../core/pathfinding';
 import { inWeaponRange, tilesInRange } from '../core/range';
 import { realmName } from '../core/realm';
+import {
+  ACCEL_MOVE,
+  activeSpiritLabels,
+  castSpirit,
+  consumeAttackSpirits,
+  consumeDefenseSpirits,
+  expireTurnSpirits,
+  isSpiritId,
+  SPIRITS,
+  spiritBlocked,
+  type SpiritId,
+} from '../core/spirit';
 import { mulberry32 } from '../core/rng';
 import { buildMap, deploymentIds } from '../core/scenario';
 import type { Deployment, GameMap, ScenarioDef, TerrainDef, UnitDef, UnitState, Vec2, WeaponDef } from '../core/types';
@@ -40,6 +52,7 @@ type State =
   | 'weaponSelect'
   | 'targetSelect'
   | 'systemMenu'
+  | 'spiritSelect'
   | 'busy'
   | 'enemyPhase'
   | 'gameOver';
@@ -185,6 +198,11 @@ export class MapScene extends Phaser.Scene {
       },
       setBattleAnim: (on) => this.setBattleAnim(on),
       confirm: () => this.onConfirm(),
+      menuMove: (n: number) => this.menu?.move(n),
+      castSpirit: (uid: string, id: string) => {
+        const u = this.units.find((x) => x.uid === uid);
+        if (u && isSpiritId(id) && !spiritBlocked(u, id, this.spiritContext(u))) castSpirit(u, id, this.spiritContext(u));
+      },
       cancel: () => this.onCancel(),
       endTurn: () => this.onEndTurn(),
     });
@@ -259,6 +277,9 @@ export class MapScene extends Phaser.Scene {
       en: u.en,
       maxEn: def.en,
       morale: u.morale,
+      sp: u.sp,
+      maxSp: u.team === 'player' ? pilot.sp : 0,
+      spirits: activeSpiritLabels(u),
     };
   }
 
@@ -297,6 +318,7 @@ export class MapScene extends Phaser.Scene {
       battleAnim: this.battleAnim,
       stoppable: this.sel ? [...this.sel.stoppable] : [],
       targets: this.sel ? this.sel.targets.map((t) => t.uid) : [],
+      menuIndex: this.menu?.index ?? -1,
       turn: this.turn,
       phase: this.phase,
       cursor: { ...this.cursorPos },
@@ -313,6 +335,8 @@ export class MapScene extends Phaser.Scene {
         morale: u.morale,
         alive: u.alive,
         acted: u.acted,
+        sp: u.sp,
+        spirits: activeSpiritLabels(u),
       })),
     };
   }
@@ -460,6 +484,7 @@ export class MapScene extends Phaser.Scene {
       case 'actionMenu':
       case 'weaponSelect':
       case 'systemMenu':
+      case 'spiritSelect':
         this.menu?.confirm();
         break;
       case 'targetSelect':
@@ -479,6 +504,7 @@ export class MapScene extends Phaser.Scene {
         this.undoMove();
         break;
       case 'weaponSelect':
+      case 'spiritSelect':
         this.closeMenu();
         this.clearHighlights();
         this.openActionMenu();
@@ -551,7 +577,7 @@ export class MapScene extends Phaser.Scene {
       map: this.map,
       terrain: this.gd.terrain,
       start: u,
-      move: def.move,
+      move: def.move + (u.spirit?.accel ? ACCEL_MOVE : 0),
       moveTypes: def.moveTypes,
       blocked,
     });
@@ -594,7 +620,7 @@ export class MapScene extends Phaser.Scene {
     this.menu = this.hud.openMenu(
       [
         { label: '攻击', enabled: canAtk },
-        { label: '神通', enabled: false },
+        { label: '神通', enabled: this.gd.pilots[u.pilotId].spirits.length > 0 },
         { label: '待机', enabled: true },
       ],
       {
@@ -602,11 +628,53 @@ export class MapScene extends Phaser.Scene {
         width,
         onSelect: (i) => {
           if (i === 0) this.openWeaponMenu();
+          else if (i === 1) this.openSpiritMenu();
           else if (i === 2) this.finishAction(u);
         },
       },
     );
     this.hud.setHint('上下 选择   Z 确定   X 撤销移动');
+  }
+
+  private spiritContext(u: UnitState): { maxHp: number; maxEn: number; moved: boolean } {
+    const def = this.gd.units[u.unitId];
+    return { maxHp: def.hp, maxEn: def.en, moved: u.moved };
+  }
+
+  private openSpiritMenu(): void {
+    const sel = this.sel;
+    if (!sel) return;
+    const u = sel.unit;
+    this.closeMenu();
+    this.state = 'spiritSelect';
+    const ids = this.gd.pilots[u.pilotId].spirits.filter(isSpiritId);
+    const width = 200;
+    const pos = this.menuPos(width);
+    this.menu = this.hud.openMenu(
+      ids.map((id) => {
+        const blocked = spiritBlocked(u, id, this.spiritContext(u));
+        return { label: `${id} ${SPIRITS[id].cost}  ${blocked ?? SPIRITS[id].desc}`, enabled: !blocked };
+      }),
+      { ...pos, width, onSelect: (i) => this.useSpirit(u, ids[i]) },
+    );
+    const maxSp = this.gd.pilots[u.pilotId].sp;
+    this.hud.setHint(`神识 ${u.sp}/${maxSp}   Z 使用   X 返回`);
+  }
+
+  /** Cast a 神通 for the selected unit and return to its menu (神行 re-opens movement). */
+  private useSpirit(u: UnitState, id: SpiritId): void {
+    if (spiritBlocked(u, id, this.spiritContext(u))) return;
+    castSpirit(u, id, this.spiritContext(u));
+    this.closeMenu();
+    this.floatText(u, id, '#ffe38f');
+    this.refreshView(u);
+    this.updateCursorInfo();
+    const sel = this.sel;
+    if (id === '神行' && sel && !u.moved) {
+      this.selectUnit(u);
+      return;
+    }
+    this.openActionMenu();
   }
 
   private openWeaponMenu(): void {
@@ -748,6 +816,7 @@ export class MapScene extends Phaser.Scene {
       if (!u.alive) continue;
       u.acted = false;
       u.moved = false;
+      if (u.team === 'player') expireTurnSpirits(u);
       if (!first) this.applyRecovery(u);
       this.refreshView(u);
     }
@@ -781,6 +850,7 @@ export class MapScene extends Phaser.Scene {
     this.state = 'enemyPhase';
     this.phase = 'enemy';
     this.hud.setHint('敌方行动中...');
+    for (const u of this.units) if (u.team === 'enemy') expireTurnSpirits(u);
     await this.hud.banner('敌方行动');
     for (const e of [...this.units]) {
       if (!e.alive || e.team !== 'enemy') continue;
@@ -949,6 +1019,8 @@ export class MapScene extends Phaser.Scene {
     } else {
       addMorale(d.state, MORALE.onEvade);
     }
+    consumeAttackSpirits(a.state);
+    consumeDefenseSpirits(d.state, result.hit);
     return {
       result,
       defense,
@@ -972,14 +1044,14 @@ export class MapScene extends Phaser.Scene {
   }
 
   private grantRewards(killer: UnitState, victim: UnitDef): void {
-    killer.exp += victim.exp;
+    killer.exp += victim.exp * (killer.spirit?.effort ? 2 : 1);
     while (killer.exp >= LEVEL_EXP) {
       killer.exp -= LEVEL_EXP;
       killer.level++;
       this.floatText(killer, 'LEVEL UP', '#ffd60a');
     }
     if (killer.team === 'player' && victim.money > 0) {
-      this.money += victim.money;
+      this.money += victim.money * (killer.spirit?.luck ? 2 : 1);
       this.hud.setTurn(`第${this.turn}回合   灵石 ${this.money}`);
     }
   }

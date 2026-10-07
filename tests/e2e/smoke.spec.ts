@@ -71,8 +71,10 @@ async function playOneAction(page: Page, onTarget?: () => Promise<void>): Promis
   );
   await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [best.t.x, best.t.y] as const);
   await confirm(page);
-  await waitState(page, ['actionMenu']);
-  await confirm(page); // first enabled item: 攻击 when a target exists, else 待机
+  const menu = await waitState(page, ['actionMenu']);
+  // the menu opens on 攻击 when a target exists, else on 神通; skip to 待机 (row 2) in that case
+  if (menu.menuIndex === 1) await page.evaluate(() => window.__srpg!.menuMove(1));
+  await confirm(page);
   const after = await waitState(page, ['weaponSelect', 'idle', 'busy', 'gameOver', 'enemyPhase']);
   if (after.state !== 'weaponSelect') return 'waited';
   await confirm(page);
@@ -373,5 +375,47 @@ test('云衡 (imported protagonist): poses, cloth, weapon drop, defeat, and batt
   await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
   await page.waitForTimeout(1500);
   await page.screenshot({ path: 'test-results/46-yunheng-battle-qixing.png' });
+  expect(errors).toEqual([]);
+});
+
+test('神通: menu, 神行 widens movement, effects show and expire next turn', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = collectErrors(page);
+  await boot(page, 42);
+  await waitState(page, ['idle']);
+  const lead = (await state(page)).units.find((u) => u.unitId === 'yunheng')!;
+  await page.evaluate(([x, y]) => window.__srpg!.setCursor(x, y), [lead.x, lead.y] as const);
+  await confirm(page);
+  const before = (await waitState(page, ['unitSelected'])).stoppable.length;
+  await confirm(page); // stay in place -> action menu
+  await waitState(page, ['actionMenu']);
+  // 攻击 is disabled (nothing in range), so the cursor already rests on 神通
+  await confirm(page);
+  await waitState(page, ['spiritSelect']);
+  await page.waitForTimeout(150);
+  await page.screenshot({ path: 'test-results/50-spirit-menu.png' });
+  await page.evaluate(() => window.__srpg!.menuMove(5)); // 神行
+  await confirm(page);
+  const after = await waitState(page, ['unitSelected']);
+  expect(after.stoppable.length).toBeGreaterThan(before);
+  const me = after.units.find((u) => u.unitId === 'yunheng')!;
+  expect(me.spirits).toContain('神行');
+  expect(me.sp).toBe(60 - 10);
+  await page.evaluate((uid) => window.__srpg!.castSpirit(uid, '破妄'), me.uid);
+  await page.evaluate((uid) => window.__srpg!.castSpirit(uid, '狂怒'), me.uid); // 30 left < 35: refused
+  await page.evaluate((uid) => window.__srpg!.castSpirit(uid, '身法'), me.uid);
+  await page.waitForTimeout(100);
+  await page.screenshot({ path: 'test-results/51-spirit-range.png' });
+  const mid = (await state(page)).units.find((u) => u.uid === me.uid)!;
+  expect(mid.spirits).toEqual(['破妄', '身法', '神行']);
+  expect(mid.sp).toBe(60 - 10 - 20 - 15);
+  await page.evaluate(() => window.__srpg!.cancel());
+  await waitState(page, ['idle']);
+  await page.evaluate(() => window.__srpg!.endTurn());
+  await page.waitForFunction(() => window.__srpg?.getState().turn === 2 && window.__srpg?.getState().state === 'idle', null, { timeout: 90_000 });
+  // turn-long effects (破妄, 神行) expired; 身法 lasts until he is attacked
+  const next = (await state(page)).units.find((u) => u.uid === me.uid)!.spirits;
+  expect(next).not.toContain('破妄');
+  expect(next).not.toContain('神行');
   expect(errors).toEqual([]);
 });

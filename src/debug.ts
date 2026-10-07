@@ -12,6 +12,8 @@ export interface DebugUnit {
   morale: number;
   alive: boolean;
   acted: boolean;
+  sp: number;
+  spirits: string[];
 }
 
 export interface DebugState {
@@ -22,6 +24,8 @@ export interface DebugState {
   stoppable: string[];
   /** Targets offered in targetSelect, by uid. */
   targets: string[];
+  /** Highlighted row of the open menu, or -1 when none is open. */
+  menuIndex: number;
   turn: number;
   phase: string;
   /** True while the cut-away battle scene is playing. */
@@ -41,6 +45,10 @@ export interface DebugApi {
   setBattleAnim(on: boolean): void;
   /** Same as pressing the confirm / cancel / end-turn keys, but applied synchronously. */
   confirm(): void;
+  /** Move the open menu's selection (like pressing up/down n times). */
+  menuMove(n: number): void;
+  /** Cast a 神通 directly (tests). */
+  castSpirit(uid: string, id: string): void;
   cancel(): void;
   endTurn(): void;
 }

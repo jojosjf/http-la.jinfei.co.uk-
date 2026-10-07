@@ -42,6 +42,10 @@ export interface UnitInfo {
   en: number;
   maxEn: number;
   morale: number;
+  sp: number;
+  maxSp: number;
+  /** Active 神通 labels. */
+  spirits: string[];
 }
 
 export interface TerrainInfo {
@@ -118,7 +122,7 @@ export class Hud {
 
   constructor(private readonly scene: Phaser.Scene) {
     this.terrainPanel = new Panel(scene, 4, 4, SIDE_W, 40);
-    this.unitPanel = new Panel(scene, 4, 48, SIDE_W, 78).show(false);
+    this.unitPanel = new Panel(scene, 4, 48, SIDE_W, 92).show(false);
 
     const hintBg = scene.add.graphics().setScrollFactor(0).setDepth(HUD_DEPTH);
     hintBg.fillStyle(0x000000, 0.6);
@@ -184,7 +188,8 @@ export class Hud {
       .at(x, 48)
       .show(true)
       .set(
-        `${unit.name}  [${tag}]\n${unit.sub}\n气血 ${unit.hp}/${unit.maxHp}\n灵力 ${unit.en}/${unit.maxEn}  战意 ${unit.morale}`,
+        `${unit.name}  [${tag}]\n${unit.sub}\n气血 ${unit.hp}/${unit.maxHp}\n灵力 ${unit.en}/${unit.maxEn}  战意 ${unit.morale}` +
+          (unit.maxSp > 0 ? `\n神识 ${unit.sp}/${unit.maxSp}${unit.spirits.length ? '  ' + unit.spirits.join('·') : ''}` : ''),
       );
   }
 

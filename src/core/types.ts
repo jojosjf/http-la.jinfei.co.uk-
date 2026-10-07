@@ -118,6 +118,8 @@ export interface UnitState {
   level: number;
   exp: number;
   alive: boolean;
+  /** Active 神通 effects (see core/spirit.ts). */
+  spirit?: import('./spirit').SpiritState;
 }
 
 export interface GameMap {
