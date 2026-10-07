@@ -1,0 +1,423 @@
+{
+ "id": "guideng",
+ "name": "鬼灯",
+ "version": 2,
+ "image": "guideng.png",
+ "root": "crown",
+ "height": 123,
+ "parts": [
+  {
+   "id": "core",
+   "frame": {
+    "x": 43,
+    "y": 1,
+    "w": 33,
+    "h": 44
+   },
+   "x": 0,
+   "y": -74.72,
+   "w": 33,
+   "h": 44,
+   "layer": 2,
+   "mass": 7.089
+  },
+  {
+   "id": "crown",
+   "frame": {
+    "x": 99,
+    "y": 1,
+    "w": 56,
+    "h": 32
+   },
+   "x": 0,
+   "y": -107.04,
+   "w": 56,
+   "h": 32,
+   "layer": 0,
+   "mass": 8.75
+  },
+  {
+   "id": "cage_l",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 20,
+    "h": 48
+   },
+   "x": -12.8,
+   "y": -74.72,
+   "w": 20,
+   "h": 48,
+   "layer": 3,
+   "mass": 4.725
+  },
+  {
+   "id": "cage_r",
+   "frame": {
+    "x": 22,
+    "y": 1,
+    "w": 20,
+    "h": 48
+   },
+   "x": 12.8,
+   "y": -74.72,
+   "w": 20,
+   "h": 48,
+   "layer": 3,
+   "mass": 4.725
+  },
+  {
+   "id": "arm_upper_l",
+   "frame": {
+    "x": 22,
+    "y": 50,
+    "w": 20,
+    "h": 21
+   },
+   "x": -28.16,
+   "y": -58.08,
+   "w": 20,
+   "h": 21,
+   "layer": 0,
+   "mass": 2.1105
+  },
+  {
+   "id": "arm_lower_l",
+   "frame": {
+    "x": 215,
+    "y": 1,
+    "w": 20,
+    "h": 23
+   },
+   "x": -39.68,
+   "y": -44,
+   "w": 20,
+   "h": 23,
+   "layer": 0,
+   "mass": 2.304
+  },
+  {
+   "id": "claw_l",
+   "frame": {
+    "x": 169,
+    "y": 1,
+    "w": 22,
+    "h": 24
+   },
+   "x": -46.4,
+   "y": -28.64,
+   "w": 22,
+   "h": 24,
+   "layer": 0,
+   "mass": 2.59
+  },
+  {
+   "id": "chain_l",
+   "frame": {
+    "x": 77,
+    "y": 1,
+    "w": 10,
+    "h": 40
+   },
+   "x": -18.56,
+   "y": -20,
+   "w": 10,
+   "h": 40,
+   "layer": 0,
+   "mass": 2
+  },
+  {
+   "id": "arm_upper_r",
+   "frame": {
+    "x": 43,
+    "y": 50,
+    "w": 20,
+    "h": 21
+   },
+   "x": 28.16,
+   "y": -58.08,
+   "w": 20,
+   "h": 21,
+   "layer": 0,
+   "mass": 2.1105
+  },
+  {
+   "id": "arm_lower_r",
+   "frame": {
+    "x": 1,
+    "y": 50,
+    "w": 20,
+    "h": 23
+   },
+   "x": 39.68,
+   "y": -44,
+   "w": 20,
+   "h": 23,
+   "layer": 0,
+   "mass": 2.304
+  },
+  {
+   "id": "claw_r",
+   "frame": {
+    "x": 192,
+    "y": 1,
+    "w": 22,
+    "h": 24
+   },
+   "x": 46.4,
+   "y": -28.64,
+   "w": 22,
+   "h": 24,
+   "layer": 0,
+   "mass": 2.59
+  },
+  {
+   "id": "chain_r",
+   "frame": {
+    "x": 88,
+    "y": 1,
+    "w": 10,
+    "h": 40
+   },
+   "x": 18.56,
+   "y": -20,
+   "w": 10,
+   "h": 40,
+   "layer": 0,
+   "mass": 2
+  },
+  {
+   "id": "bottom_cap",
+   "frame": {
+    "x": 64,
+    "y": 50,
+    "w": 36,
+    "h": 18
+   },
+   "x": 0,
+   "y": -45.28,
+   "w": 36,
+   "h": 18,
+   "layer": 0,
+   "mass": 3.108
+  },
+  {
+   "id": "pendulum",
+   "frame": {
+    "x": 156,
+    "y": 1,
+    "w": 12,
+    "h": 29
+   },
+   "x": 0,
+   "y": -25.12,
+   "w": 12,
+   "h": 29,
+   "layer": 0,
+   "mass": 1.7745
+  },
+  {
+   "id": "ornament_l",
+   "frame": {
+    "x": 101,
+    "y": 50,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -60.32,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "ornament_r",
+   "frame": {
+    "x": 120,
+    "y": 50,
+    "w": 18,
+    "h": 18
+   },
+   "x": 28.8,
+   "y": -60.32,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  }
+ ],
+ "joints": [
+  {
+   "a": "core",
+   "b": "crown",
+   "anchor": [
+    0,
+    -90.88
+   ],
+   "min": -0.1,
+   "max": 0.1,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "cage_l",
+   "anchor": [
+    -6.4,
+    -74.72
+   ],
+   "min": -0.05,
+   "max": 0.05,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "cage_r",
+   "anchor": [
+    6.4,
+    -74.72
+   ],
+   "min": -0.05,
+   "max": 0.05,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "arm_upper_l",
+   "anchor": [
+    -14.08,
+    -66.4
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_upper_l",
+   "b": "arm_lower_l",
+   "anchor": [
+    -33.92,
+    -51.04
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_lower_l",
+   "b": "claw_l",
+   "anchor": [
+    -43.04,
+    -36.32
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "chain_l",
+   "anchor": [
+    -9.28,
+    -47.36
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "arm_upper_r",
+   "anchor": [
+    14.08,
+    -66.4
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_upper_r",
+   "b": "arm_lower_r",
+   "anchor": [
+    33.92,
+    -51.04
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_lower_r",
+   "b": "claw_r",
+   "anchor": [
+    43.04,
+    -36.32
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "chain_r",
+   "anchor": [
+    9.28,
+    -47.36
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "bottom_cap",
+   "anchor": [
+    0,
+    -60
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "bottom_cap",
+   "b": "pendulum",
+   "anchor": [
+    0,
+    -35.2
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "ornament_l",
+   "anchor": [
+    -14.4,
+    -67.52
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "ornament_r",
+   "anchor": [
+    14.4,
+    -67.52
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.32,
+  "mirrored": false,
+  "colors": 48
+ }
+}

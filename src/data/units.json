@@ -194,5 +194,169 @@
     "money": 6000,
     "exp": 60,
     "color": "#c04a9a"
+  },
+  "hanyue": {
+    "id": "hanyue",
+    "name": "撼岳",
+    "hp": 6500,
+    "en": 150,
+    "armor": 1500,
+    "mobility": 65,
+    "limit": 250,
+    "move": 5,
+    "size": "L",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "weapons": [
+      "hanshan_quan",
+      "poyue_chui",
+      "zhendi_bo"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#d9822b"
+  },
+  "feiyan": {
+    "id": "feiyan",
+    "name": "飞燕",
+    "hp": 3600,
+    "en": 110,
+    "armor": 850,
+    "mobility": 125,
+    "limit": 350,
+    "move": 7,
+    "size": "M",
+    "moveTypes": [
+      "air",
+      "land"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "B",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "yanling_bi",
+      "yuren_lianshe"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#5fd3c4"
+  },
+  "xuetang": {
+    "id": "xuetang",
+    "name": "血螳",
+    "hp": 3800,
+    "en": 130,
+    "armor": 950,
+    "mobility": 110,
+    "limit": 300,
+    "move": 6,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "xue_lian",
+      "lian_feng"
+    ],
+    "money": 6000,
+    "exp": 60,
+    "color": "#c0303a"
+  },
+  "heilei": {
+    "id": "heilei",
+    "name": "黑垒",
+    "hp": 4500,
+    "en": 120,
+    "armor": 1250,
+    "mobility": 58,
+    "limit": 240,
+    "move": 4,
+    "size": "L",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "weapons": [
+      "dun_ji",
+      "chengfang_pao"
+    ],
+    "money": 4500,
+    "exp": 45,
+    "color": "#3a3f48"
+  },
+  "fenlu": {
+    "id": "fenlu",
+    "name": "焚炉",
+    "hp": 3000,
+    "en": 110,
+    "armor": 900,
+    "mobility": 75,
+    "limit": 260,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "D",
+      "space": "B"
+    },
+    "weapons": [
+      "tie_quan",
+      "luhuo_penshe"
+    ],
+    "money": 3000,
+    "exp": 30,
+    "color": "#b8402a"
+  },
+  "suohun": {
+    "id": "suohun",
+    "name": "锁魂",
+    "hp": 2900,
+    "en": 100,
+    "armor": 820,
+    "mobility": 85,
+    "limit": 270,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "weapons": [
+      "suohun_lian",
+      "duopo_gou"
+    ],
+    "money": 3200,
+    "exp": 32,
+    "color": "#7a5aa8"
   }
 }

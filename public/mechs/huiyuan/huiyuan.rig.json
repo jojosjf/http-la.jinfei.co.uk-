@@ -1,0 +1,423 @@
+{
+ "id": "huiyuan",
+ "name": "灰鸢",
+ "version": 2,
+ "image": "huiyuan.png",
+ "root": "torso",
+ "height": 103,
+ "parts": [
+  {
+   "id": "torso",
+   "frame": {
+    "x": 119,
+    "y": 1,
+    "w": 34,
+    "h": 34
+   },
+   "x": 0,
+   "y": -58.4,
+   "w": 34,
+   "h": 34,
+   "layer": 0,
+   "mass": 5.6175
+  },
+  {
+   "id": "head",
+   "frame": {
+    "x": 154,
+    "y": 1,
+    "w": 32,
+    "h": 32
+   },
+   "x": 0,
+   "y": -87.2,
+   "w": 32,
+   "h": 32,
+   "layer": 5,
+   "mass": 4.95
+  },
+  {
+   "id": "shoulder_l",
+   "frame": {
+    "x": 219,
+    "y": 1,
+    "w": 29,
+    "h": 26
+   },
+   "x": -19.52,
+   "y": -61.28,
+   "w": 29,
+   "h": 26,
+   "layer": 3,
+   "mass": 3.64
+  },
+  {
+   "id": "wing_l",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 58,
+    "h": 44
+   },
+   "x": -50.88,
+   "y": -72.48,
+   "w": 58,
+   "h": 44,
+   "layer": -1,
+   "mass": 12.5795
+  },
+  {
+   "id": "leg_l",
+   "frame": {
+    "x": 187,
+    "y": 1,
+    "w": 15,
+    "h": 28
+   },
+   "x": -11.2,
+   "y": -28.96,
+   "w": 15,
+   "h": 28,
+   "layer": 0,
+   "mass": 2.001
+  },
+  {
+   "id": "talon_l",
+   "frame": {
+    "x": 71,
+    "y": 46,
+    "w": 19,
+    "h": 19
+   },
+   "x": -12.8,
+   "y": -9.44,
+   "w": 19,
+   "h": 19,
+   "layer": 0,
+   "mass": 1.7405
+  },
+  {
+   "id": "bomb_pod_l",
+   "frame": {
+    "x": 31,
+    "y": 46,
+    "w": 19,
+    "h": 22
+   },
+   "x": -22.08,
+   "y": -35.68,
+   "w": 19,
+   "h": 22,
+   "layer": 0,
+   "mass": 2.001
+  },
+  {
+   "id": "shoulder_r",
+   "frame": {
+    "x": 1,
+    "y": 46,
+    "w": 29,
+    "h": 26
+   },
+   "x": 19.52,
+   "y": -61.28,
+   "w": 29,
+   "h": 26,
+   "layer": 3,
+   "mass": 3.64
+  },
+  {
+   "id": "wing_r",
+   "frame": {
+    "x": 60,
+    "y": 1,
+    "w": 58,
+    "h": 44
+   },
+   "x": 50.88,
+   "y": -72.48,
+   "w": 58,
+   "h": 44,
+   "layer": -1,
+   "mass": 12.5795
+  },
+  {
+   "id": "leg_r",
+   "frame": {
+    "x": 203,
+    "y": 1,
+    "w": 15,
+    "h": 28
+   },
+   "x": 11.2,
+   "y": -28.96,
+   "w": 15,
+   "h": 28,
+   "layer": 0,
+   "mass": 2.001
+  },
+  {
+   "id": "talon_r",
+   "frame": {
+    "x": 91,
+    "y": 46,
+    "w": 19,
+    "h": 19
+   },
+   "x": 12.8,
+   "y": -9.44,
+   "w": 19,
+   "h": 19,
+   "layer": 0,
+   "mass": 1.7405
+  },
+  {
+   "id": "bomb_pod_r",
+   "frame": {
+    "x": 51,
+    "y": 46,
+    "w": 19,
+    "h": 22
+   },
+   "x": 22.08,
+   "y": -35.68,
+   "w": 19,
+   "h": 22,
+   "layer": 0,
+   "mass": 2.001
+  },
+  {
+   "id": "tail",
+   "frame": {
+    "x": 111,
+    "y": 46,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -44,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "beak",
+   "frame": {
+    "x": 130,
+    "y": 46,
+    "w": 18,
+    "h": 18
+   },
+   "x": 28.8,
+   "y": -44,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "back_plate",
+   "frame": {
+    "x": 149,
+    "y": 46,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -32.48,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "core",
+   "frame": {
+    "x": 168,
+    "y": 46,
+    "w": 18,
+    "h": 18
+   },
+   "x": 28.8,
+   "y": -32.48,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  }
+ ],
+ "joints": [
+  {
+   "a": "torso",
+   "b": "head",
+   "anchor": [
+    0,
+    -72.8
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "shoulder_l",
+   "anchor": [
+    -9.76,
+    -59.84
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "wing_l",
+   "anchor": [
+    -25.44,
+    -65.44
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "leg_l",
+   "anchor": [
+    -5.6,
+    -43.68
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_l",
+   "b": "talon_l",
+   "anchor": [
+    -12,
+    -19.2
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "bomb_pod_l",
+   "anchor": [
+    -11.04,
+    -47.04
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "shoulder_r",
+   "anchor": [
+    9.76,
+    -59.84
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "wing_r",
+   "anchor": [
+    25.44,
+    -65.44
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "leg_r",
+   "anchor": [
+    5.6,
+    -43.68
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_r",
+   "b": "talon_r",
+   "anchor": [
+    12,
+    -19.2
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "bomb_pod_r",
+   "anchor": [
+    11.04,
+    -47.04
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "tail",
+   "anchor": [
+    -14.4,
+    -51.2
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "beak",
+   "anchor": [
+    14.4,
+    -51.2
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "back_plate",
+   "anchor": [
+    -14.4,
+    -45.44
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "core",
+   "anchor": [
+    14.4,
+    -45.44
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.32,
+  "mirrored": false,
+  "colors": 48
+ }
+}

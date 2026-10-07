@@ -236,23 +236,23 @@ test('照夜 rig: poses, weapon knock-off and ragdoll death in the viewer', asyn
   expect(errors).toEqual([]);
 });
 
-test('battle demo: 照夜 slashes and the target ragdolls; spell exchange with counter', async ({ page }) => {
+test('battle demo: 照夜 vs 血螳 — slash kill, counter exchange, 照夜 destroyed', async ({ page }) => {
   const errors = collectErrors(page);
-  await page.goto('/?view=battle&a=zhaoye&d=e_liaoya&w=guandao&kill=1');
+  await page.goto('/?view=battle&a=zhaoye&d=xuetang&w=guandao&kill=1');
   await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
   await page.waitForTimeout(1050);
   await page.screenshot({ path: 'test-results/19-demo-slash.png' });
   await page.waitForTimeout(2600);
   await page.screenshot({ path: 'test-results/20-demo-kill.png' });
 
-  await page.goto('/?view=battle&a=e_liaoya&d=zhaoye&w=e_beam_gun&cw=lingguang&kill=0');
+  await page.goto('/?view=battle&a=xuetang&ateam=enemy&d=zhaoye&dteam=player&w=lian_feng&cw=lingguang&kill=0');
   await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
   await page.waitForTimeout(2600);
   await page.screenshot({ path: 'test-results/21-demo-zhaoye-hit-and-cast.png' });
   await page.waitForTimeout(1200);
   await page.screenshot({ path: 'test-results/22-demo-zhaoye-cast.png' });
 
-  await page.goto('/?view=battle&a=e_liaoya&d=zhaoye&w=e_beam_blade&kill=1');
+  await page.goto('/?view=battle&a=xuetang&ateam=enemy&d=zhaoye&dteam=player&w=xue_lian&kill=1&crit=1');
   await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
   await page.waitForTimeout(3800);
   await page.screenshot({ path: 'test-results/23-demo-zhaoye-destroyed.png' });

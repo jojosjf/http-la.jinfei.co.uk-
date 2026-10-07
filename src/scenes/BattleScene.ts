@@ -79,11 +79,20 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
+  /** Thruster flames of airborne mechs, kept under their actor as it dashes and hovers. */
+  private flames: Array<{ actor: BattleActor; obj: Phaser.GameObjects.Rectangle; dx: number; dy: number }> = [];
+
   update(_time: number, delta: number): void {
     stepRagdolls(this, delta);
+    for (const f of this.flames) {
+      const dead = (f.actor as BattleActor & { isRagdoll?: boolean }).isRagdoll === true;
+      f.obj.setVisible(!dead && f.actor.node.alpha > 0.05);
+      f.obj.setPosition(f.actor.x + f.dx, f.actor.y + f.dy);
+    }
   }
 
   init(data: BattleSceneData): void {
+    this.flames = [];
     this.script = data.script;
     this.onDone = data.onDone;
     this.finished = false;
@@ -454,10 +463,10 @@ export class BattleScene extends Phaser.Scene {
     if (airborne) {
       this.tweens.add({ targets: actor.node, y: y - 4, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       for (const dx of [-12, 12]) {
-        const flame = this.add.rectangle(POS_X[side] + dx, y + 2, 6, 10, 0xffb347, 0.9).setOrigin(0.5, 0).setDepth(9);
-        const core = this.add.rectangle(POS_X[side] + dx, y + 2, 3, 6, 0xfff1a8, 1).setOrigin(0.5, 0).setDepth(9);
+        const flame = this.add.rectangle(0, 0, 6, 10, 0xffb347, 0.9).setOrigin(0.5, 0).setDepth(9);
+        const core = this.add.rectangle(0, 0, 3, 6, 0xfff1a8, 1).setOrigin(0.5, 0).setDepth(9);
         this.tweens.add({ targets: [flame, core], scaleY: 1.6, alpha: 0.6, duration: 120, yoyo: true, repeat: -1 });
-        this.tweens.add({ targets: [flame, core], y: y - 2, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        this.flames.push({ actor, obj: flame, dx, dy: 2 }, { actor, obj: core, dx, dy: 2 });
       }
     }
     return actor;

@@ -355,5 +355,278 @@
     "postMove": true,
     "beam": false,
     "kind": "melee"
+  },
+  "hanshan_quan": {
+    "id": "hanshan_quan",
+    "name": "撼山拳",
+    "power": 2500,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 5,
+    "crit": 10,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "poyue_chui": {
+    "id": "poyue_chui",
+    "name": "破岳锤",
+    "power": 3300,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 0,
+    "crit": 20,
+    "en": 20,
+    "ammo": null,
+    "morale": 110,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "zhendi_bo": {
+    "id": "zhendi_bo",
+    "name": "震地波",
+    "power": 2200,
+    "rangeMin": 1,
+    "rangeMax": 3,
+    "hit": 0,
+    "crit": 0,
+    "en": 15,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged"
+  },
+  "yanling_bi": {
+    "id": "yanling_bi",
+    "name": "燕翎匕",
+    "power": 2100,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 15,
+    "crit": 15,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "yuren_lianshe": {
+    "id": "yuren_lianshe",
+    "name": "羽刃连射",
+    "power": 1800,
+    "rangeMin": 2,
+    "rangeMax": 5,
+    "hit": 25,
+    "crit": 0,
+    "en": 0,
+    "ammo": 10,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged"
+  },
+  "xue_lian": {
+    "id": "xue_lian",
+    "name": "血镰",
+    "power": 2500,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 10,
+    "crit": 20,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "C",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "lian_feng": {
+    "id": "lian_feng",
+    "name": "镰风",
+    "power": 2000,
+    "rangeMin": 2,
+    "rangeMax": 4,
+    "hit": 15,
+    "crit": 5,
+    "en": 10,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": true,
+    "kind": "ranged"
+  },
+  "dun_ji": {
+    "id": "dun_ji",
+    "name": "盾击",
+    "power": 2000,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 0,
+    "crit": 5,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "chengfang_pao": {
+    "id": "chengfang_pao",
+    "name": "城防炮",
+    "power": 2300,
+    "rangeMin": 2,
+    "rangeMax": 6,
+    "hit": 10,
+    "crit": 0,
+    "en": 15,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged"
+  },
+  "luhuo_penshe": {
+    "id": "luhuo_penshe",
+    "name": "炉火喷射",
+    "power": 1900,
+    "rangeMin": 1,
+    "rangeMax": 3,
+    "hit": 10,
+    "crit": 0,
+    "en": 10,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "D",
+      "space": "B"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "ranged"
+  },
+  "tie_quan": {
+    "id": "tie_quan",
+    "name": "铁拳",
+    "power": 1700,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 0,
+    "crit": 5,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "suohun_lian": {
+    "id": "suohun_lian",
+    "name": "锁魂链",
+    "power": 2100,
+    "rangeMin": 1,
+    "rangeMax": 3,
+    "hit": 10,
+    "crit": 10,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "duopo_gou": {
+    "id": "duopo_gou",
+    "name": "夺魄钩",
+    "power": 1700,
+    "rangeMin": 2,
+    "rangeMax": 4,
+    "hit": 20,
+    "crit": 0,
+    "en": 0,
+    "ammo": 6,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged"
   }
 }

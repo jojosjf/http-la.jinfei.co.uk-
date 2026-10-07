@@ -1,0 +1,423 @@
+{
+ "id": "liedi",
+ "name": "裂地",
+ "version": 2,
+ "image": "liedi.png",
+ "root": "head_socket",
+ "height": 51,
+ "parts": [
+  {
+   "id": "drill",
+   "frame": {
+    "x": 35,
+    "y": 1,
+    "w": 35,
+    "h": 29
+   },
+   "x": -72.44,
+   "y": -25.28,
+   "w": 35,
+   "h": 29,
+   "layer": 4,
+   "mass": 5.4625
+  },
+  {
+   "id": "head_socket",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 33,
+    "h": 31
+   },
+   "x": -46.55,
+   "y": -25.28,
+   "w": 33,
+   "h": 31,
+   "layer": 0,
+   "mass": 5.508
+  },
+  {
+   "id": "segment_1",
+   "frame": {
+    "x": 71,
+    "y": 1,
+    "w": 28,
+    "h": 27
+   },
+   "x": -30.52,
+   "y": -25.28,
+   "w": 28,
+   "h": 27,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_2",
+   "frame": {
+    "x": 100,
+    "y": 1,
+    "w": 28,
+    "h": 27
+   },
+   "x": -14.49,
+   "y": -25.28,
+   "w": 28,
+   "h": 27,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_3",
+   "frame": {
+    "x": 129,
+    "y": 1,
+    "w": 28,
+    "h": 27
+   },
+   "x": 1.54,
+   "y": -25.28,
+   "w": 28,
+   "h": 27,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_4",
+   "frame": {
+    "x": 158,
+    "y": 1,
+    "w": 28,
+    "h": 27
+   },
+   "x": 17.57,
+   "y": -25.28,
+   "w": 28,
+   "h": 27,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_5",
+   "frame": {
+    "x": 187,
+    "y": 1,
+    "w": 28,
+    "h": 27
+   },
+   "x": 33.6,
+   "y": -25.28,
+   "w": 28,
+   "h": 27,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_6",
+   "frame": {
+    "x": 216,
+    "y": 1,
+    "w": 28,
+    "h": 27
+   },
+   "x": 49.63,
+   "y": -25.28,
+   "w": 28,
+   "h": 27,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "tail",
+   "frame": {
+    "x": 1,
+    "y": 33,
+    "w": 28,
+    "h": 27
+   },
+   "x": 65.66,
+   "y": -25.28,
+   "w": 28,
+   "h": 27,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "claw_1",
+   "frame": {
+    "x": 30,
+    "y": 33,
+    "w": 21,
+    "h": 23
+   },
+   "x": -30.52,
+   "y": -11.41,
+   "w": 21,
+   "h": 23,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "claw_2",
+   "frame": {
+    "x": 52,
+    "y": 33,
+    "w": 21,
+    "h": 23
+   },
+   "x": -14.49,
+   "y": -39.15,
+   "w": 21,
+   "h": 23,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "claw_3",
+   "frame": {
+    "x": 74,
+    "y": 33,
+    "w": 21,
+    "h": 23
+   },
+   "x": 1.54,
+   "y": -11.41,
+   "w": 21,
+   "h": 23,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "claw_4",
+   "frame": {
+    "x": 96,
+    "y": 33,
+    "w": 21,
+    "h": 23
+   },
+   "x": 17.57,
+   "y": -39.15,
+   "w": 21,
+   "h": 23,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "fin_l",
+   "frame": {
+    "x": 118,
+    "y": 33,
+    "w": 21,
+    "h": 23
+   },
+   "x": 33.6,
+   "y": -11.41,
+   "w": 21,
+   "h": 23,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "fin_r",
+   "frame": {
+    "x": 140,
+    "y": 33,
+    "w": 21,
+    "h": 23
+   },
+   "x": 49.63,
+   "y": -39.15,
+   "w": 21,
+   "h": 23,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "core",
+   "frame": {
+    "x": 162,
+    "y": 33,
+    "w": 21,
+    "h": 23
+   },
+   "x": -30.52,
+   "y": -11.41,
+   "w": 21,
+   "h": 23,
+   "layer": 2,
+   "mass": 2.516
+  }
+ ],
+ "joints": [
+  {
+   "a": "drill",
+   "b": "head_socket",
+   "anchor": [
+    -59.49,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "head_socket",
+   "b": "segment_1",
+   "anchor": [
+    -38.53,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "segment_2",
+   "anchor": [
+    -22.5,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_2",
+   "b": "segment_3",
+   "anchor": [
+    -6.47,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_3",
+   "b": "segment_4",
+   "anchor": [
+    9.56,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_4",
+   "b": "segment_5",
+   "anchor": [
+    25.58,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_5",
+   "b": "segment_6",
+   "anchor": [
+    41.61,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_6",
+   "b": "tail",
+   "anchor": [
+    57.64,
+    -25.28
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "claw_1",
+   "anchor": [
+    -30.52,
+    -18.34
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_2",
+   "b": "claw_2",
+   "anchor": [
+    -14.49,
+    -32.21
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_3",
+   "b": "claw_3",
+   "anchor": [
+    1.54,
+    -18.34
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_4",
+   "b": "claw_4",
+   "anchor": [
+    17.57,
+    -32.21
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_5",
+   "b": "fin_l",
+   "anchor": [
+    33.6,
+    -18.34
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_6",
+   "b": "fin_r",
+   "anchor": [
+    49.63,
+    -32.21
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "core",
+   "anchor": [
+    -30.52,
+    -18.34
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.31,
+  "mirrored": false,
+  "colors": 48
+ }
+}

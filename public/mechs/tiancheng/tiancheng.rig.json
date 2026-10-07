@@ -1,0 +1,683 @@
+{
+ "id": "tiancheng",
+ "name": "镇岳天城",
+ "version": 2,
+ "image": "tiancheng.png",
+ "root": "fortress_hull",
+ "height": 140,
+ "parts": [
+  {
+   "id": "fortress_hull",
+   "frame": {
+    "x": 1,
+    "y": 53,
+    "w": 152,
+    "h": 41
+   },
+   "x": 0,
+   "y": -80.99,
+   "w": 152,
+   "h": 41,
+   "layer": 0,
+   "mass": 31.525
+  },
+  {
+   "id": "front_face",
+   "frame": {
+    "x": 79,
+    "y": 1,
+    "w": 43,
+    "h": 44
+   },
+   "x": 0,
+   "y": -65.29,
+   "w": 43,
+   "h": 44,
+   "layer": 6,
+   "mass": 9.59
+  },
+  {
+   "id": "reactor",
+   "frame": {
+    "x": 181,
+    "y": 95,
+    "w": 23,
+    "h": 23
+   },
+   "x": 0,
+   "y": -63.72,
+   "w": 23,
+   "h": 23,
+   "layer": 7,
+   "mass": 2.592
+  },
+  {
+   "id": "gatehouse",
+   "frame": {
+    "x": 123,
+    "y": 1,
+    "w": 46,
+    "h": 44
+   },
+   "x": 0,
+   "y": -118.03,
+   "w": 46,
+   "h": 44,
+   "layer": 0,
+   "mass": 10.15
+  },
+  {
+   "id": "tower_l",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 38,
+    "h": 51
+   },
+   "x": -56.19,
+   "y": -114.57,
+   "w": 38,
+   "h": 51,
+   "layer": 0,
+   "mass": 9.882
+  },
+  {
+   "id": "tower_r",
+   "frame": {
+    "x": 40,
+    "y": 1,
+    "w": 38,
+    "h": 51
+   },
+   "x": 56.19,
+   "y": -114.57,
+   "w": 38,
+   "h": 51,
+   "layer": 0,
+   "mass": 9.882
+  },
+  {
+   "id": "leg_upper_1",
+   "frame": {
+    "x": 43,
+    "y": 95,
+    "w": 22,
+    "h": 29
+   },
+   "x": -60.43,
+   "y": -46.77,
+   "w": 22,
+   "h": 29,
+   "layer": 0,
+   "mass": 3.22
+  },
+  {
+   "id": "leg_lower_1",
+   "frame": {
+    "x": 154,
+    "y": 53,
+    "w": 20,
+    "h": 32
+   },
+   "x": -60.43,
+   "y": -24.48,
+   "w": 20,
+   "h": 32,
+   "layer": 0,
+   "mass": 3.3475
+  },
+  {
+   "id": "foot_1",
+   "frame": {
+    "x": 31,
+    "y": 128,
+    "w": 24,
+    "h": 13
+   },
+   "x": -60.43,
+   "y": -6.59,
+   "w": 24,
+   "h": 13,
+   "layer": 0,
+   "mass": 1.638
+  },
+  {
+   "id": "leg_upper_2",
+   "frame": {
+    "x": 66,
+    "y": 95,
+    "w": 22,
+    "h": 29
+   },
+   "x": -36.26,
+   "y": -46.77,
+   "w": 22,
+   "h": 29,
+   "layer": 0,
+   "mass": 3.22
+  },
+  {
+   "id": "leg_lower_2",
+   "frame": {
+    "x": 175,
+    "y": 53,
+    "w": 20,
+    "h": 32
+   },
+   "x": -36.26,
+   "y": -24.48,
+   "w": 20,
+   "h": 32,
+   "layer": 0,
+   "mass": 3.3475
+  },
+  {
+   "id": "foot_2",
+   "frame": {
+    "x": 56,
+    "y": 128,
+    "w": 24,
+    "h": 13
+   },
+   "x": -36.26,
+   "y": -6.59,
+   "w": 24,
+   "h": 13,
+   "layer": 0,
+   "mass": 1.638
+  },
+  {
+   "id": "leg_upper_3",
+   "frame": {
+    "x": 89,
+    "y": 95,
+    "w": 22,
+    "h": 29
+   },
+   "x": -12.09,
+   "y": -46.77,
+   "w": 22,
+   "h": 29,
+   "layer": 0,
+   "mass": 3.22
+  },
+  {
+   "id": "leg_lower_3",
+   "frame": {
+    "x": 196,
+    "y": 53,
+    "w": 20,
+    "h": 32
+   },
+   "x": -12.09,
+   "y": -24.48,
+   "w": 20,
+   "h": 32,
+   "layer": 0,
+   "mass": 3.3475
+  },
+  {
+   "id": "foot_3",
+   "frame": {
+    "x": 81,
+    "y": 128,
+    "w": 24,
+    "h": 13
+   },
+   "x": -12.09,
+   "y": -6.59,
+   "w": 24,
+   "h": 13,
+   "layer": 0,
+   "mass": 1.638
+  },
+  {
+   "id": "leg_upper_4",
+   "frame": {
+    "x": 112,
+    "y": 95,
+    "w": 22,
+    "h": 29
+   },
+   "x": 12.09,
+   "y": -46.77,
+   "w": 22,
+   "h": 29,
+   "layer": 0,
+   "mass": 3.22
+  },
+  {
+   "id": "leg_lower_4",
+   "frame": {
+    "x": 217,
+    "y": 53,
+    "w": 20,
+    "h": 32
+   },
+   "x": 12.09,
+   "y": -24.48,
+   "w": 20,
+   "h": 32,
+   "layer": 0,
+   "mass": 3.3475
+  },
+  {
+   "id": "foot_4",
+   "frame": {
+    "x": 106,
+    "y": 128,
+    "w": 24,
+    "h": 13
+   },
+   "x": 12.09,
+   "y": -6.59,
+   "w": 24,
+   "h": 13,
+   "layer": 0,
+   "mass": 1.638
+  },
+  {
+   "id": "leg_upper_5",
+   "frame": {
+    "x": 135,
+    "y": 95,
+    "w": 22,
+    "h": 29
+   },
+   "x": 36.26,
+   "y": -46.77,
+   "w": 22,
+   "h": 29,
+   "layer": 0,
+   "mass": 3.22
+  },
+  {
+   "id": "leg_lower_5",
+   "frame": {
+    "x": 1,
+    "y": 95,
+    "w": 20,
+    "h": 32
+   },
+   "x": 36.26,
+   "y": -24.48,
+   "w": 20,
+   "h": 32,
+   "layer": 0,
+   "mass": 3.3475
+  },
+  {
+   "id": "foot_5",
+   "frame": {
+    "x": 131,
+    "y": 128,
+    "w": 24,
+    "h": 13
+   },
+   "x": 36.26,
+   "y": -6.59,
+   "w": 24,
+   "h": 13,
+   "layer": 0,
+   "mass": 1.638
+  },
+  {
+   "id": "leg_upper_6",
+   "frame": {
+    "x": 158,
+    "y": 95,
+    "w": 22,
+    "h": 29
+   },
+   "x": 60.43,
+   "y": -46.77,
+   "w": 22,
+   "h": 29,
+   "layer": 0,
+   "mass": 3.22
+  },
+  {
+   "id": "leg_lower_6",
+   "frame": {
+    "x": 22,
+    "y": 95,
+    "w": 20,
+    "h": 32
+   },
+   "x": 60.43,
+   "y": -24.48,
+   "w": 20,
+   "h": 32,
+   "layer": 0,
+   "mass": 3.3475
+  },
+  {
+   "id": "foot_6",
+   "frame": {
+    "x": 156,
+    "y": 128,
+    "w": 24,
+    "h": 13
+   },
+   "x": 60.43,
+   "y": -6.59,
+   "w": 24,
+   "h": 13,
+   "layer": 0,
+   "mass": 1.638
+  },
+  {
+   "id": "cannon_l",
+   "frame": {
+    "x": 205,
+    "y": 95,
+    "w": 29,
+    "h": 22
+   },
+   "x": -58.7,
+   "y": -112.38,
+   "w": 29,
+   "h": 22,
+   "layer": 3,
+   "mass": 3.174
+  },
+  {
+   "id": "cannon_r",
+   "frame": {
+    "x": 1,
+    "y": 128,
+    "w": 29,
+    "h": 22
+   },
+   "x": 58.7,
+   "y": -112.38,
+   "w": 29,
+   "h": 22,
+   "layer": 3,
+   "mass": 3.174
+  }
+ ],
+ "joints": [
+  {
+   "a": "fortress_hull",
+   "b": "front_face",
+   "anchor": [
+    0,
+    -73.14
+   ],
+   "min": -0.05,
+   "max": 0.05,
+   "detachable": false
+  },
+  {
+   "a": "front_face",
+   "b": "reactor",
+   "anchor": [
+    0,
+    -64.51
+   ],
+   "min": 0,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "gatehouse",
+   "anchor": [
+    0,
+    -99.51
+   ],
+   "min": -0.05,
+   "max": 0.05,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "tower_l",
+   "anchor": [
+    -28.09,
+    -97.78
+   ],
+   "min": -0.05,
+   "max": 0.05,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "tower_r",
+   "anchor": [
+    28.09,
+    -97.78
+   ],
+   "min": -0.05,
+   "max": 0.05,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "leg_upper_1",
+   "anchor": [
+    -60.43,
+    -67.49
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "leg_upper_1",
+   "b": "leg_lower_1",
+   "anchor": [
+    -60.43,
+    -35.63
+   ],
+   "min": 0,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_lower_1",
+   "b": "foot_1",
+   "anchor": [
+    -60.43,
+    -15.54
+   ],
+   "min": -0.2,
+   "max": 0.2,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "leg_upper_2",
+   "anchor": [
+    -36.26,
+    -67.49
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "leg_upper_2",
+   "b": "leg_lower_2",
+   "anchor": [
+    -36.26,
+    -35.63
+   ],
+   "min": 0,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_lower_2",
+   "b": "foot_2",
+   "anchor": [
+    -36.26,
+    -15.54
+   ],
+   "min": -0.2,
+   "max": 0.2,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "leg_upper_3",
+   "anchor": [
+    -12.09,
+    -67.49
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "leg_upper_3",
+   "b": "leg_lower_3",
+   "anchor": [
+    -12.09,
+    -35.63
+   ],
+   "min": 0,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_lower_3",
+   "b": "foot_3",
+   "anchor": [
+    -12.09,
+    -15.54
+   ],
+   "min": -0.2,
+   "max": 0.2,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "leg_upper_4",
+   "anchor": [
+    12.09,
+    -67.49
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "leg_upper_4",
+   "b": "leg_lower_4",
+   "anchor": [
+    12.09,
+    -35.63
+   ],
+   "min": 0,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_lower_4",
+   "b": "foot_4",
+   "anchor": [
+    12.09,
+    -15.54
+   ],
+   "min": -0.2,
+   "max": 0.2,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "leg_upper_5",
+   "anchor": [
+    36.26,
+    -67.49
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "leg_upper_5",
+   "b": "leg_lower_5",
+   "anchor": [
+    36.26,
+    -35.63
+   ],
+   "min": 0,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_lower_5",
+   "b": "foot_5",
+   "anchor": [
+    36.26,
+    -15.54
+   ],
+   "min": -0.2,
+   "max": 0.2,
+   "detachable": false
+  },
+  {
+   "a": "fortress_hull",
+   "b": "leg_upper_6",
+   "anchor": [
+    60.43,
+    -67.49
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "leg_upper_6",
+   "b": "leg_lower_6",
+   "anchor": [
+    60.43,
+    -35.63
+   ],
+   "min": 0,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "leg_lower_6",
+   "b": "foot_6",
+   "anchor": [
+    60.43,
+    -15.54
+   ],
+   "min": -0.2,
+   "max": 0.2,
+   "detachable": false
+  },
+  {
+   "a": "tower_l",
+   "b": "cannon_l",
+   "anchor": [
+    -57.44,
+    -113.48
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "tower_r",
+   "b": "cannon_r",
+   "anchor": [
+    57.44,
+    -113.48
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.31,
+  "mirrored": false,
+  "colors": 48
+ }
+}

@@ -1,0 +1,423 @@
+{
+ "id": "qianlin",
+ "name": "潜鳞",
+ "version": 2,
+ "image": "qianlin.png",
+ "root": "head",
+ "height": 41,
+ "parts": [
+  {
+   "id": "head",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 34,
+    "h": 29
+   },
+   "x": -55.29,
+   "y": -23.15,
+   "w": 34,
+   "h": 29,
+   "layer": 4,
+   "mass": 9.0625
+  },
+  {
+   "id": "neck",
+   "frame": {
+    "x": 36,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": -35.53,
+   "y": -23.15,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 5.508
+  },
+  {
+   "id": "segment_1",
+   "frame": {
+    "x": 62,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": -23.29,
+   "y": -20.27,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_2",
+   "frame": {
+    "x": 85,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": -11.06,
+   "y": -18.75,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_3",
+   "frame": {
+    "x": 108,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": 1.18,
+   "y": -19.29,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_4",
+   "frame": {
+    "x": 131,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": 13.41,
+   "y": -21.66,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_5",
+   "frame": {
+    "x": 154,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": 25.65,
+   "y": -24.72,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_6",
+   "frame": {
+    "x": 177,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": 37.88,
+   "y": -27.05,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_7",
+   "frame": {
+    "x": 200,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": 50.12,
+   "y": -27.55,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_8",
+   "frame": {
+    "x": 223,
+    "y": 1,
+    "w": 22,
+    "h": 20
+   },
+   "x": 62.35,
+   "y": -25.98,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "tail_root",
+   "frame": {
+    "x": 1,
+    "y": 31,
+    "w": 22,
+    "h": 20
+   },
+   "x": 74.59,
+   "y": -23.08,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "tail_tip",
+   "frame": {
+    "x": 24,
+    "y": 31,
+    "w": 22,
+    "h": 20
+   },
+   "x": 86.82,
+   "y": -20.22,
+   "w": 22,
+   "h": 20,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "fin_l",
+   "frame": {
+    "x": 47,
+    "y": 31,
+    "w": 16,
+    "h": 17
+   },
+   "x": -23.29,
+   "y": -9.68,
+   "w": 16,
+   "h": 17,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "fin_r",
+   "frame": {
+    "x": 64,
+    "y": 31,
+    "w": 16,
+    "h": 17
+   },
+   "x": -11.06,
+   "y": -29.34,
+   "w": 16,
+   "h": 17,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "fin_top",
+   "frame": {
+    "x": 81,
+    "y": 31,
+    "w": 16,
+    "h": 17
+   },
+   "x": 1.18,
+   "y": -8.71,
+   "w": 16,
+   "h": 17,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "jaw",
+   "frame": {
+    "x": 98,
+    "y": 31,
+    "w": 16,
+    "h": 17
+   },
+   "x": 13.41,
+   "y": -32.24,
+   "w": 16,
+   "h": 17,
+   "layer": 2,
+   "mass": 2.516
+  }
+ ],
+ "joints": [
+  {
+   "a": "head",
+   "b": "neck",
+   "anchor": [
+    -45.41,
+    -23.15
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "neck",
+   "b": "segment_1",
+   "anchor": [
+    -29.41,
+    -21.71
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "segment_2",
+   "anchor": [
+    -17.18,
+    -19.51
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_2",
+   "b": "segment_3",
+   "anchor": [
+    -4.94,
+    -19.02
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_3",
+   "b": "segment_4",
+   "anchor": [
+    7.29,
+    -20.47
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_4",
+   "b": "segment_5",
+   "anchor": [
+    19.53,
+    -23.19
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_5",
+   "b": "segment_6",
+   "anchor": [
+    31.76,
+    -25.89
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_6",
+   "b": "segment_7",
+   "anchor": [
+    44,
+    -27.3
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_7",
+   "b": "segment_8",
+   "anchor": [
+    56.24,
+    -26.76
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_8",
+   "b": "tail_root",
+   "anchor": [
+    68.47,
+    -24.53
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "tail_root",
+   "b": "tail_tip",
+   "anchor": [
+    80.71,
+    -21.65
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "fin_l",
+   "anchor": [
+    -23.29,
+    -14.98
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_2",
+   "b": "fin_r",
+   "anchor": [
+    -11.06,
+    -24.04
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_3",
+   "b": "fin_top",
+   "anchor": [
+    1.18,
+    -14
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_4",
+   "b": "jaw",
+   "anchor": [
+    13.41,
+    -26.95
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.24,
+  "mirrored": false,
+  "colors": 48
+ }
+}

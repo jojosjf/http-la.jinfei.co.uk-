@@ -1,0 +1,423 @@
+{
+ "id": "xuanlei",
+ "name": "玄垒",
+ "version": 2,
+ "image": "xuanlei.png",
+ "root": "torso",
+ "height": 121,
+ "parts": [
+  {
+   "id": "torso",
+   "frame": {
+    "x": 106,
+    "y": 1,
+    "w": 35,
+    "h": 33
+   },
+   "x": 0,
+   "y": -76.32,
+   "w": 35,
+   "h": 33,
+   "layer": 0,
+   "mass": 5.616
+  },
+  {
+   "id": "head",
+   "frame": {
+    "x": 142,
+    "y": 1,
+    "w": 32,
+    "h": 32
+   },
+   "x": 0,
+   "y": -105.12,
+   "w": 32,
+   "h": 32,
+   "layer": 5,
+   "mass": 5
+  },
+  {
+   "id": "pelvis",
+   "frame": {
+    "x": 1,
+    "y": 42,
+    "w": 34,
+    "h": 22
+   },
+   "x": 0,
+   "y": -50.72,
+   "w": 34,
+   "h": 22,
+   "layer": 3,
+   "mass": 3.675
+  },
+  {
+   "id": "upper_arm_l",
+   "frame": {
+    "x": 217,
+    "y": 1,
+    "w": 16,
+    "h": 24
+   },
+   "x": 29.76,
+   "y": -57.12,
+   "w": 16,
+   "h": 24,
+   "layer": 0,
+   "mass": 1.875
+  },
+  {
+   "id": "forearm_hand_l",
+   "frame": {
+    "x": 175,
+    "y": 1,
+    "w": 20,
+    "h": 25
+   },
+   "x": 33.92,
+   "y": -38.56,
+   "w": 20,
+   "h": 25,
+   "layer": 2,
+   "mass": 2.4885
+  },
+  {
+   "id": "shoulder_l",
+   "frame": {
+    "x": 28,
+    "y": 1,
+    "w": 38,
+    "h": 34
+   },
+   "x": 28.48,
+   "y": -77.92,
+   "w": 38,
+   "h": 34,
+   "layer": 4,
+   "mass": 6.307
+  },
+  {
+   "id": "thigh_l",
+   "frame": {
+    "x": 74,
+    "y": 42,
+    "w": 16,
+    "h": 20
+   },
+   "x": 11.52,
+   "y": -36,
+   "w": 16,
+   "h": 20,
+   "layer": 0,
+   "mass": 1.5555
+  },
+  {
+   "id": "shin_l",
+   "frame": {
+    "x": 36,
+    "y": 42,
+    "w": 18,
+    "h": 22
+   },
+   "x": 13.76,
+   "y": -20,
+   "w": 18,
+   "h": 22,
+   "layer": 0,
+   "mass": 1.904
+  },
+  {
+   "id": "foot_l",
+   "frame": {
+    "x": 108,
+    "y": 42,
+    "w": 24,
+    "h": 14
+   },
+   "x": 14.72,
+   "y": -6.88,
+   "w": 24,
+   "h": 14,
+   "layer": 0,
+   "mass": 1.6125
+  },
+  {
+   "id": "upper_arm_r",
+   "frame": {
+    "x": 234,
+    "y": 1,
+    "w": 16,
+    "h": 24
+   },
+   "x": -29.76,
+   "y": -57.12,
+   "w": 16,
+   "h": 24,
+   "layer": 0,
+   "mass": 1.875
+  },
+  {
+   "id": "forearm_hand_r",
+   "frame": {
+    "x": 196,
+    "y": 1,
+    "w": 20,
+    "h": 25
+   },
+   "x": -33.92,
+   "y": -38.56,
+   "w": 20,
+   "h": 25,
+   "layer": 2,
+   "mass": 2.4885
+  },
+  {
+   "id": "shoulder_r",
+   "frame": {
+    "x": 67,
+    "y": 1,
+    "w": 38,
+    "h": 34
+   },
+   "x": -28.48,
+   "y": -77.92,
+   "w": 38,
+   "h": 34,
+   "layer": 4,
+   "mass": 6.307
+  },
+  {
+   "id": "thigh_r",
+   "frame": {
+    "x": 91,
+    "y": 42,
+    "w": 16,
+    "h": 20
+   },
+   "x": -11.52,
+   "y": -36,
+   "w": 16,
+   "h": 20,
+   "layer": 0,
+   "mass": 1.5555
+  },
+  {
+   "id": "shin_r",
+   "frame": {
+    "x": 55,
+    "y": 42,
+    "w": 18,
+    "h": 22
+   },
+   "x": -13.76,
+   "y": -20,
+   "w": 18,
+   "h": 22,
+   "layer": 0,
+   "mass": 1.904
+  },
+  {
+   "id": "foot_r",
+   "frame": {
+    "x": 133,
+    "y": 42,
+    "w": 24,
+    "h": 14
+   },
+   "x": -14.72,
+   "y": -6.88,
+   "w": 24,
+   "h": 14,
+   "layer": 0,
+   "mass": 1.6125
+  },
+  {
+   "id": "shield",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 26,
+    "h": 40
+   },
+   "x": 48,
+   "y": -61.92,
+   "w": 26,
+   "h": 40,
+   "layer": 4,
+   "mass": 5
+  }
+ ],
+ "joints": [
+  {
+   "a": "torso",
+   "b": "head",
+   "anchor": [
+    0,
+    -92
+   ],
+   "min": -0.35,
+   "max": 0.35,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "pelvis",
+   "anchor": [
+    0,
+    -60.64
+   ],
+   "min": -0.25,
+   "max": 0.25,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_l",
+   "anchor": [
+    16.32,
+    -74.4
+   ],
+   "min": -0.5,
+   "max": 1.5,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_l",
+   "b": "forearm_hand_l",
+   "anchor": [
+    31.04,
+    -46.88
+   ],
+   "min": 0,
+   "max": 1.8,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "shoulder_l",
+   "anchor": [
+    16.64,
+    -79.2
+   ],
+   "min": -0.18,
+   "max": 0.18,
+   "detachable": false
+  },
+  {
+   "a": "pelvis",
+   "b": "thigh_l",
+   "anchor": [
+    11.2,
+    -44.64
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "thigh_l",
+   "b": "shin_l",
+   "anchor": [
+    12.8,
+    -28
+   ],
+   "min": -1.5,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "shin_l",
+   "b": "foot_l",
+   "anchor": [
+    14.08,
+    -11.36
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_r",
+   "anchor": [
+    -16.32,
+    -74.4
+   ],
+   "min": -1.5,
+   "max": 0.5,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_r",
+   "b": "forearm_hand_r",
+   "anchor": [
+    -31.04,
+    -46.88
+   ],
+   "min": -1.8,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "shoulder_r",
+   "anchor": [
+    -16.64,
+    -79.2
+   ],
+   "min": -0.18,
+   "max": 0.18,
+   "detachable": false
+  },
+  {
+   "a": "pelvis",
+   "b": "thigh_r",
+   "anchor": [
+    -11.2,
+    -44.64
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "thigh_r",
+   "b": "shin_r",
+   "anchor": [
+    -12.8,
+    -28
+   ],
+   "min": -1.5,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "shin_r",
+   "b": "foot_r",
+   "anchor": [
+    -14.08,
+    -11.36
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "forearm_hand_l",
+   "b": "shield",
+   "anchor": [
+    40.96,
+    -50.24
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": true
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.32,
+  "mirrored": true,
+  "colors": 48
+ }
+}

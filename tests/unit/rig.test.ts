@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { samplePose, solvePose, subtree, validateRig, weaponSide, type RigDef } from '../../src/core/rig';
+import { heldParts, samplePose, solvePose, subtree, validateRig, weaponSide, type RigDef } from '../../src/core/rig';
 
 /** Torso at the origin's top, an arm hanging from its right edge, a weapon in the hand. */
 function rig(): RigDef {
@@ -84,5 +84,28 @@ describe('poses', () => {
     const b = samplePose(r, 'idle', 0.4 + 1.6);
     expect(b.dy).toBeCloseTo(a.dy);
     expect(samplePose(r, 'nope', 0.4)).toEqual(a);
+  });
+});
+
+describe('held items', () => {
+  it('finds detachable items held by forearms and picks the forward one as the weapon side', () => {
+    const frame = { x: 0, y: 0, w: 4, h: 4 };
+    const part = (id: string, x: number) => ({ id, frame, x, y: -20, w: 4, h: 4, layer: 0, mass: 1 });
+    const r: RigDef = {
+      id: 'm', name: 'M', version: 2, image: 'm.png', root: 'torso', height: 40,
+      parts: [part('torso', 0), part('forearm_hand_l', -10), part('forearm_hand_r', 10), part('sickle_l', -14), part('sickle_r', 16)],
+      joints: [
+        { a: 'torso', b: 'forearm_hand_l', anchor: [-6, -20], min: -1, max: 1, detachable: false },
+        { a: 'torso', b: 'forearm_hand_r', anchor: [6, -20], min: -1, max: 1, detachable: false },
+        { a: 'forearm_hand_l', b: 'sickle_l', anchor: [-12, -20], min: -0.3, max: 0.3, detachable: true },
+        { a: 'forearm_hand_r', b: 'sickle_r', anchor: [13, -20], min: -0.3, max: 0.3, detachable: true },
+      ],
+      poses: { cut: { duration: 1, loop: false, keys: [{ t: 0, a: {} }, { t: 1, a: { held_W: 1, held_O: -1 } }] } },
+    };
+    expect(heldParts(r)).toEqual({ l: 'sickle_l', r: 'sickle_r' });
+    expect(weaponSide(r)).toBe('r');
+    const end = samplePose(r, 'cut', 1).angles;
+    expect(end.sickle_r).toBeCloseTo(1);
+    expect(end.sickle_l).toBeCloseTo(-1);
   });
 });

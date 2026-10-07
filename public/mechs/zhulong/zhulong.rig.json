@@ -1,0 +1,423 @@
+{
+ "id": "zhulong",
+ "name": "烛龙天机",
+ "version": 2,
+ "image": "zhulong.png",
+ "root": "head",
+ "height": 60,
+ "parts": [
+  {
+   "id": "head",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 40,
+    "h": 34
+   },
+   "x": -64.59,
+   "y": -35.73,
+   "w": 40,
+   "h": 34,
+   "layer": 4,
+   "mass": 9.0625
+  },
+  {
+   "id": "neck",
+   "frame": {
+    "x": 42,
+    "y": 1,
+    "w": 30,
+    "h": 28
+   },
+   "x": -41.5,
+   "y": -35.73,
+   "w": 30,
+   "h": 28,
+   "layer": 0,
+   "mass": 5.508
+  },
+  {
+   "id": "segment_1",
+   "frame": {
+    "x": 73,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": -27.21,
+   "y": -32.37,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_2",
+   "frame": {
+    "x": 99,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": -12.92,
+   "y": -30.59,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_3",
+   "frame": {
+    "x": 125,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": 1.37,
+   "y": -31.22,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_4",
+   "frame": {
+    "x": 151,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": 15.67,
+   "y": -33.98,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_5",
+   "frame": {
+    "x": 177,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": 29.96,
+   "y": -37.56,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "segment_6",
+   "frame": {
+    "x": 203,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": 44.25,
+   "y": -40.28,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "tail_root",
+   "frame": {
+    "x": 229,
+    "y": 1,
+    "w": 25,
+    "h": 24
+   },
+   "x": 58.54,
+   "y": -40.86,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "tail_tip",
+   "frame": {
+    "x": 1,
+    "y": 36,
+    "w": 25,
+    "h": 24
+   },
+   "x": 72.84,
+   "y": -39.03,
+   "w": 25,
+   "h": 24,
+   "layer": 0,
+   "mass": 3.956
+  },
+  {
+   "id": "claw_front_l",
+   "frame": {
+    "x": 27,
+    "y": 36,
+    "w": 19,
+    "h": 20
+   },
+   "x": -27.21,
+   "y": -20,
+   "w": 19,
+   "h": 20,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "claw_front_r",
+   "frame": {
+    "x": 47,
+    "y": 36,
+    "w": 19,
+    "h": 20
+   },
+   "x": -27.21,
+   "y": -44.74,
+   "w": 19,
+   "h": 20,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "claw_rear_l",
+   "frame": {
+    "x": 67,
+    "y": 36,
+    "w": 19,
+    "h": 20
+   },
+   "x": 29.96,
+   "y": -25.19,
+   "w": 19,
+   "h": 20,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "claw_rear_r",
+   "frame": {
+    "x": 87,
+    "y": 36,
+    "w": 19,
+    "h": 20
+   },
+   "x": 29.96,
+   "y": -49.93,
+   "w": 19,
+   "h": 20,
+   "layer": 2,
+   "mass": 2.516
+  },
+  {
+   "id": "propulsion_ring",
+   "frame": {
+    "x": 127,
+    "y": 36,
+    "w": 32,
+    "h": 19
+   },
+   "x": 29.96,
+   "y": -25.19,
+   "w": 32,
+   "h": 19,
+   "layer": -1,
+   "mass": 4.025
+  },
+  {
+   "id": "pearl",
+   "frame": {
+    "x": 107,
+    "y": 36,
+    "w": 19,
+    "h": 20
+   },
+   "x": -48.38,
+   "y": -10.17,
+   "w": 19,
+   "h": 20,
+   "layer": 2,
+   "mass": 2.516
+  }
+ ],
+ "joints": [
+  {
+   "a": "head",
+   "b": "neck",
+   "anchor": [
+    -53.05,
+    -35.73
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "neck",
+   "b": "segment_1",
+   "anchor": [
+    -34.36,
+    -34.05
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "segment_2",
+   "anchor": [
+    -20.06,
+    -31.48
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_2",
+   "b": "segment_3",
+   "anchor": [
+    -5.77,
+    -30.9
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_3",
+   "b": "segment_4",
+   "anchor": [
+    8.52,
+    -32.6
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_4",
+   "b": "segment_5",
+   "anchor": [
+    22.81,
+    -35.77
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_5",
+   "b": "segment_6",
+   "anchor": [
+    37.11,
+    -38.92
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_6",
+   "b": "tail_root",
+   "anchor": [
+    51.4,
+    -40.57
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "tail_root",
+   "b": "tail_tip",
+   "anchor": [
+    65.69,
+    -39.95
+   ],
+   "min": -0.65,
+   "max": 0.65,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "claw_front_l",
+   "anchor": [
+    -27.21,
+    -26.18
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_1",
+   "b": "claw_front_r",
+   "anchor": [
+    -27.21,
+    -38.55
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_5",
+   "b": "claw_rear_l",
+   "anchor": [
+    29.96,
+    -31.38
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_5",
+   "b": "claw_rear_r",
+   "anchor": [
+    29.96,
+    -43.75
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "segment_5",
+   "b": "propulsion_ring",
+   "anchor": [
+    29.96,
+    -31.38
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "neck",
+   "b": "pearl",
+   "anchor": [
+    -44.94,
+    -22.95
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.27,
+  "mirrored": false,
+  "colors": 48
+ }
+}

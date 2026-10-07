@@ -2,7 +2,7 @@
 /**
  * Import mechs from the 「天工仙甲」 ragdoll prototype (mecha-ragdoll-v1) into the game.
  *
- *   node tools/import-rig.mjs <prototype-dir> [id ...] [--out public/mechs] [--scale 0.32] [--max-height 140] [--colors 48]
+ *   node tools/import-rig.mjs <prototype-dir> [id ...] [--out public/mechs] [--scale 0.32] [--max-height 140] [--max-width 170] [--colors 48]
  *
  * For each mech it reads characters.json, rigs/<id>.json and the 4x4 part atlas, then:
  *  1. finds every part like the prototype does (largest opaque connected region per cell);
@@ -259,6 +259,7 @@ const r2 = (v) => Math.round(v * 100) / 100;
 export function convertMech(protoDir, id, opts = {}) {
   const scaleOpt = opts.scale ?? 0.32;
   const maxHeight = opts.maxHeight ?? 140;
+  const maxWidth = opts.maxWidth ?? 170;
   const colors = opts.colors ?? 48;
   const chars = JSON.parse(readFileSync(join(protoDir, 'characters.json'), 'utf8'));
   const ch = chars.find((c) => c.id === id);
@@ -284,9 +285,18 @@ export function convertMech(protoDir, id, opts = {}) {
   const minY = Math.min(...bodies.map((b) => b.y - b.h / 2));
   const maxY = Math.max(...bodies.map((b) => b.y + b.h / 2));
   const restHeight = maxY - minY;
-  const scale = Math.min(scaleOpt, maxHeight / restHeight);
-  const weapon = bodies.find((b) => b.id === 'weapon');
-  const mirror = weapon ? weapon.x < 0 : false;
+  const restWidth = Math.max(...bodies.map((b) => b.x + b.w / 2)) - Math.min(...bodies.map((b) => b.x - b.w / 2));
+  const scale = Math.min(scaleOpt, maxHeight / restHeight, maxWidth / restWidth);
+  // Held items: leaves joined to a hand by a detachable joint (or a part named weapon).
+  const heldIds = new Set(bodies.filter((b) => b.id === 'weapon').map((b) => b.id));
+  for (const j of src.joints) {
+    if (!j.detachable) continue;
+    if (/hand|forearm/.test(j.a) && !/arm|hand/.test(j.b)) heldIds.add(j.b);
+    if (/hand|forearm/.test(j.b) && !/arm|hand/.test(j.a)) heldIds.add(j.a);
+  }
+  const heldX = bodies.filter((b) => heldIds.has(b.id)).map((b) => b.x);
+  // Mirror when the held item(s) sit on the left, so the weapon side faces forward (+x).
+  const mirror = heldX.length > 0 && heldX.reduce((a, v) => a + v, 0) / heldX.length < -1;
   const sx = mirror ? -1 : 1;
 
   const images = [];
@@ -302,11 +312,6 @@ export function convertMech(protoDir, id, opts = {}) {
     images.push(resample(atlas, region, w, h, mirror));
     parts.push({ id: b.id, x: r2(b.x * sx * scale), y: r2((b.y - maxY) * scale), w, h, layer: b.layer ?? 0, mass: b.mass ?? 1 });
   }
-  const palette = medianCut(images, colors);
-  for (const img of images) applyPalette(img, palette);
-  const { frames, sheet } = pack(images);
-  parts.forEach((p, i) => (p.frame = frames[i]));
-
   const ids = new Set(parts.map((p) => p.id));
   const joints = [];
   for (const j of src.joints) {
@@ -322,11 +327,36 @@ export function convertMech(protoDir, id, opts = {}) {
   }
   const root = ids.has('torso') ? 'torso' : parts.slice().sort((a, b) => b.mass - a.mass)[0].id;
 
+  // Drop parts that lost their connection to the root (e.g. a missing tile in the chain).
+  const reached = new Set([root]);
+  for (let grew = true; grew; ) {
+    grew = false;
+    for (const j of joints) {
+      if (reached.has(j.a) !== reached.has(j.b)) {
+        reached.add(reached.has(j.a) ? j.b : j.a);
+        grew = true;
+      }
+    }
+  }
+  for (let i = parts.length - 1; i >= 0; i--) {
+    if (reached.has(parts[i].id)) continue;
+    report.push(`部件 ${parts[i].id}：与主体断开（上游部件缺失），已移除`);
+    parts.splice(i, 1);
+    images.splice(i, 1);
+  }
+  for (let i = joints.length - 1; i >= 0; i--) if (!reached.has(joints[i].a) || !reached.has(joints[i].b)) joints.splice(i, 1);
+
+  const palette = medianCut(images, colors);
+  for (const img of images) applyPalette(img, palette);
+  const { frames, sheet } = pack(images);
+  parts.forEach((p, i) => (p.frame = frames[i]));
+
+  const outId = opts.as ?? id;
   const rig = {
-    id,
+    id: outId,
     name: src.name ?? ch.name ?? id,
     version: 2,
-    image: `${id}.png`,
+    image: `${outId}.png`,
     root,
     height: Math.round(restHeight * scale),
     parts: parts.map(({ id: pid, frame, x, y, w, h, layer, mass }) => ({ id: pid, frame, x, y, w, h, layer, mass })),
@@ -370,6 +400,7 @@ if (isMain) {
   const out = opt('--out', 'public/mechs');
   const scale = Number(opt('--scale', '0.32'));
   const maxHeight = Number(opt('--max-height', '140'));
+  const maxWidth = Number(opt('--max-width', '170'));
   const colors = Number(opt('--colors', '48'));
   const [protoDir, ...wanted] = args;
   if (!protoDir) {
@@ -382,7 +413,7 @@ if (isMain) {
   const index = existsSync(indexPath) ? JSON.parse(readFileSync(indexPath, 'utf8')) : { dolls: [] };
   index.dolls ??= [];
   for (const id of ids) {
-    const { rig, sheet, icon, report } = convertMech(protoDir, id, { scale, maxHeight, colors });
+    const { rig, sheet, icon, report } = convertMech(protoDir, id, { scale, maxHeight, maxWidth, colors });
     const dir = join(out, id);
     mkdirSync(dir, { recursive: true });
     writePng(join(dir, `${id}.png`), sheet);

@@ -1,0 +1,423 @@
+{
+ "id": "mingwang",
+ "name": "六臂明王",
+ "version": 2,
+ "image": "mingwang.png",
+ "root": "torso",
+ "height": 140,
+ "parts": [
+  {
+   "id": "torso",
+   "frame": {
+    "x": 27,
+    "y": 81,
+    "w": 41,
+    "h": 38
+   },
+   "x": 0,
+   "y": -82.01,
+   "w": 41,
+   "h": 38,
+   "layer": 0,
+   "mass": 9.1045
+  },
+  {
+   "id": "head",
+   "frame": {
+    "x": 69,
+    "y": 81,
+    "w": 38,
+    "h": 36
+   },
+   "x": 0,
+   "y": -115.98,
+   "w": 38,
+   "h": 36,
+   "layer": 5,
+   "mass": 7.93
+  },
+  {
+   "id": "pelvis",
+   "frame": {
+    "x": 108,
+    "y": 81,
+    "w": 41,
+    "h": 30
+   },
+   "x": 0,
+   "y": -50.96,
+   "w": 41,
+   "h": 30,
+   "layer": 3,
+   "mass": 7.21
+  },
+  {
+   "id": "halo",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 79,
+    "h": 79
+   },
+   "x": 0,
+   "y": -100.46,
+   "w": 79,
+   "h": 79,
+   "layer": -3,
+   "mass": 36.45
+  },
+  {
+   "id": "leg_l",
+   "frame": {
+    "x": 205,
+    "y": 1,
+    "w": 25,
+    "h": 43
+   },
+   "x": -14.06,
+   "y": -21.38,
+   "w": 25,
+   "h": 43,
+   "layer": 0,
+   "mass": 6.278
+  },
+  {
+   "id": "arm_top_l",
+   "frame": {
+    "x": 150,
+    "y": 81,
+    "w": 42,
+    "h": 25
+   },
+   "x": -41.3,
+   "y": -101.92,
+   "w": 42,
+   "h": 25,
+   "layer": 2,
+   "mass": 6.264
+  },
+  {
+   "id": "arm_middle_l",
+   "frame": {
+    "x": 193,
+    "y": 81,
+    "w": 42,
+    "h": 25
+   },
+   "x": -41.3,
+   "y": -76.15,
+   "w": 42,
+   "h": 25,
+   "layer": 2,
+   "mass": 6.264
+  },
+  {
+   "id": "arm_bottom_l",
+   "frame": {
+    "x": 1,
+    "y": 125,
+    "w": 42,
+    "h": 25
+   },
+   "x": -41.3,
+   "y": -52.43,
+   "w": 42,
+   "h": 25,
+   "layer": 2,
+   "mass": 6.264
+  },
+  {
+   "id": "leg_r",
+   "frame": {
+    "x": 1,
+    "y": 81,
+    "w": 25,
+    "h": 43
+   },
+   "x": 14.06,
+   "y": -21.38,
+   "w": 25,
+   "h": 43,
+   "layer": 0,
+   "mass": 6.278
+  },
+  {
+   "id": "arm_top_r",
+   "frame": {
+    "x": 44,
+    "y": 125,
+    "w": 42,
+    "h": 25
+   },
+   "x": 41.3,
+   "y": -101.92,
+   "w": 42,
+   "h": 25,
+   "layer": 2,
+   "mass": 6.264
+  },
+  {
+   "id": "arm_middle_r",
+   "frame": {
+    "x": 87,
+    "y": 125,
+    "w": 42,
+    "h": 25
+   },
+   "x": 41.3,
+   "y": -76.15,
+   "w": 42,
+   "h": 25,
+   "layer": 2,
+   "mass": 6.264
+  },
+  {
+   "id": "arm_bottom_r",
+   "frame": {
+    "x": 130,
+    "y": 125,
+    "w": 42,
+    "h": 25
+   },
+   "x": 41.3,
+   "y": -52.43,
+   "w": 42,
+   "h": 25,
+   "layer": 2,
+   "mass": 6.264
+  },
+  {
+   "id": "hammer",
+   "frame": {
+    "x": 81,
+    "y": 1,
+    "w": 30,
+    "h": 44
+   },
+   "x": -67.07,
+   "y": -118.03,
+   "w": 30,
+   "h": 44,
+   "layer": 4,
+   "mass": 7.8
+  },
+  {
+   "id": "bell",
+   "frame": {
+    "x": 112,
+    "y": 1,
+    "w": 30,
+    "h": 44
+   },
+   "x": 67.07,
+   "y": -118.03,
+   "w": 30,
+   "h": 44,
+   "layer": 4,
+   "mass": 7.8
+  },
+  {
+   "id": "ji",
+   "frame": {
+    "x": 143,
+    "y": 1,
+    "w": 30,
+    "h": 44
+   },
+   "x": -69.71,
+   "y": -62.38,
+   "w": 30,
+   "h": 44,
+   "layer": 4,
+   "mass": 7.8
+  },
+  {
+   "id": "shield",
+   "frame": {
+    "x": 174,
+    "y": 1,
+    "w": 30,
+    "h": 44
+   },
+   "x": 69.71,
+   "y": -62.38,
+   "w": 30,
+   "h": 44,
+   "layer": 4,
+   "mass": 7.8
+  }
+ ],
+ "joints": [
+  {
+   "a": "torso",
+   "b": "head",
+   "anchor": [
+    0,
+    -99
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "pelvis",
+   "anchor": [
+    0,
+    -66.49
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "halo",
+   "anchor": [
+    0,
+    -91.23
+   ],
+   "min": -0.1,
+   "max": 0.1,
+   "detachable": false
+  },
+  {
+   "a": "pelvis",
+   "b": "leg_l",
+   "anchor": [
+    -14.06,
+    -40.42
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "arm_top_l",
+   "anchor": [
+    -18.16,
+    -91.97
+   ],
+   "min": -1.2,
+   "max": 1.2,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "arm_middle_l",
+   "anchor": [
+    -18.16,
+    -79.08
+   ],
+   "min": -1.2,
+   "max": 1.2,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "arm_bottom_l",
+   "anchor": [
+    -18.16,
+    -67.22
+   ],
+   "min": -1.2,
+   "max": 1.2,
+   "detachable": false
+  },
+  {
+   "a": "pelvis",
+   "b": "leg_r",
+   "anchor": [
+    14.06,
+    -40.42
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "arm_top_r",
+   "anchor": [
+    18.16,
+    -91.97
+   ],
+   "min": -1.2,
+   "max": 1.2,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "arm_middle_r",
+   "anchor": [
+    18.16,
+    -79.08
+   ],
+   "min": -1.2,
+   "max": 1.2,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "arm_bottom_r",
+   "anchor": [
+    18.16,
+    -67.22
+   ],
+   "min": -1.2,
+   "max": 1.2,
+   "detachable": false
+  },
+  {
+   "a": "arm_top_l",
+   "b": "hammer",
+   "anchor": [
+    -54.18,
+    -109.98
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": true
+  },
+  {
+   "a": "arm_top_r",
+   "b": "bell",
+   "anchor": [
+    54.18,
+    -109.98
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": true
+  },
+  {
+   "a": "arm_middle_l",
+   "b": "ji",
+   "anchor": [
+    -55.5,
+    -69.27
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": true
+  },
+  {
+   "a": "arm_middle_r",
+   "b": "shield",
+   "anchor": [
+    55.5,
+    -69.27
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": true
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.29,
+  "mirrored": false,
+  "colors": 48
+ }
+}

@@ -8,6 +8,121 @@
       "id": "zhaoye",
       "rig": "mechs/zhaoye/zhaoye.rig.json",
       "icon": "mechs/zhaoye/icon.png"
+    },
+    {
+      "id": "feiyan",
+      "rig": "mechs/feiyan/feiyan.rig.json",
+      "icon": "mechs/feiyan/icon.png"
+    },
+    {
+      "id": "hanyue",
+      "rig": "mechs/hanyue/hanyue.rig.json",
+      "icon": "mechs/hanyue/icon.png"
+    },
+    {
+      "id": "xuanlei",
+      "rig": "mechs/xuanlei/xuanlei.rig.json",
+      "icon": "mechs/xuanlei/icon.png"
+    },
+    {
+      "id": "liuxian",
+      "rig": "mechs/liuxian/liuxian.rig.json",
+      "icon": "mechs/liuxian/icon.png"
+    },
+    {
+      "id": "qinghe",
+      "rig": "mechs/qinghe/qinghe.rig.json",
+      "icon": "mechs/qinghe/icon.png"
+    },
+    {
+      "id": "chilun",
+      "rig": "mechs/chilun/chilun.rig.json",
+      "icon": "mechs/chilun/icon.png"
+    },
+    {
+      "id": "leigu",
+      "rig": "mechs/leigu/leigu.rig.json",
+      "icon": "mechs/leigu/icon.png"
+    },
+    {
+      "id": "baize",
+      "rig": "mechs/baize/baize.rig.json",
+      "icon": "mechs/baize/icon.png"
+    },
+    {
+      "id": "qianlin",
+      "rig": "mechs/qianlin/qianlin.rig.json",
+      "icon": "mechs/qianlin/icon.png"
+    },
+    {
+      "id": "tianshu",
+      "rig": "mechs/tianshu/tianshu.rig.json",
+      "icon": "mechs/tianshu/icon.png"
+    },
+    {
+      "id": "xuetang",
+      "rig": "mechs/xuetang/xuetang.rig.json",
+      "icon": "mechs/xuetang/icon.png"
+    },
+    {
+      "id": "tieliao",
+      "rig": "mechs/tieliao/tieliao.rig.json",
+      "icon": "mechs/tieliao/icon.png"
+    },
+    {
+      "id": "guideng",
+      "rig": "mechs/guideng/guideng.rig.json",
+      "icon": "mechs/guideng/icon.png"
+    },
+    {
+      "id": "heilei",
+      "rig": "mechs/heilei/heilei.rig.json",
+      "icon": "mechs/heilei/icon.png"
+    },
+    {
+      "id": "duzhu",
+      "rig": "mechs/duzhu/duzhu.rig.json",
+      "icon": "mechs/duzhu/icon.png"
+    },
+    {
+      "id": "huiyuan",
+      "rig": "mechs/huiyuan/huiyuan.rig.json",
+      "icon": "mechs/huiyuan/icon.png"
+    },
+    {
+      "id": "fenlu",
+      "rig": "mechs/fenlu/fenlu.rig.json",
+      "icon": "mechs/fenlu/icon.png"
+    },
+    {
+      "id": "liedi",
+      "rig": "mechs/liedi/liedi.rig.json",
+      "icon": "mechs/liedi/icon.png"
+    },
+    {
+      "id": "suohun",
+      "rig": "mechs/suohun/suohun.rig.json",
+      "icon": "mechs/suohun/icon.png"
+    },
+    {
+      "id": "chuanyun",
+      "rig": "mechs/chuanyun/chuanyun.rig.json",
+      "icon": "mechs/chuanyun/icon.png"
+    },
+    {
+      "id": "mingwang",
+      "rig": "mechs/mingwang/mingwang.rig.json",
+      "icon": "mechs/mingwang/icon.png"
+    },
+    {
+      "id": "tiancheng",
+      "rig": "mechs/tiancheng/tiancheng.rig.json",
+      "icon": "mechs/tiancheng/icon.png"
+    },
+    {
+      "id": "zhulong",
+      "rig": "mechs/zhulong/zhulong.rig.json",
+      "icon": "mechs/zhulong/icon.png"
     }
   ]
 }

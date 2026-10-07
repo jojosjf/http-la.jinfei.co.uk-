@@ -1,0 +1,423 @@
+{
+ "id": "chilun",
+ "name": "赤轮",
+ "version": 2,
+ "image": "chilun.png",
+ "root": "torso",
+ "height": 115,
+ "parts": [
+  {
+   "id": "torso",
+   "frame": {
+    "x": 203,
+    "y": 1,
+    "w": 35,
+    "h": 33
+   },
+   "x": 0,
+   "y": -70.56,
+   "w": 35,
+   "h": 33,
+   "layer": 0,
+   "mass": 5.616
+  },
+  {
+   "id": "head",
+   "frame": {
+    "x": 1,
+    "y": 42,
+    "w": 32,
+    "h": 32
+   },
+   "x": 0,
+   "y": -99.36,
+   "w": 32,
+   "h": 32,
+   "layer": 5,
+   "mass": 5
+  },
+  {
+   "id": "pelvis",
+   "frame": {
+    "x": 110,
+    "y": 42,
+    "w": 34,
+    "h": 22
+   },
+   "x": 0,
+   "y": -44.96,
+   "w": 34,
+   "h": 22,
+   "layer": 3,
+   "mass": 3.675
+  },
+  {
+   "id": "upper_arm_l",
+   "frame": {
+    "x": 76,
+    "y": 42,
+    "w": 16,
+    "h": 24
+   },
+   "x": -29.76,
+   "y": -51.36,
+   "w": 16,
+   "h": 24,
+   "layer": 0,
+   "mass": 1.875
+  },
+  {
+   "id": "forearm_hand_l",
+   "frame": {
+    "x": 34,
+    "y": 42,
+    "w": 20,
+    "h": 25
+   },
+   "x": -33.92,
+   "y": -32.8,
+   "w": 20,
+   "h": 25,
+   "layer": 2,
+   "mass": 2.4885
+  },
+  {
+   "id": "shoulder_l",
+   "frame": {
+    "x": 55,
+    "y": 1,
+    "w": 38,
+    "h": 34
+   },
+   "x": -28.48,
+   "y": -72.16,
+   "w": 38,
+   "h": 34,
+   "layer": 4,
+   "mass": 6.307
+  },
+  {
+   "id": "upper_arm_r",
+   "frame": {
+    "x": 93,
+    "y": 42,
+    "w": 16,
+    "h": 24
+   },
+   "x": 29.76,
+   "y": -51.36,
+   "w": 16,
+   "h": 24,
+   "layer": 0,
+   "mass": 1.875
+  },
+  {
+   "id": "forearm_hand_r",
+   "frame": {
+    "x": 55,
+    "y": 42,
+    "w": 20,
+    "h": 25
+   },
+   "x": 33.92,
+   "y": -32.8,
+   "w": 20,
+   "h": 25,
+   "layer": 2,
+   "mass": 2.4885
+  },
+  {
+   "id": "shoulder_r",
+   "frame": {
+    "x": 94,
+    "y": 1,
+    "w": 38,
+    "h": 34
+   },
+   "x": 28.48,
+   "y": -72.16,
+   "w": 38,
+   "h": 34,
+   "layer": 4,
+   "mass": 6.307
+  },
+  {
+   "id": "wheel_l",
+   "frame": {
+    "x": 133,
+    "y": 1,
+    "w": 34,
+    "h": 34
+   },
+   "x": -16.32,
+   "y": -16.8,
+   "w": 34,
+   "h": 34,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "wheel_r",
+   "frame": {
+    "x": 168,
+    "y": 1,
+    "w": 34,
+    "h": 34
+   },
+   "x": 16.32,
+   "y": -16.8,
+   "w": 34,
+   "h": 34,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "wheel_hub_l",
+   "frame": {
+    "x": 145,
+    "y": 42,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -44.64,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "wheel_hub_r",
+   "frame": {
+    "x": 164,
+    "y": 42,
+    "w": 18,
+    "h": 18
+   },
+   "x": 28.8,
+   "y": -44.64,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "spear_l",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 26,
+    "h": 40
+   },
+   "x": -48,
+   "y": -33.12,
+   "w": 26,
+   "h": 40,
+   "layer": 4,
+   "mass": 5
+  },
+  {
+   "id": "spear_r",
+   "frame": {
+    "x": 28,
+    "y": 1,
+    "w": 26,
+    "h": 40
+   },
+   "x": 48,
+   "y": -33.12,
+   "w": 26,
+   "h": 40,
+   "layer": 4,
+   "mass": 5
+  },
+  {
+   "id": "back_plate",
+   "frame": {
+    "x": 183,
+    "y": 42,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -21.6,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  }
+ ],
+ "joints": [
+  {
+   "a": "torso",
+   "b": "head",
+   "anchor": [
+    0,
+    -86.24
+   ],
+   "min": -0.35,
+   "max": 0.35,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "pelvis",
+   "anchor": [
+    0,
+    -54.88
+   ],
+   "min": -0.25,
+   "max": 0.25,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_l",
+   "anchor": [
+    -16.32,
+    -68.64
+   ],
+   "min": -1.5,
+   "max": 0.5,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_l",
+   "b": "forearm_hand_l",
+   "anchor": [
+    -31.04,
+    -41.12
+   ],
+   "min": -1.8,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "shoulder_l",
+   "anchor": [
+    -16.64,
+    -73.44
+   ],
+   "min": -0.18,
+   "max": 0.18,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_r",
+   "anchor": [
+    16.32,
+    -68.64
+   ],
+   "min": -0.5,
+   "max": 1.5,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_r",
+   "b": "forearm_hand_r",
+   "anchor": [
+    31.04,
+    -41.12
+   ],
+   "min": 0,
+   "max": 1.8,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "shoulder_r",
+   "anchor": [
+    16.64,
+    -73.44
+   ],
+   "min": -0.18,
+   "max": 0.18,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "wheel_l",
+   "anchor": [
+    -8.16,
+    -43.68
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "wheel_r",
+   "anchor": [
+    8.16,
+    -43.68
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "wheel_hub_l",
+   "anchor": [
+    -14.4,
+    -57.6
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "wheel_hub_r",
+   "anchor": [
+    14.4,
+    -57.6
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "forearm_hand_l",
+   "b": "spear_l",
+   "anchor": [
+    -40.96,
+    -32.96
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": true
+  },
+  {
+   "a": "forearm_hand_r",
+   "b": "spear_r",
+   "anchor": [
+    40.96,
+    -32.96
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": true
+  },
+  {
+   "a": "torso",
+   "b": "back_plate",
+   "anchor": [
+    -14.4,
+    -46.08
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.32,
+  "mirrored": false,
+  "colors": 48
+ }
+}

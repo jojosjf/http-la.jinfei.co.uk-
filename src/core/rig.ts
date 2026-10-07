@@ -55,7 +55,7 @@ export interface RigDef {
 export interface RigKey {
   /** 0..1 within the pose. */
   t: number;
-  /** Local angles by part id; `_W` / `_O` suffixes mean weapon-arm side / off side. */
+  /** Local angles by part id; `_W` / `_O` suffixes mean weapon-arm side / off side, `held_W` / `held_O` the item held on that side. */
   a?: Record<string, number>;
   /** Root offset in pixels (y down). */
   dx?: number;
@@ -93,11 +93,11 @@ export const POSE_LIBRARY: Record<string, RigPose> = {
     duration: 0.7,
     loop: true,
     keys: [
-      { t: 0, a: { thigh_l: 0.3, thigh_r: -0.3, shin_l: 0.1, shin_r: 0.35, upper_arm_l: -0.15, upper_arm_r: 0.15 }, dy: 0 },
+      { t: 0, a: { thigh_l: 0.3, thigh_r: -0.3, leg_l: 0.3, leg_r: -0.3, shin_l: 0.1, shin_r: 0.35, upper_arm_l: -0.15, upper_arm_r: 0.15 }, dy: 0 },
       { t: 0.25, a: {}, dy: -2 },
-      { t: 0.5, a: { thigh_l: -0.3, thigh_r: 0.3, shin_l: 0.35, shin_r: 0.1, upper_arm_l: 0.15, upper_arm_r: -0.15 }, dy: 0 },
+      { t: 0.5, a: { thigh_l: -0.3, thigh_r: 0.3, leg_l: -0.3, leg_r: 0.3, shin_l: 0.35, shin_r: 0.1, upper_arm_l: 0.15, upper_arm_r: -0.15 }, dy: 0 },
       { t: 0.75, a: {}, dy: -2 },
-      { t: 1, a: { thigh_l: 0.3, thigh_r: -0.3, shin_l: 0.1, shin_r: 0.35, upper_arm_l: -0.15, upper_arm_r: 0.15 }, dy: 0 },
+      { t: 1, a: { thigh_l: 0.3, thigh_r: -0.3, leg_l: 0.3, leg_r: -0.3, shin_l: 0.1, shin_r: 0.35, upper_arm_l: -0.15, upper_arm_r: 0.15 }, dy: 0 },
     ],
   },
   melee: {
@@ -105,9 +105,9 @@ export const POSE_LIBRARY: Record<string, RigPose> = {
     loop: false,
     keys: [
       { t: 0, a: {} },
-      { t: 0.35, a: { torso: -0.12, head: 0.06, upper_arm_W: -2.7, forearm_hand_W: -0.35, weapon: -0.4, thigh_l: -0.15, thigh_r: 0.1 }, dx: -2, dy: 1 },
-      { t: 0.6, a: { torso: 0.16, head: -0.08, upper_arm_W: -0.55, forearm_hand_W: -0.15, weapon: 0.5, upper_arm_O: 0.35, thigh_l: 0.25, thigh_r: -0.2 }, dx: 4, dy: 2 },
-      { t: 1, a: { torso: 0.06, upper_arm_W: -0.3, weapon: 0.2 }, dx: 1 },
+      { t: 0.35, a: { torso: -0.12, head: 0.06, upper_arm_W: -2.7, forearm_hand_W: -0.35, held_W: -0.4, thigh_l: -0.15, thigh_r: 0.1 }, dx: -2, dy: 1 },
+      { t: 0.6, a: { torso: 0.16, head: -0.08, upper_arm_W: -0.55, forearm_hand_W: -0.15, held_W: 0.5, upper_arm_O: 0.35, thigh_l: 0.25, thigh_r: -0.2 }, dx: 4, dy: 2 },
+      { t: 1, a: { torso: 0.06, upper_arm_W: -0.3, held_W: 0.2 }, dx: 1 },
     ],
   },
   shoot: {
@@ -115,8 +115,8 @@ export const POSE_LIBRARY: Record<string, RigPose> = {
     loop: false,
     keys: [
       { t: 0, a: {} },
-      { t: 0.3, a: { torso: 0.06, head: -0.05, upper_arm_W: -1.35, forearm_hand_W: -0.15, weapon: -0.3, upper_arm_O: 2.3, forearm_hand_O: 0.4 } },
-      { t: 0.75, a: { torso: 0.03, upper_arm_W: -1.45, forearm_hand_W: -0.1, weapon: -0.3, upper_arm_O: 2.4, forearm_hand_O: 0.5 }, dx: -2 },
+      { t: 0.3, a: { torso: 0.06, head: -0.05, upper_arm_W: -1.35, forearm_hand_W: -0.15, held_W: -0.3, upper_arm_O: 2.3, forearm_hand_O: 0.4 } },
+      { t: 0.75, a: { torso: 0.03, upper_arm_W: -1.45, forearm_hand_W: -0.1, held_W: -0.3, upper_arm_O: 2.4, forearm_hand_O: 0.5 }, dx: -2 },
       { t: 1, a: { upper_arm_W: -0.4, upper_arm_O: 0.5 } },
     ],
   },
@@ -142,15 +142,42 @@ export const POSE_LIBRARY: Record<string, RigPose> = {
 const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
 const smooth = (t: number): number => t * t * (3 - 2 * t);
 
-/** Which side ("l" / "r") holds the weapon: the side of the part the weapon is jointed to. */
-export function weaponSide(rig: RigDef): 'l' | 'r' {
-  const j = rig.joints.find((x) => x.a === 'weapon' || x.b === 'weapon');
-  const holder = j ? (j.a === 'weapon' ? j.b : j.a) : '';
-  return holder.endsWith('_r') ? 'r' : 'l';
+/**
+ * Hand-held items: parts joined to a `forearm_hand_*` (or `*hand*`) part by a detachable joint,
+ * or a part literally named `weapon`. Returned by side ("l" / "r" = the holding arm's suffix).
+ */
+export function heldParts(rig: RigDef): Partial<Record<'l' | 'r', string>> {
+  const out: Partial<Record<'l' | 'r', string>> = {};
+  for (const j of rig.joints) {
+    for (const [holder, item] of [
+      [j.a, j.b],
+      [j.b, j.a],
+    ]) {
+      const named = item === 'weapon';
+      if (!named && !(j.detachable && /hand|forearm/.test(holder))) continue;
+      if (/hand|forearm|arm/.test(item)) continue;
+      const side = holder.endsWith('_r') ? 'r' : holder.endsWith('_l') ? 'l' : null;
+      if (side && !out[side]) out[side] = item;
+    }
+  }
+  return out;
 }
 
-function resolveName(name: string, w: 'l' | 'r'): string {
+/**
+ * The weapon-arm side: the holding arm whose item sits furthest forward (+x); without held
+ * items, the arm side that is further forward. Defaults to "l".
+ */
+export function weaponSide(rig: RigDef): 'l' | 'r' {
+  const held = heldParts(rig);
+  const x = (id: string | undefined): number => rig.parts.find((p) => p.id === id)?.x ?? -Infinity;
+  if (held.l || held.r) return x(held.r) > x(held.l) ? 'r' : 'l';
+  return x('forearm_hand_r') > x('forearm_hand_l') ? 'r' : 'l';
+}
+
+function resolveName(name: string, w: 'l' | 'r', held: Partial<Record<'l' | 'r', string>>): string {
   const o = w === 'l' ? 'r' : 'l';
+  if (name === 'held_W') return held[w] ?? '';
+  if (name === 'held_O') return held[o] ?? '';
   if (name.endsWith('_W')) return name.slice(0, -2) + '_' + w;
   if (name.endsWith('_O')) return name.slice(0, -2) + '_' + o;
   return name;
@@ -174,6 +201,7 @@ export interface PoseSample {
 export function samplePose(rig: RigDef, name: string, time: number): PoseSample {
   const pose = getPose(rig, name);
   const w = weaponSide(rig);
+  const held = heldParts(rig);
   let u = pose.duration > 0 ? time / pose.duration : 1;
   u = pose.loop ? u - Math.floor(u) : Math.min(1, Math.max(0, u));
   const keys = pose.keys;
@@ -186,7 +214,8 @@ export function samplePose(rig: RigDef, name: string, time: number): PoseSample 
   const names = new Set([...Object.keys(k0.a ?? {}), ...Object.keys(k1.a ?? {})]);
   const angles: Record<string, number> = {};
   for (const n of names) {
-    angles[resolveName(n, w)] = lerp(k0.a?.[n] ?? 0, k1.a?.[n] ?? 0, f);
+    const id = resolveName(n, w, held);
+    if (id) angles[id] = lerp(k0.a?.[n] ?? 0, k1.a?.[n] ?? 0, f);
   }
   return { angles, dx: lerp(k0.dx ?? 0, k1.dx ?? 0, f), dy: lerp(k0.dy ?? 0, k1.dy ?? 0, f) };
 }

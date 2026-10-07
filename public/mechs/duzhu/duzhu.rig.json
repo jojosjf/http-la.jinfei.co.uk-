@@ -1,0 +1,423 @@
+{
+ "id": "duzhu",
+ "name": "毒蛛",
+ "version": 2,
+ "image": "duzhu.png",
+ "root": "abdomen",
+ "height": 60,
+ "parts": [
+  {
+   "id": "abdomen",
+   "frame": {
+    "x": 33,
+    "y": 40,
+    "w": 46,
+    "h": 36
+   },
+   "x": 0,
+   "y": -41.6,
+   "w": 46,
+   "h": 36,
+   "layer": 0,
+   "mass": 8.0795
+  },
+  {
+   "id": "head",
+   "frame": {
+    "x": 80,
+    "y": 40,
+    "w": 32,
+    "h": 27
+   },
+   "x": -26.88,
+   "y": -36.8,
+   "w": 32,
+   "h": 27,
+   "layer": 5,
+   "mass": 4.2
+  },
+  {
+   "id": "front_shell",
+   "frame": {
+    "x": 113,
+    "y": 40,
+    "w": 33,
+    "h": 22
+   },
+   "x": -12.8,
+   "y": -48,
+   "w": 33,
+   "h": 22,
+   "layer": 3,
+   "mass": 3.605
+  },
+  {
+   "id": "core",
+   "frame": {
+    "x": 147,
+    "y": 40,
+    "w": 21,
+    "h": 20
+   },
+   "x": 0,
+   "y": -41.6,
+   "w": 21,
+   "h": 20,
+   "layer": 0,
+   "mass": 2.015
+  },
+  {
+   "id": "leg_1",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 31,
+    "h": 38
+   },
+   "x": -29.76,
+   "y": -29.44,
+   "w": 31,
+   "h": 38,
+   "layer": -1,
+   "mass": 5.723
+  },
+  {
+   "id": "leg_2",
+   "frame": {
+    "x": 33,
+    "y": 1,
+    "w": 31,
+    "h": 38
+   },
+   "x": -32.64,
+   "y": -25.92,
+   "w": 31,
+   "h": 38,
+   "layer": -1,
+   "mass": 5.723
+  },
+  {
+   "id": "leg_3",
+   "frame": {
+    "x": 65,
+    "y": 1,
+    "w": 31,
+    "h": 38
+   },
+   "x": -35.52,
+   "y": -22.4,
+   "w": 31,
+   "h": 38,
+   "layer": -1,
+   "mass": 5.723
+  },
+  {
+   "id": "leg_4",
+   "frame": {
+    "x": 97,
+    "y": 1,
+    "w": 31,
+    "h": 38
+   },
+   "x": -38.4,
+   "y": -18.88,
+   "w": 31,
+   "h": 38,
+   "layer": -1,
+   "mass": 5.723
+  },
+  {
+   "id": "leg_5",
+   "frame": {
+    "x": 129,
+    "y": 1,
+    "w": 31,
+    "h": 38
+   },
+   "x": 29.76,
+   "y": -29.44,
+   "w": 31,
+   "h": 38,
+   "layer": 2,
+   "mass": 5.723
+  },
+  {
+   "id": "leg_6",
+   "frame": {
+    "x": 161,
+    "y": 1,
+    "w": 31,
+    "h": 38
+   },
+   "x": 32.64,
+   "y": -25.92,
+   "w": 31,
+   "h": 38,
+   "layer": 2,
+   "mass": 5.723
+  },
+  {
+   "id": "leg_7",
+   "frame": {
+    "x": 193,
+    "y": 1,
+    "w": 31,
+    "h": 38
+   },
+   "x": 35.52,
+   "y": -22.4,
+   "w": 31,
+   "h": 38,
+   "layer": 2,
+   "mass": 5.723
+  },
+  {
+   "id": "leg_8",
+   "frame": {
+    "x": 1,
+    "y": 40,
+    "w": 31,
+    "h": 38
+   },
+   "x": 38.4,
+   "y": -18.88,
+   "w": 31,
+   "h": 38,
+   "layer": 2,
+   "mass": 5.723
+  },
+  {
+   "id": "reservoir_l",
+   "frame": {
+    "x": 169,
+    "y": 40,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -27.2,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "reservoir_r",
+   "frame": {
+    "x": 188,
+    "y": 40,
+    "w": 18,
+    "h": 18
+   },
+   "x": 28.8,
+   "y": -27.2,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "injector",
+   "frame": {
+    "x": 207,
+    "y": 40,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -15.68,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "mandible",
+   "frame": {
+    "x": 226,
+    "y": 40,
+    "w": 18,
+    "h": 18
+   },
+   "x": 28.8,
+   "y": -15.68,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  }
+ ],
+ "joints": [
+  {
+   "a": "abdomen",
+   "b": "head",
+   "anchor": [
+    -13.44,
+    -39.2
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "front_shell",
+   "anchor": [
+    -6.4,
+    -44.8
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "core",
+   "anchor": [
+    0,
+    -41.6
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_1",
+   "anchor": [
+    -16.32,
+    -48.96
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_2",
+   "anchor": [
+    -16.32,
+    -42.88
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_3",
+   "anchor": [
+    -16.32,
+    -36.8
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_4",
+   "anchor": [
+    -16.32,
+    -30.72
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_5",
+   "anchor": [
+    16.32,
+    -48.96
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_6",
+   "anchor": [
+    16.32,
+    -42.88
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_7",
+   "anchor": [
+    16.32,
+    -36.8
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "leg_8",
+   "anchor": [
+    16.32,
+    -30.72
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "reservoir_l",
+   "anchor": [
+    -14.4,
+    -34.4
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "reservoir_r",
+   "anchor": [
+    14.4,
+    -34.4
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "injector",
+   "anchor": [
+    -14.4,
+    -28.64
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "abdomen",
+   "b": "mandible",
+   "anchor": [
+    14.4,
+    -28.64
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.32,
+  "mirrored": false,
+  "colors": 48
+ }
+}

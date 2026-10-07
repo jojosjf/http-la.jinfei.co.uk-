@@ -1,0 +1,423 @@
+{
+ "id": "tianshu",
+ "name": "天枢",
+ "version": 2,
+ "image": "tianshu.png",
+ "root": "ring_1",
+ "height": 128,
+ "parts": [
+  {
+   "id": "core",
+   "frame": {
+    "x": 205,
+    "y": 1,
+    "w": 38,
+    "h": 38
+   },
+   "x": 0,
+   "y": -64.12,
+   "w": 38,
+   "h": 38,
+   "layer": 4,
+   "mass": 6.962
+  },
+  {
+   "id": "ring_1",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 67,
+    "h": 67
+   },
+   "x": 0,
+   "y": -64.12,
+   "w": 67,
+   "h": 67,
+   "layer": -3,
+   "mass": 21.8405
+  },
+  {
+   "id": "arm_upper_1",
+   "frame": {
+    "x": 124,
+    "y": 69,
+    "w": 22,
+    "h": 17
+   },
+   "x": 32,
+   "y": -64.12,
+   "w": 22,
+   "h": 17,
+   "layer": 0,
+   "mass": 1.8285
+  },
+  {
+   "id": "arm_lower_1",
+   "frame": {
+    "x": 147,
+    "y": 69,
+    "w": 22,
+    "h": 17
+   },
+   "x": 48.32,
+   "y": -64.12,
+   "w": 22,
+   "h": 17,
+   "layer": 0,
+   "mass": 1.8285
+  },
+  {
+   "id": "claw_1",
+   "frame": {
+    "x": 1,
+    "y": 69,
+    "w": 21,
+    "h": 20
+   },
+   "x": 62.4,
+   "y": -64.12,
+   "w": 21,
+   "h": 20,
+   "layer": 0,
+   "mass": 2.079
+  },
+  {
+   "id": "ring_2",
+   "frame": {
+    "x": 69,
+    "y": 1,
+    "w": 67,
+    "h": 67
+   },
+   "x": 0,
+   "y": -64.12,
+   "w": 67,
+   "h": 67,
+   "layer": -2,
+   "mass": 21.8405
+  },
+  {
+   "id": "arm_upper_2",
+   "frame": {
+    "x": 170,
+    "y": 69,
+    "w": 22,
+    "h": 17
+   },
+   "x": -16,
+   "y": -36.41,
+   "w": 22,
+   "h": 17,
+   "layer": 0,
+   "mass": 1.8285
+  },
+  {
+   "id": "arm_lower_2",
+   "frame": {
+    "x": 193,
+    "y": 69,
+    "w": 22,
+    "h": 17
+   },
+   "x": -24.16,
+   "y": -22.27,
+   "w": 22,
+   "h": 17,
+   "layer": 0,
+   "mass": 1.8285
+  },
+  {
+   "id": "claw_2",
+   "frame": {
+    "x": 23,
+    "y": 69,
+    "w": 21,
+    "h": 20
+   },
+   "x": -31.2,
+   "y": -10.08,
+   "w": 21,
+   "h": 20,
+   "layer": 0,
+   "mass": 2.079
+  },
+  {
+   "id": "ring_3",
+   "frame": {
+    "x": 137,
+    "y": 1,
+    "w": 67,
+    "h": 67
+   },
+   "x": 0,
+   "y": -64.12,
+   "w": 67,
+   "h": 67,
+   "layer": -1,
+   "mass": 21.8405
+  },
+  {
+   "id": "arm_upper_3",
+   "frame": {
+    "x": 216,
+    "y": 69,
+    "w": 22,
+    "h": 17
+   },
+   "x": -16,
+   "y": -91.83,
+   "w": 22,
+   "h": 17,
+   "layer": 0,
+   "mass": 1.8285
+  },
+  {
+   "id": "arm_lower_3",
+   "frame": {
+    "x": 1,
+    "y": 90,
+    "w": 22,
+    "h": 17
+   },
+   "x": -24.16,
+   "y": -105.97,
+   "w": 22,
+   "h": 17,
+   "layer": 0,
+   "mass": 1.8285
+  },
+  {
+   "id": "claw_3",
+   "frame": {
+    "x": 45,
+    "y": 69,
+    "w": 21,
+    "h": 20
+   },
+   "x": -31.2,
+   "y": -118.16,
+   "w": 21,
+   "h": 20,
+   "layer": 0,
+   "mass": 2.079
+  },
+  {
+   "id": "finial",
+   "frame": {
+    "x": 67,
+    "y": 69,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -49.72,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "pendulum",
+   "frame": {
+    "x": 86,
+    "y": 69,
+    "w": 18,
+    "h": 18
+   },
+   "x": 28.8,
+   "y": -49.72,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  },
+  {
+   "id": "core_shell",
+   "frame": {
+    "x": 105,
+    "y": 69,
+    "w": 18,
+    "h": 18
+   },
+   "x": -28.8,
+   "y": -38.2,
+   "w": 18,
+   "h": 18,
+   "layer": -2,
+   "mass": 1.5125
+  }
+ ],
+ "joints": [
+  {
+   "a": "core",
+   "b": "ring_1",
+   "anchor": [
+    0,
+    -64.12
+   ],
+   "min": -3.141592653589793,
+   "max": 3.141592653589793,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "arm_upper_1",
+   "anchor": [
+    16,
+    -64.12
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_upper_1",
+   "b": "arm_lower_1",
+   "anchor": [
+    40.16,
+    -64.12
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_lower_1",
+   "b": "claw_1",
+   "anchor": [
+    55.36,
+    -64.12
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "ring_2",
+   "anchor": [
+    0,
+    -64.12
+   ],
+   "min": -3.141592653589793,
+   "max": 3.141592653589793,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "arm_upper_2",
+   "anchor": [
+    -8,
+    -50.26
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_upper_2",
+   "b": "arm_lower_2",
+   "anchor": [
+    -20.08,
+    -29.34
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_lower_2",
+   "b": "claw_2",
+   "anchor": [
+    -27.68,
+    -16.18
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "ring_3",
+   "anchor": [
+    0,
+    -64.12
+   ],
+   "min": -3.141592653589793,
+   "max": 3.141592653589793,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "arm_upper_3",
+   "anchor": [
+    -8,
+    -77.98
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_upper_3",
+   "b": "arm_lower_3",
+   "anchor": [
+    -20.08,
+    -98.9
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "arm_lower_3",
+   "b": "claw_3",
+   "anchor": [
+    -27.68,
+    -112.06
+   ],
+   "min": -0.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "finial",
+   "anchor": [
+    -14.4,
+    -56.92
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "pendulum",
+   "anchor": [
+    14.4,
+    -56.92
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "core",
+   "b": "core_shell",
+   "anchor": [
+    -14.4,
+    -51.16
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "mecha-ragdoll-v1",
+  "scale": 0.32,
+  "mirrored": false,
+  "colors": 48
+ }
+}
