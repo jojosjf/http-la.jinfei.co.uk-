@@ -78,6 +78,62 @@ export function findRegions(img, cols, rows) {
   return regions;
 }
 
+/**
+ * Copy of `rect` with stray specks removed: opaque 8-connected islands smaller than `minShare`
+ * of the largest island are cleared (crop boxes often catch bits of neighbouring cells).
+ */
+export function despeckle(src, rect, minShare = 0.02) {
+  const W = rect.w;
+  const H = rect.h;
+  const out = { width: W, height: H, data: new Uint8Array(W * H * 4) };
+  for (let y = 0; y < H; y++) {
+    const sy = rect.y + y;
+    if (sy < 0 || sy >= src.height) continue;
+    for (let x = 0; x < W; x++) {
+      const sx = rect.x + x;
+      if (sx < 0 || sx >= src.width) continue;
+      const si = (sy * src.width + sx) * 4;
+      out.data.set(src.data.subarray(si, si + 4), (y * W + x) * 4);
+    }
+  }
+  const label = new Int32Array(W * H).fill(-1);
+  const sizes = [];
+  const queue = new Int32Array(W * H);
+  for (let start = 0; start < W * H; start++) {
+    if (label[start] >= 0 || out.data[start * 4 + 3] <= 64) continue;
+    const id = sizes.length;
+    let read = 0;
+    let write = 1;
+    queue[0] = start;
+    label[start] = id;
+    while (read < write) {
+      const p = queue[read++];
+      const x = p % W;
+      const y = (p - x) / W;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const nx = x + dx;
+          const ny = y + dy;
+          if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+          const q = ny * W + nx;
+          if (label[q] < 0 && out.data[q * 4 + 3] > 64) {
+            label[q] = id;
+            queue[write++] = q;
+          }
+        }
+      }
+    }
+    sizes.push(write);
+  }
+  const largest = Math.max(0, ...sizes);
+  for (let p = 0; p < W * H; p++) {
+    const id = label[p];
+    if (id >= 0 && sizes[id] < largest * minShare) out.data[p * 4 + 3] = 0;
+    else if (id < 0 && out.data[p * 4 + 3] <= 64) out.data[p * 4 + 3] = 0;
+  }
+  return out;
+}
+
 /** Area-average resample of a source rectangle to w x h (premultiplied), optional horizontal mirror. */
 export function resample(src, rect, w, h, mirror = false) {
   const out = newImage(w, h);
@@ -356,7 +412,8 @@ export function convertMech(protoDir, id, opts = {}) {
     }
     const w = Math.max(1, Math.round(b.w * scale));
     const h = Math.max(1, Math.round(b.h * scale));
-    images.push(resample(atlas, region, w, h, mirror));
+    const clean = despeckle(atlas, region);
+    images.push(resample(clean, { x: 0, y: 0, w: region.w, h: region.h }, w, h, mirror));
     parts.push({ id: b.id, x: r2(b.x * sx * scale), y: r2((b.y - maxY) * scale), w, h, layer: b.layer ?? 0, mass: b.mass ?? 1 });
   }
   const ids = new Set(parts.map((p) => p.id));
@@ -393,7 +450,10 @@ export function convertMech(protoDir, id, opts = {}) {
   }
   for (let i = joints.length - 1; i >= 0; i--) if (!reached.has(joints[i].a) || !reached.has(joints[i].b)) joints.splice(i, 1);
 
-  const palette = medianCut(images, colors);
+  // People keep their full colour (a 48-colour palette smears faces and embroidery);
+  // constructs and beasts share one palette for a uniform pixel-art look.
+  const keepColour = isHuman || colors <= 0;
+  const palette = keepColour ? [] : medianCut(images, colors);
   for (const img of images) applyPalette(img, palette);
   const { frames, sheet } = pack(images);
   parts.forEach((p, i) => (p.frame = frames[i]));

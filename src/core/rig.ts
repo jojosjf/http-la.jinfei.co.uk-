@@ -276,8 +276,132 @@ function chainFrom(rig: RigDef, re: RegExp): string[] {
   return order;
 }
 
+/** Parent of every part when the joint graph is walked from the root (root maps to null). */
+export function parentMap(rig: RigDef): Map<string, string | null> {
+  const parent = new Map<string, string | null>([[rig.root, null]]);
+  for (let grew = true; grew; ) {
+    grew = false;
+    for (const j of rig.joints) {
+      if (parent.has(j.a) && !parent.has(j.b)) {
+        parent.set(j.b, j.a);
+        grew = true;
+      } else if (parent.has(j.b) && !parent.has(j.a)) {
+        parent.set(j.a, j.b);
+        grew = true;
+      }
+    }
+  }
+  return parent;
+}
+
+/**
+ * Converts world-space angles (every part not listed is upright, angle 0) into the parent-relative
+ * angles this solver uses. This is how the 云衡 package's motion.js poses its skeleton: each part's
+ * angle is absolute, so feet stay flat and sleeves hang regardless of what the limb above does.
+ */
+export function absoluteToRelative(rig: RigDef, abs: Angles): Angles {
+  const parent = parentMap(rig);
+  const rel: Angles = {};
+  for (const p of rig.parts) {
+    const par = parent.get(p.id);
+    const a = abs[p.id] ?? 0;
+    const pa = par ? (abs[par] ?? 0) : 0;
+    if (a - pa !== 0) rel[p.id] = a - pa;
+  }
+  return rel;
+}
+
+/**
+ * 修士 poses, ported from the 云衡 package's motion.js (absolute angles, subtle motion):
+ * the sword is carried tilted (-0.5 rad), the walk swings legs ±0.21 with the shin bending only
+ * on the back-swing and the foot counter-rotating to stay flat, the slash lifts the sword arm
+ * (-1.25) and sweeps the blade up and forward (-0.5 → -2.05), the hit leans back and recoils.
+ */
+function humanPoses(rig: RigDef): Record<string, RigPose> {
+  const w = weaponSide(rig);
+  const o = w === 'l' ? 'r' : 'l';
+  const held = heldParts(rig)[w];
+  const has = new Set(rig.parts.map((p) => p.id));
+  const sideSign: Record<string, number> = { [w]: 1, [o]: -1 };
+  const base = (): Angles => (held ? { [held]: -0.5 } : {});
+  const pick = (a: Angles): Angles => Object.fromEntries(Object.entries(a).filter(([k]) => has.has(k)));
+  const rel = (a: Angles): Angles => absoluteToRelative(rig, pick(a));
+  const loop = (duration: number, n: number, f: (ph: number) => { a: Angles; dx?: number; dy?: number }): RigPose => {
+    const keys: RigKey[] = [];
+    for (let i = 0; i <= n; i++) {
+      const fr = f((i % n) * ((2 * Math.PI) / n));
+      keys.push({ t: i / n, a: rel(fr.a), dx: fr.dx ?? 0, dy: fr.dy ?? 0 });
+    }
+    return { duration, loop: true, keys };
+  };
+  const once = (duration: number, n: number, f: (u: number) => { a: Angles; dx?: number; dy?: number }): RigPose => {
+    const keys: RigKey[] = [];
+    for (let i = 0; i <= n; i++) {
+      const fr = f(i / n);
+      keys.push({ t: i / n, a: rel(fr.a), dx: fr.dx ?? 0, dy: fr.dy ?? 0 });
+    }
+    return { duration, loop: false, keys };
+  };
+  return {
+    idle: loop(2.7, 8, (ph) => ({ a: { ...base(), torso: 0.008 * Math.sin(ph), head: -0.01 * Math.sin(ph) }, dy: Math.sin(ph) > 0.3 ? 1 : 0 })),
+    walk: loop(0.9, 8, (ph) => {
+      const g = Math.sin(ph);
+      const a: Angles = { ...base(), robe_back: 0.065 * g, backpack: 0.025 * g, bundle: 0.04 * g, scroll: 0.03 * g, pouch: 0.08 * g };
+      for (const side of [w, o]) {
+        const sg = sideSign[side];
+        a[`thigh_${side}`] = 0.21 * g * sg;
+        a[`leg_${side}`] = 0.21 * g * sg;
+        a[`shin_${side}`] = Math.max(0, -g * sg) * 0.28;
+        a[`foot_${side}`] = -g * 0.14 * sg;
+        a[`upper_arm_${side}`] = 0.13 * g * sg;
+        a[`forearm_hand_${side}`] = -0.12 * g * sg;
+        a[`sleeve_${side}`] = 0.16 * g * sg;
+        a[`robe_${side}`] = 0.07 * g * sg;
+      }
+      if (held) a[held] = -0.5 + a[`forearm_hand_${w}`] * 0.5;
+      return { a, dy: -Math.round(Math.abs(g) * 1.5) };
+    }),
+    melee: once(0.65, 10, (u) => {
+      const k = Math.sin(u * Math.PI);
+      return {
+        a: {
+          ...base(),
+          [`upper_arm_${w}`]: -1.25 * k,
+          [`forearm_hand_${w}`]: -0.6 * k,
+          [`sleeve_${w}`]: -0.9 * k,
+          ...(held ? { [held]: -0.5 - 1.55 * k } : {}),
+          torso: -0.04 * k,
+        },
+        dx: Math.round(2 * k),
+      };
+    }),
+    shoot: once(0.6, 8, (u) => {
+      const k = Math.sin(Math.min(1, u * 1.6) * (Math.PI / 2)) * (u < 0.8 ? 1 : (1 - u) / 0.2);
+      return {
+        a: { ...base(), [`upper_arm_${o}`]: -1.35 * k, [`forearm_hand_${o}`]: -1.45 * k, [`sleeve_${o}`]: -0.55 * k, torso: 0.03 * k, head: 0.02 * k },
+        dx: -Math.round(1.5 * k),
+      };
+    }),
+    block: once(0.3, 4, (u) => ({
+      a: {
+        [`upper_arm_${w}`]: -0.6 * u,
+        [`forearm_hand_${w}`]: -1.3 * u,
+        [`sleeve_${w}`]: -0.5 * u,
+        ...(held ? { [held]: -0.5 - 1.4 * u } : {}),
+        torso: -0.04 * u,
+      },
+      dy: Math.round(u),
+    })),
+    hit: once(0.38, 6, (u) => {
+      const k = Math.sin(u * Math.PI);
+      return { a: { ...base(), torso: u < 1 ? -0.12 * k : 0, head: -0.06 * k }, dx: -Math.round(4 * k) };
+    }),
+  };
+}
+
 function buildArchetypePoses(rig: RigDef): Record<string, RigPose> {
   const kind = archetypeOf(rig);
+  if (kind === 'humanoid' && rig.species === 'human') return humanPoses(rig);
   switch (kind) {
     case 'quadruped': {
       const fl = ids(rig, /^front_upper_l$/);

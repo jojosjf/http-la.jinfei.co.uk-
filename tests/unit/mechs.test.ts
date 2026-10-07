@@ -84,3 +84,33 @@ describe('species', () => {
     expect(gd.units.xuetang.species).toBe('construct');
   });
 });
+
+import { absoluteToRelative } from '../../src/core/rig';
+
+describe('修士 poses (ported from the 云衡 package, absolute angles)', () => {
+  const rig = JSON.parse(readFileSync('public/mechs/yunheng/yunheng.rig.json', 'utf8')) as RigDef;
+  const at = (pose: string, t: number) => solvePose(rig, samplePose(rig, pose, t));
+  const angle = (ts: ReturnType<typeof solvePose>, id: string) => ts.find((x) => x.id === id)!.angle;
+
+  it('converts world angles to parent-relative ones', () => {
+    const rel = absoluteToRelative(rig, { upper_arm_l: -1, forearm_hand_l: -0.6 });
+    expect(rel.upper_arm_l).toBeCloseTo(-1);
+    expect(rel.forearm_hand_l).toBeCloseTo(0.4);
+    expect(rel.sleeve_l).toBeCloseTo(1); // unlisted parts stay upright in world space
+  });
+
+  it('keeps the feet flat while walking and carries the sword tilted', () => {
+    for (let t = 0; t < 0.9; t += 0.05) {
+      const ts = at('walk', t);
+      expect(Math.abs(angle(ts, 'foot_l'))).toBeLessThanOrEqual(0.16);
+      expect(Math.abs(angle(ts, 'foot_r'))).toBeLessThanOrEqual(0.16);
+    }
+    expect(angle(at('idle', 0), 'weapon')).toBeCloseTo(-0.5, 1);
+  });
+
+  it('slash lifts the sword arm and sweeps the blade up', () => {
+    const mid = at('melee', 0.325);
+    expect(angle(mid, 'upper_arm_l')).toBeCloseTo(-1.25, 1);
+    expect(angle(mid, 'weapon')).toBeCloseTo(-2.05, 1);
+  });
+});
