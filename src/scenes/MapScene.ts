@@ -29,9 +29,11 @@ import {
   spiritBlocked,
   type SpiritId,
 } from '../core/spirit';
+import { applyRoster, isCampaignState, newCampaign, recordStage, type CampaignState } from '../core/campaign';
+import { DEFAULT_LEADERS, dueEvents, isHolding, matches, nearestFree, stageOutcome, type EventCheck, type EventUnit, type Outcome } from '../core/events';
 import { mulberry32 } from '../core/rng';
 import { buildMap, deploymentIds } from '../core/scenario';
-import type { Deployment, GameMap, ScenarioDef, TerrainDef, UnitDef, UnitState, Vec2, WeaponDef } from '../core/types';
+import type { DialogueLine, Deployment, GameMap, ScenarioDef, TerrainDef, UnitDef, UnitState, Vec2, WeaponDef } from '../core/types';
 import {
   UNAVAILABLE_TEXT,
   consumeWeapon,
@@ -42,6 +44,7 @@ import {
 } from '../core/unit';
 import { loadData, type GameData } from '../data';
 import { installDebugHook, type DebugState } from '../debug';
+import { Dialogue, type Speaker } from '../ui/Dialogue';
 import { Hud, TEXT_STYLE, type Menu, type PreviewSide, type UnitInfo } from '../ui/Hud';
 import type { BattleScript, BattleSide, BattleStrike } from './BattleScene';
 
@@ -55,6 +58,7 @@ type State =
   | 'spiritSelect'
   | 'busy'
   | 'enemyPhase'
+  | 'dialogue'
   | 'gameOver';
 
 interface WeaponOption {
@@ -105,6 +109,15 @@ const LEVEL_EXP = 100;
 /** Fixed seed for the procedural map art so a stage always looks the same. */
 const ART_SEED = 20261006;
 const BATTLE_ANIM_KEY = 'sf.battleAnim';
+/** Stage-start save: `{ scenarioId, campaign }`, read by BootScene to resume. */
+export const SAVE_KEY = 'wjl.save';
+const NARRATOR = '旁白';
+
+export interface MapParams {
+  scenarioId?: string;
+  seed?: number;
+  campaign?: CampaignState;
+}
 
 /**
  * The tactical map: player phase state machine, enemy phase, on-map battle animation v0.
@@ -132,6 +145,13 @@ export class MapScene extends Phaser.Scene {
   private rng: () => number = Math.random;
   private battleAnim = true;
   private inBattle = false;
+  private dialogue!: Dialogue;
+  /** Campaign carried into this stage, and (after a clear) what the next stage inherits. */
+  private campaign: CampaignState = newCampaign();
+  /** Campaign as it stood when this stage began, for 重玩本话. */
+  private startCampaign: CampaignState = newCampaign();
+  private fired = new Set<number>();
+  private outcome: Outcome = null;
 
   constructor() {
     super('Map');
@@ -147,9 +167,12 @@ export class MapScene extends Phaser.Scene {
     if (this.history.length > 60) this.history.shift();
   }
 
-  init(params: { scenarioId?: string; seed?: number } = {}): void {
+  init(params: MapParams = {}): void {
     this.gd = loadData();
-    this.scenario = this.gd.scenarios[params.scenarioId ?? 's01'];
+    this.scenario = this.gd.scenarios[params.scenarioId ?? 's01'] ?? this.gd.scenarios.s01;
+    this.campaign = isCampaignState(params.campaign) ? params.campaign : newCampaign();
+    this.fired = new Set();
+    this.outcome = null;
     this.map = buildMap(this.scenario);
     const url = new URLSearchParams(window.location.search);
     const urlSeed = url.get('seed');
@@ -161,7 +184,7 @@ export class MapScene extends Phaser.Scene {
     this.menu = null;
     this.turn = 1;
     this.phase = 'player';
-    this.money = 0;
+    this.money = this.campaign.money;
     this.state = 'busy';
     this.inBattle = false;
     try {
@@ -180,6 +203,8 @@ export class MapScene extends Phaser.Scene {
     this.tweens.add({ targets: this.cursorImg, alpha: { from: 1, to: 0.35 }, duration: 450, yoyo: true, repeat: -1 });
 
     this.hud = new Hud(this);
+    this.dialogue = new Dialogue(this);
+    this.saveProgress();
 
     const cam = this.cameras.main;
     cam.setBounds(0, 0, this.map.width * TILE, this.map.height * TILE);
@@ -205,6 +230,8 @@ export class MapScene extends Phaser.Scene {
       },
       cancel: () => this.onCancel(),
       endTurn: () => this.onEndTurn(),
+      defeat: (uid: string) => void this.debugDefeat(uid),
+      mapImage: () => this.textures.getBase64(`map_${this.scenario.id}`),
     });
 
     void this.startPlayerTurn(true);
@@ -217,20 +244,36 @@ export class MapScene extends Phaser.Scene {
     this.add.image(0, 0, key).setOrigin(0).setDepth(0);
   }
 
-  private spawn(d: Deployment): void {
+  private spawn(d: Deployment): UnitState {
     const ids = deploymentIds(d);
     const def = this.gd.units[ids.unit];
     const pilot = this.gd.pilots[ids.pilot];
     const u = createUnit(`u${this.units.length}`, def, pilot, this.gd.weapons, d.team, d.x, d.y);
+    if (d.boss) u.boss = true;
+    if (d.hold !== undefined) u.hold = d.hold;
+    applyRoster(u, this.campaign);
     this.units.push(u);
 
     const frame = this.add.image(0, 0, u.team === 'player' ? 'team_player' : 'team_enemy').setOrigin(0);
     const body = this.add.image(0, 0, `unit_${def.id}`).setOrigin(0);
     if (u.team === 'enemy') body.setFlipX(true);
     const hpBar = this.add.graphics();
-    const container = this.add.container(u.x * TILE, u.y * TILE, [frame, body, hpBar]).setDepth(10);
+    const parts: Phaser.GameObjects.GameObject[] = [frame, body, hpBar];
+    if (u.boss) {
+      // 首领 badge: gold diamond in the top-left corner
+      const badge = this.add.graphics();
+      badge.fillStyle(0x000000, 1);
+      badge.fillTriangle(1, 5, 5, 1, 9, 5);
+      badge.fillTriangle(1, 5, 5, 9, 9, 5);
+      badge.fillStyle(0xffd60a, 1);
+      badge.fillTriangle(2, 5, 5, 2, 8, 5);
+      badge.fillTriangle(2, 5, 5, 8, 8, 5);
+      parts.push(badge);
+    }
+    const container = this.add.container(u.x * TILE, u.y * TILE, parts).setDepth(10);
     this.views.set(u.uid, { container, body, hpBar });
     this.refreshView(u);
+    return u;
   }
 
   private setupInput(): void {
@@ -268,9 +311,10 @@ export class MapScene extends Phaser.Scene {
     const pilot = this.gd.pilots[u.pilotId];
     const realm = realmName(u.level);
     const title = def.title ?? (pilot.name !== def.name ? pilot.name : '');
+    const rider = def.species && def.species !== 'human' && pilot.name !== def.name ? `${pilot.name} 驾驭` : '';
     return {
-      name: def.name,
-      sub: def.species === 'human' || !def.species ? [realm, title].filter(Boolean).join(' · ') : title || realm,
+      name: u.boss ? `${def.name} [首领]` : def.name,
+      sub: rider || (def.species === 'human' || !def.species ? [realm, title].filter(Boolean).join(' · ') : title || realm),
       team: u.team,
       hp: u.hp,
       maxHp: def.hp,
@@ -319,6 +363,8 @@ export class MapScene extends Phaser.Scene {
       stoppable: this.sel ? [...this.sel.stoppable] : [],
       targets: this.sel ? this.sel.targets.map((t) => t.uid) : [],
       menuIndex: this.menu?.index ?? -1,
+      scenario: this.scenario.id,
+      outcome: this.outcome,
       turn: this.turn,
       phase: this.phase,
       cursor: { ...this.cursorPos },
@@ -440,8 +486,14 @@ export class MapScene extends Phaser.Scene {
   // ---------------------------------------------------------------- input
 
   private onKey(code: string): void {
+    if (this.state === 'dialogue') {
+      if (CONFIRM_KEYS.has(code)) this.dialogue.advance();
+      else if (CANCEL_KEYS.has(code)) this.dialogue.skip();
+      return;
+    }
     if (this.state === 'gameOver') {
-      if (code === 'KeyR') this.scene.restart({ scenarioId: this.scenario.id });
+      if (code === 'KeyR') this.restartStage();
+      else if (CONFIRM_KEYS.has(code)) this.onConfirm();
       return;
     }
     if (this.state === 'busy' || this.state === 'enemyPhase') return;
@@ -472,6 +524,12 @@ export class MapScene extends Phaser.Scene {
 
   private onConfirm(): void {
     switch (this.state) {
+      case 'dialogue':
+        this.dialogue.advance();
+        break;
+      case 'gameOver':
+        if (this.outcome === 'win') this.goToNextStage();
+        break;
       case 'idle': {
         const u = this.unitAt(this.cursorPos.x, this.cursorPos.y);
         if (u && u.team === 'player' && !u.acted) this.selectUnit(u);
@@ -497,6 +555,9 @@ export class MapScene extends Phaser.Scene {
 
   private onCancel(): void {
     switch (this.state) {
+      case 'dialogue':
+        this.dialogue.skip();
+        break;
       case 'unitSelected':
         this.deselect();
         break;
@@ -547,7 +608,12 @@ export class MapScene extends Phaser.Scene {
   }
 
   private onPointerDown(p: Phaser.Input.Pointer): void {
-    if (this.state === 'busy' || this.state === 'enemyPhase' || this.state === 'gameOver') return;
+    if (this.state === 'dialogue' || this.state === 'gameOver') {
+      if (p.rightButtonDown()) this.onCancel();
+      else this.onConfirm();
+      return;
+    }
+    if (this.state === 'busy' || this.state === 'enemyPhase') return;
     if (p.rightButtonDown()) {
       this.onCancel();
       return;
@@ -774,7 +840,10 @@ export class MapScene extends Phaser.Scene {
     this.menu = this.hud.openMenu(
       [
         { label: '结束回合', enabled: true },
+        { label: '作战目标', enabled: true },
         { label: `战斗演出：${this.battleAnim ? '开' : '关'}`, enabled: true },
+        { label: '重玩本话', enabled: true },
+        { label: '从第1话开始', enabled: true },
         { label: '返回', enabled: true },
       ],
       {
@@ -785,9 +854,18 @@ export class MapScene extends Phaser.Scene {
             this.closeMenu();
             void this.endPlayerTurn();
           } else if (i === 1) {
+            this.closeMenu();
+            void this.talk([{ who: NARRATOR, text: this.objectivesText() }]).then(() => {
+              this.state = 'idle';
+            });
+          } else if (i === 2) {
             this.setBattleAnim(!this.battleAnim);
             this.openSystemMenu();
-            this.menu?.move(1);
+            this.menu?.move(2);
+          } else if (i === 3) {
+            this.restartStage();
+          } else if (i === 4) {
+            this.scene.restart({ scenarioId: 's01', campaign: newCampaign() } satisfies MapParams);
           } else {
             this.closeMenu();
             this.state = 'idle';
@@ -818,10 +896,18 @@ export class MapScene extends Phaser.Scene {
       u.moved = false;
       if (u.team === 'player') expireTurnSpirits(u);
       if (!first) this.applyRecovery(u);
+      if (typeof u.hold === 'number' && !isHolding(u.hold, this.turn)) u.hold = false;
       this.refreshView(u);
     }
     this.hud.setTurn(`第${this.turn}回合   灵石 ${this.money}`);
-    if (first) await this.hud.banner(this.scenario.title, 900);
+    if (first) {
+      await this.hud.banner(this.scenario.title, 900);
+      await this.runEvents({ type: 'start' });
+      await this.talk([{ who: NARRATOR, text: this.objectivesText() }]);
+    } else {
+      await this.runEvents({ type: 'turn', turn: this.turn });
+    }
+    if (this.checkEnd()) return;
     await this.hud.banner(`第 ${this.turn} 回合   我方行动`);
     const firstUnit = this.units.find((u) => u.alive && u.team === 'player');
     if (firstUnit) this.setCursor(firstUnit.x, firstUnit.y);
@@ -862,6 +948,7 @@ export class MapScene extends Phaser.Scene {
         units: this.units,
         actor: e,
         combatant: (u, at) => this.combatant(u, at),
+        hold: isHolding(e.hold, this.turn),
       });
       if (plan.path.length > 1) await this.moveAlong(e, plan.path);
       e.moved = plan.path.length > 1;
@@ -876,18 +963,190 @@ export class MapScene extends Phaser.Scene {
     await this.startPlayerTurn();
   }
 
+  /** True (and the stage-end sequence starts) once the scenario's victory or defeat condition holds. */
   private checkEnd(): boolean {
-    const enemies = this.units.filter((u) => u.alive && u.team === 'enemy').length;
-    const players = this.units.filter((u) => u.alive && u.team === 'player').length;
-    if (enemies > 0 && players > 0) return false;
-    this.state = 'gameOver';
+    if (this.outcome) return true;
+    const outcome = stageOutcome(this.scenario, this.eventUnits());
+    if (!outcome) return false;
+    this.outcome = outcome;
+    this.state = 'busy';
     this.sel = null;
     this.closeMenu();
     this.hud.hidePreview();
     this.clearHighlights();
-    this.hud.setHint('按 R 重新开始');
-    void this.hud.banner(enemies === 0 ? `STAGE CLEAR   灵石 ${this.money}` : 'GAME OVER', -1);
+    void this.endStage(outcome);
     return true;
+  }
+
+  private async endStage(outcome: 'win' | 'lose'): Promise<void> {
+    if (outcome === 'win') {
+      // the stage's remaining enemies withdraw
+      for (const u of this.units) {
+        if (u.alive && u.team === 'enemy') {
+          u.alive = false;
+          void this.destroyUnit(u);
+        }
+      }
+      await this.runEvents({ type: 'clear' });
+      this.campaign = recordStage(this.campaign, this.units, this.money);
+      const next = this.scenario.next;
+      if (next) this.saveProgress(next);
+      const earned = this.money - this.startCampaign.money;
+      const roster = this.units
+        .filter((u) => u.team === 'player')
+        .map((u) => `${this.gd.units[u.unitId].name.padEnd(4, '　')} ${realmName(u.level)}`);
+      this.hud.showResult(`${this.scenario.title}  完`, [`获得灵石 ${earned}    累计 ${this.money}`, '', ...roster], next ? 'Z 进入下一话' : '第一卷「剑骨」完 · 敬请期待');
+      this.state = 'gameOver';
+      this.hud.setHint(next ? 'Z 进入下一话   R 重玩本话' : 'R 重玩本话');
+    } else {
+      const leaders = this.scenario.leaders ?? DEFAULT_LEADERS;
+      const fallen = this.units.find((u) => u.team === 'player' && !u.alive && leaders.some((id) => matches(u, id)));
+      this.state = 'gameOver';
+      this.hud.setHint('按 R 重新开始本话');
+      void this.hud.banner(fallen ? `${this.gd.units[fallen.unitId].name} 败退   GAME OVER` : 'GAME OVER', -1);
+    }
+  }
+
+  private restartStage(): void {
+    this.scene.restart({ scenarioId: this.scenario.id, campaign: this.startCampaign } satisfies MapParams);
+  }
+
+  private goToNextStage(): void {
+    const next = this.scenario.next;
+    if (!next || !this.gd.scenarios[next]) return;
+    this.scene.restart({ scenarioId: next, campaign: this.campaign } satisfies MapParams);
+  }
+
+  private saveProgress(scenarioId = this.scenario.id): void {
+    if (scenarioId === this.scenario.id) this.startCampaign = this.campaign;
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ scenarioId, campaign: this.campaign }));
+    } catch {
+      // storage unavailable: progress lasts for this session only
+    }
+  }
+
+  // ---------------------------------------------------------------- scenario events
+
+  private eventUnits(): EventUnit[] {
+    return this.units.map((u) => ({
+      unitId: u.unitId,
+      pilotId: u.pilotId,
+      team: u.team,
+      hp: u.hp,
+      maxHp: this.gd.units[u.unitId].hp,
+      alive: u.alive,
+      boss: u.boss,
+    }));
+  }
+
+  /** Fires every due event in order: dialogue first, then reinforcements, morale, 神通 and releases. */
+  private async runEvents(check: EventCheck): Promise<void> {
+    const events = this.scenario.events ?? [];
+    for (;;) {
+      const due = dueEvents(events, this.fired, check, this.eventUnits());
+      if (due.length === 0) return;
+      for (const i of due) {
+        this.fired.add(i);
+        const e = events[i];
+        if (e.talk) await this.talk(e.talk);
+        if (e.spawn) await this.reinforce(e.spawn);
+        for (const m of e.morale ?? []) {
+          for (const u of this.named(m.who)) {
+            addMorale(u, m.add);
+            this.floatText(u, `战意+${m.add}`, '#ffd60a');
+          }
+        }
+        for (const sp of e.spirit ?? []) {
+          for (const u of this.named(sp.who)) {
+            if (!isSpiritId(sp.id) || spiritBlocked(u, sp.id, this.spiritContext(u))) continue;
+            castSpirit(u, sp.id, this.spiritContext(u));
+            this.floatText(u, sp.id, '#ff9ad5');
+          }
+        }
+        for (const who of e.release ?? []) for (const u of this.named(who)) u.hold = false;
+      }
+      // a status check may cascade (an event's spawn can satisfy another); start/turn/clear fire once
+      if (check.type !== 'status') return;
+    }
+  }
+
+  private named(who: string): UnitState[] {
+    return this.units.filter((u) => u.alive && matches(u, who));
+  }
+
+  private async reinforce(list: Deployment[]): Promise<void> {
+    for (const d of list) {
+      const def = this.gd.units[deploymentIds(d).unit];
+      const spot = nearestFree(d, this.map, (x, y) => {
+        if (this.unitAt(x, y)) return false;
+        const t = this.terrainAt(x, y);
+        return def.moveTypes.some((m) => t.cost[m] !== undefined);
+      });
+      if (!spot) continue;
+      const u = this.spawn({ ...d, ...spot });
+      this.setCursor(u.x, u.y);
+      const v = this.views.get(u.uid);
+      if (v) {
+        v.container.setAlpha(0);
+        await this.tweenP({ targets: v.container, alpha: 1, duration: 260 });
+      }
+      this.floatText(u, d.team === 'player' ? '参战' : '增援', d.team === 'player' ? '#9ad0ff' : '#ff8a80');
+      await this.delay(120);
+    }
+  }
+
+  /** Plays a conversation; the scene sits in the 'dialogue' state until it is dismissed. */
+  private async talk(lines: DialogueLine[]): Promise<void> {
+    if (lines.length === 0) return;
+    const prev = this.state;
+    const cursor = { ...this.cursorPos };
+    this.state = 'dialogue';
+    await this.dialogue.play(
+      lines.map((l) => {
+        const u = l.who === NARRATOR ? undefined : this.units.find((x) => x.alive && matches(x, l.who));
+        return { speaker: this.speaker(l.who), text: l.text, focus: u ? () => this.setCursor(u.x, u.y) : undefined };
+      }),
+    );
+    this.setCursor(cursor.x, cursor.y);
+    this.state = prev === 'dialogue' ? 'busy' : prev;
+  }
+
+  private speaker(who: string): Speaker {
+    if (who === NARRATOR) return { name: null, portrait: null, team: null };
+    const deployed = this.units.find((u) => matches(u, who));
+    const pilot = this.gd.pilots[who];
+    const unit = this.gd.units[who];
+    const name = pilot?.name ?? unit?.name ?? who;
+    const team = deployed?.team ?? null;
+    let portrait: Speaker['portrait'] = null;
+    if (this.textures.exists(`portraitL_${who}`)) portrait = { key: `portraitL_${who}`, scale: 1 };
+    else {
+      const icon = `unit_${deployed?.unitId ?? who}`;
+      if (this.textures.exists(icon)) portrait = { key: icon, scale: 2, flip: team === 'enemy' };
+    }
+    return { name, portrait, team };
+  }
+
+  private objectivesText(): string {
+    const s = this.scenario;
+    const win = s.winText ?? (s.win === 'boss' ? '击败敌方首领' : '击败全部敌人');
+    const lose = s.loseText ?? (s.lose === 'leader' ? '云衡被击败' : '我方全灭');
+    return `【胜利条件】${win}\n【失败条件】${lose}`;
+  }
+
+  /** Test hook: takes a unit down as if it had been defeated, then runs the usual checks. */
+  private async debugDefeat(uid: string): Promise<void> {
+    const u = this.units.find((x) => x.uid === uid);
+    if (!u || !u.alive) return;
+    u.hp = 0;
+    u.alive = false;
+    this.views.get(u.uid)?.container.setVisible(false);
+    const prev = this.state;
+    this.state = 'busy';
+    await this.runEvents({ type: 'status' });
+    if (this.checkEnd()) return;
+    this.state = prev;
   }
 
   // ---------------------------------------------------------------- battle
@@ -933,6 +1192,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   private async executeAttack(attacker: UnitState, defender: UnitState, weapon: WeaponDef): Promise<void> {
+    await this.runEvents({ type: 'battle', a: attacker, b: defender });
     const a = this.combatant(attacker);
     const d = this.combatant(defender);
     const choice = chooseDefense(d, a, this.gd);
@@ -978,6 +1238,7 @@ export class MapScene extends Phaser.Scene {
     }
     this.hud.hidePreview();
     this.updateCursorInfo();
+    await this.runEvents({ type: 'status' });
   }
 
   private battleSide(u: UnitState): BattleSide {
@@ -1006,6 +1267,7 @@ export class MapScene extends Phaser.Scene {
     const result = resolveStrike({ attacker: a, defender: d, weapon, defense }, this.rng);
     if (result.hit) {
       d.state.hp = Math.max(0, d.state.hp - result.damage);
+      if (d.state.hold && result.damage > 0) d.state.hold = false;
       addMorale(a.state, MORALE.onHit);
       addMorale(d.state, MORALE.onDamaged);
       if (d.state.hp === 0) {

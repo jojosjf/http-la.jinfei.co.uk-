@@ -3,7 +3,10 @@ import { TILE } from '../config';
 import type { UnitDef } from '../core/types';
 import { loadMechAssets } from '../art/dollRegistry';
 import { loadData, validateData } from '../data';
+import { isCampaignState } from '../core/campaign';
+import type { GameData } from '../data';
 import { startBattleDemo } from './battleDemo';
+import { SAVE_KEY, type MapParams } from './MapScene';
 
 type Rect = [number, number, number, number];
 
@@ -62,9 +65,12 @@ export class BootScene extends Phaser.Scene {
     const hash = window.location.hash.replace('#', '');
     if (hash === 'battle-kill') params.set('kill', '1');
     const view = params.get('view') ?? (hash.startsWith('battle') ? 'battle' : hash || null);
+    // `?stage=s02` / `#s02` jumps to a stage; otherwise resume the saved stage, or start at 第1话.
+    const stage = params.get('stage') ?? (/^s\d+$/.test(hash) ? hash : null);
     if (view === 'dolls') this.scene.start('DollViewer');
     else if (view === 'battle') startBattleDemo(this, params);
-    else this.scene.start('Map', { scenarioId: 's01' });
+    else if (stage && gd.scenarios[stage]) this.scene.start('Map', { scenarioId: stage } satisfies MapParams);
+    else this.scene.start('Map', readSave(gd) ?? ({ scenarioId: 's01' } satisfies MapParams));
   }
 
   private makeUnit(u: UnitDef): void {
@@ -204,5 +210,18 @@ export class BootScene extends Phaser.Scene {
       g.generateTexture(key, TILE, TILE);
       g.destroy();
     }
+  }
+}
+
+/** The stage-start save written by MapScene, if there is a usable one. */
+function readSave(gd: GameData): MapParams | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const v = JSON.parse(raw) as { scenarioId?: unknown; campaign?: unknown };
+    if (typeof v.scenarioId !== 'string' || !gd.scenarios[v.scenarioId] || !isCampaignState(v.campaign)) return null;
+    return { scenarioId: v.scenarioId, campaign: v.campaign };
+  } catch {
+    return null;
   }
 }

@@ -26,6 +26,9 @@ export interface DebugState {
   targets: string[];
   /** Highlighted row of the open menu, or -1 when none is open. */
   menuIndex: number;
+  /** Current scenario id and, once decided, how it ended. */
+  scenario: string;
+  outcome: 'win' | 'lose' | null;
   turn: number;
   phase: string;
   /** True while the cut-away battle scene is playing. */
@@ -51,6 +54,10 @@ export interface DebugApi {
   castSpirit(uid: string, id: string): void;
   cancel(): void;
   endTurn(): void;
+  /** Take a unit down as if defeated (tests: reach events and stage ends quickly). */
+  defeat(uid: string): void;
+  /** The whole stage map as a PNG data URL (art review). */
+  mapImage(): string;
 }
 
 declare global {

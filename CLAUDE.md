@@ -23,8 +23,10 @@ pnpm test:watch   # Vitest 监听模式
 - `src/scenes/` Phaser 场景：`BootScene` 程序化生成机体 / 光标占位贴图；`MapScene` 玩家阶段状态机、敌方阶段、先结算后演出（`applyStrike` → `BattleScript`）；`BattleScene` 切出式战斗画面（双方机体走 `createActor()`：骨架 rig 优先，其次布娃娃，最后占位 `mech_<unitId>`；击坠时骨架机体散架成刚体残骸；HP/EN 面板、光束 / 弹幕 / 炮弹 / 格斗四类攻击动画、命中 / 回避 / 防御 / 击坠效果，按确认键 25 倍速快进，可在系统菜单里关闭，设置存 localStorage）。
 - `src/scenes/DollViewerScene.ts` 机体预览页（`?view=dolls`，D 击坠 / S 断臂击坠 / W 武器脱手）；`src/scenes/battleDemo.ts` 战斗演示（`?view=battle&a=<机体>&d=<机体>&w=<武器>&kill=1`），给美术检查导入结果。
 - `src/core/spirit.ts` 神通（精神指令）：13 种，消耗神识（每关回满、不随回合恢复），效果存在 `UnitState.spirit` 由 `battle.ts` 直接读取；一回合型在己方下个阶段开始时失效，一次型在攻击 / 被攻击后消耗。数值表见 `docs/game-plan.md` §6.3b。
-- `src/ui/Hud.ts` 固定在屏幕上的面板、菜单、预览、横幅。
-- `tests/unit/` Vitest；`tests/e2e/` Playwright，通过 `window.__srpg`（见 `src/debug.ts`）读取状态并操控光标。
+- **剧情与关卡流程**：总纲在 `docs/story.md`（第一卷「剑骨」第 1～3 话）。对白写在关卡 JSON 的 `events` 里：触发 `start` / `turn` / `defeated` / `hpBelow` / `battle`（两人首次交手前）/ `clear`，动作 `talk`（说话人写角色 id 显示名字头像；`剑灵` 等直接写名字；`旁白` 无名字框，每句 ≤60 字）、`spawn` 增援 / 参战、`morale`、`spirit`（Boss 施放神通）、`release`。胜利 `win: annihilate | boss`（部署写 `"boss": true`，击败首领即胜，其余撤退），失败 `lose: leader`（`leaders`，默认云衡），`next` 指向下一话。Boss 写 `{ "unit": "<傀儡>", "pilot": "<长老>" }`（天工宗长老驾驭镇宗傀儡），`"hold": true | 回合数` 原地坚守直到受伤 / 释放 / 到回合。纯逻辑在 `src/core/events.ts`（事件判定、胜败、坚守、增援落点）和 `src/core/campaign.ts`（灵石与境界跨关继承），`validateData()` 会校验事件引用、句长和落点地形。每话开始存档到 localStorage `wjl.save`，刷新即续玩；`?stage=s02` 或 `#s02` 直接跳关；系统菜单有 作战目标 / 重玩本话 / 从第1话开始。
+- `src/ui/Dialogue.ts` 对话框（头像 64×64 `portraitL_<id>`，没有就用 2 倍地图图标；逐字显示，Z 下一句、X 跳过整段；说话时镜头移到说话人）。
+- `src/ui/Hud.ts` 固定在屏幕上的面板、菜单、预览、横幅、过关结算面板。
+- `tests/unit/` Vitest；`tests/e2e/` Playwright，通过 `window.__srpg`（见 `src/debug.ts`）读取状态并操控光标（`defeat(uid)` 直接击倒单位推进剧情，`mapImage()` 导出整张地图）。e2e 的 `waitState()` 会自动点掉不需要的对话。
 - `docs/game-plan.md` 总体制作计划与任务表；`docs/art-spec.md` 美术规格。
 
 ## 题材约定（修仙版）

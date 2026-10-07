@@ -712,5 +712,45 @@
       "剑心",
       "神行"
     ]
+  },
+  "yanwuchang": {
+    "id": "yanwuchang",
+    "name": "偃无常",
+    "level": 12,
+    "melee": 150,
+    "ranged": 150,
+    "hit": 160,
+    "evade": 120,
+    "skill": 140,
+    "defense": 140,
+    "sp": 60,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [],
+    "moraleStart": 110
+  },
+  "lihanzhou": {
+    "id": "lihanzhou",
+    "name": "厉寒舟",
+    "level": 18,
+    "melee": 165,
+    "ranged": 165,
+    "hit": 170,
+    "evade": 125,
+    "skill": 160,
+    "defense": 150,
+    "sp": 80,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [],
+    "moraleStart": 115
   }
 }

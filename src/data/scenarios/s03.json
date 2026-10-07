@@ -1,0 +1,319 @@
+{
+  "id": "s03",
+  "title": "第3话 问剑峰",
+  "width": 22,
+  "height": 16,
+  "legend": {
+    ".": "plain",
+    "r": "road",
+    "f": "forest",
+    "m": "mountain",
+    "c": "city",
+    "b": "base",
+    "~": "sea",
+    "w": "river"
+  },
+  "rows": [
+    "mmmmmmmbbbbbbbbmmmmmmm",
+    "mmmmmm.bbbbbbbb..wmmmm",
+    "mmmmm...rrrrrr...wmmmm",
+    "mmmm..ff..r...ff.ww.mm",
+    "mmm..fff..r...fff.w.mm",
+    "mm........r.......ww.m",
+    "mm..m.....r.....m..w.m",
+    "m...mm....r....mm..w.m",
+    "m.........r........ww.",
+    "...ff.....r.....ff..w.",
+    "..fff.....r....fff..w.",
+    "..........r.........ww",
+    "..mm......r.....mm...w",
+    "..mm......r.....mm...w",
+    "..........r..........w",
+    "..........r..........w"
+  ],
+  "deploy": [
+    {
+      "character": "yunheng",
+      "team": "player",
+      "x": 10,
+      "y": 15
+    },
+    {
+      "character": "linxuan",
+      "team": "player",
+      "x": 11,
+      "y": 15
+    },
+    {
+      "character": "shipojun",
+      "team": "player",
+      "x": 10,
+      "y": 14
+    },
+    {
+      "character": "suqinghan",
+      "team": "player",
+      "x": 9,
+      "y": 15
+    },
+    {
+      "character": "fenlu",
+      "team": "enemy",
+      "x": 8,
+      "y": 9
+    },
+    {
+      "character": "liedi",
+      "team": "enemy",
+      "x": 6,
+      "y": 6
+    },
+    {
+      "character": "chuanyun",
+      "team": "enemy",
+      "x": 15,
+      "y": 5
+    },
+    {
+      "character": "tianshu",
+      "team": "enemy",
+      "x": 4,
+      "y": 4
+    },
+    {
+      "character": "liuxian",
+      "team": "enemy",
+      "x": 13,
+      "y": 3
+    },
+    {
+      "character": "guideng",
+      "team": "enemy",
+      "x": 8,
+      "y": 3
+    },
+    {
+      "character": "fenlu",
+      "team": "enemy",
+      "x": 11,
+      "y": 5
+    },
+    {
+      "unit": "tiancheng",
+      "pilot": "lihanzhou",
+      "team": "enemy",
+      "x": 11,
+      "y": 1,
+      "boss": true,
+      "hold": 4
+    }
+  ],
+  "win": "boss",
+  "lose": "leader",
+  "leaders": [
+    "yunheng"
+  ],
+  "winText": "击败厉寒舟（镇岳天城）",
+  "loseText": "云衡被击败",
+  "events": [
+    {
+      "when": {
+        "type": "start"
+      },
+      "talk": [
+        {
+          "who": "旁白",
+          "text": "问剑峰。三年前的焦痕还留在石阶上，山门牌坊塌了一半。"
+        },
+        {
+          "who": "yunheng",
+          "text": "……我回来了。"
+        },
+        {
+          "who": "shipojun",
+          "text": "少主，山门那儿——那是座城？会走路的城？！"
+        },
+        {
+          "who": "剑灵",
+          "text": "镇岳天城。那股剑意……小子，是你的剑骨。就在它肚子里。"
+        },
+        {
+          "who": "lihanzhou",
+          "text": "问剑宗的余孽。三年前留你一命，是我心软。"
+        },
+        {
+          "who": "lihanzhou",
+          "text": "剑冢明日开掘。今日，正好连剑骨的主人一并炼了。"
+        },
+        {
+          "who": "suqinghan",
+          "text": "云衡，我替你续了三条脉。剩下的，要你自己打通。"
+        },
+        {
+          "who": "yunheng",
+          "text": "够了。三条脉，够我走到他面前。"
+        },
+        {
+          "who": "旁白",
+          "text": "提示：镇岳天城炮程极远，但不善近身。第4回合起它会开始前进。"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "turn",
+        "turn": 3
+      },
+      "talk": [
+        {
+          "who": "lihanzhou",
+          "text": "两翼合围。一个不留。"
+        },
+        {
+          "who": "linxuan",
+          "text": "侧面有傀儡！石兄，护住苏姑娘！"
+        },
+        {
+          "who": "shipojun",
+          "text": "交给我！谁敢过来，先吃我一拳！"
+        }
+      ],
+      "spawn": [
+        {
+          "character": "huiyuan",
+          "team": "enemy",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "character": "huiyuan",
+          "team": "enemy",
+          "x": 0,
+          "y": 10
+        },
+        {
+          "character": "chilun",
+          "team": "enemy",
+          "x": 21,
+          "y": 8
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "turn",
+        "turn": 4
+      },
+      "talk": [
+        {
+          "who": "lihanzhou",
+          "text": "天城，前进。碾过去。"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "battle",
+        "a": "yunheng",
+        "b": "lihanzhou"
+      },
+      "talk": [
+        {
+          "who": "lihanzhou",
+          "text": "你的剑骨很好用。天城的灵枢，三年来从没这么亮过。"
+        },
+        {
+          "who": "yunheng",
+          "text": "那就还给我。连本带利。"
+        },
+        {
+          "who": "剑灵",
+          "text": "小子，站稳了。这一剑，我陪你出。"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "hpBelow",
+        "who": "lihanzhou",
+        "pct": 50
+      },
+      "talk": [
+        {
+          "who": "旁白",
+          "text": "天城胸口的灵枢裂开一道缝，一缕白光挣扎着朝云衡飞去。"
+        },
+        {
+          "who": "剑灵",
+          "text": "剑骨在应你！哈哈哈哈——这一剑，我等了三年！"
+        },
+        {
+          "who": "yunheng",
+          "text": "……我感觉到了。师父，师兄们……我听见了。"
+        },
+        {
+          "who": "lihanzhou",
+          "text": "灵枢在反噬？不可能……天城，压住它！"
+        }
+      ],
+      "morale": [
+        {
+          "who": "yunheng",
+          "add": 30
+        }
+      ],
+      "release": [
+        "lihanzhou"
+      ],
+      "spirit": [
+        {
+          "who": "lihanzhou",
+          "id": "坚守"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "clear"
+      },
+      "talk": [
+        {
+          "who": "旁白",
+          "text": "镇岳天城轰然崩塌。一道白虹破开烟尘，没入云衡体内。"
+        },
+        {
+          "who": "yunheng",
+          "text": "剑骨……回来了。"
+        },
+        {
+          "who": "lihanzhou",
+          "text": "咳……你以为，宗主要的只是一副剑骨？"
+        },
+        {
+          "who": "lihanzhou",
+          "text": "他要的是九州所有的灵根……天机城一成，修士……都只是零件……"
+        },
+        {
+          "who": "旁白",
+          "text": "厉寒舟气绝。山风吹过碎石，响起一个温和的声音。"
+        },
+        {
+          "who": "公输衍",
+          "text": "寒舟输了啊。云衡，你的剑，我很喜欢。我们会再见的。"
+        },
+        {
+          "who": "linxuan",
+          "text": "……天工宗宗主，公输衍。"
+        },
+        {
+          "who": "yunheng",
+          "text": "好。下一个，就是他。"
+        },
+        {
+          "who": "旁白",
+          "text": "第一卷「剑骨」完。"
+        }
+      ]
+    }
+  ]
+}

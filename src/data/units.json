@@ -787,7 +787,7 @@
   "mingwang": {
     "id": "mingwang",
     "name": "六臂明王",
-    "hp": 22000,
+    "hp": 14000,
     "en": 250,
     "armor": 1700,
     "mobility": 90,
@@ -809,8 +809,8 @@
       "fanzhong_yin",
       "liubi_luanwu"
     ],
-    "money": 30000,
-    "exp": 300,
+    "money": 12000,
+    "exp": 150,
     "color": "#c08a30",
     "species": "construct",
     "title": "天工宗镇宗傀儡"
@@ -818,10 +818,10 @@
   "tiancheng": {
     "id": "tiancheng",
     "name": "镇岳天城",
-    "hp": 32000,
+    "hp": 17000,
     "en": 300,
-    "armor": 2200,
-    "mobility": 40,
+    "armor": 1800,
+    "mobility": 70,
     "limit": 240,
     "move": 3,
     "size": "LL",
@@ -839,8 +839,8 @@
       "zhenyue_ta",
       "taotie_fangshe"
     ],
-    "money": 40000,
-    "exp": 400,
+    "money": 20000,
+    "exp": 250,
     "color": "#6a5a3a",
     "species": "construct",
     "title": "天工宗镇宗傀儡"
@@ -905,7 +905,7 @@
     "exp": 0,
     "color": "#e8eef8",
     "species": "human",
-    "title": "青云剑宗"
+    "title": "太素剑阁"
   },
   "suqinghan": {
     "id": "suqinghan",

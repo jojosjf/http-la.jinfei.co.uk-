@@ -34,7 +34,7 @@ export interface Menu {
 
 export interface UnitInfo {
   name: string;
-  /** Realm and/or faction line, e.g. 炼气五层 · 青云剑宗. */
+  /** Realm and/or faction line, e.g. 炼气五层 · 太素剑阁. */
   sub: string;
   team: 'player' | 'enemy';
   hp: number;
@@ -119,6 +119,9 @@ export class Hud {
   private readonly bannerRoot: Phaser.GameObjects.Container;
   private readonly bannerText: Phaser.GameObjects.Text;
   private menuRoot: Phaser.GameObjects.Container | null = null;
+  private bannerTimer: Phaser.Time.TimerEvent | null = null;
+  /** Resolves the banner currently showing (called early when a newer banner replaces it). */
+  private bannerDone: (() => void) | null = null;
 
   constructor(private readonly scene: Phaser.Scene) {
     this.terrainPanel = new Panel(scene, 4, 4, SIDE_W, 40);
@@ -271,11 +274,41 @@ export class Hud {
     this.preview.root.setVisible(false);
   }
 
+  /** Stage-complete panel: title, summary lines and a footer; stays until the scene restarts. */
+  showResult(title: string, lines: string[], footer: string): void {
+    const scene = this.scene;
+    const w = 300;
+    const h = 52 + lines.length * 14 + 26;
+    const bg = scene.add.graphics();
+    drawBox(bg, w, h);
+    bg.fillStyle(0xffd60a, 1);
+    bg.fillRect(10, 26, w - 20, 1);
+    const head = scene.add.text(w / 2, 8, title, { ...TEXT_STYLE, color: '#ffd60a' }).setOrigin(0.5, 0);
+    const body = scene.add.text(14, 34, lines.join('\n'), TEXT_STYLE).setLineSpacing(2);
+    const foot = scene.add.text(w / 2, h - 20, footer, { ...TEXT_STYLE, color: '#9ad0ff' }).setOrigin(0.5, 0);
+    const root = scene.add
+      .container(Math.round((GAME_WIDTH - w) / 2), Math.round((GAME_HEIGHT - 16 - h) / 2), [bg, head, body, foot])
+      .setDepth(HUD_DEPTH + 4)
+      .setAlpha(0);
+    root.setScrollFactor(0, 0, true);
+    scene.tweens.add({ targets: root, alpha: 1, duration: 250 });
+  }
+
   /** Centre-screen banner: fade in, hold, fade out. Resolves when done (or immediately after fade-in when hold < 0). */
   banner(text: string, hold = 700): Promise<void> {
+    // a newer banner replaces one still fading, so a stale fade-out can't hide it
+    this.scene.tweens.killTweensOf(this.bannerRoot);
+    this.bannerTimer?.remove(false);
+    this.bannerTimer = null;
+    this.bannerDone?.();
     this.bannerText.setText(text);
     this.bannerRoot.setVisible(true).setAlpha(0);
-    return new Promise((resolve) => {
+    return new Promise<void>((done) => {
+      const resolve = (): void => {
+        if (this.bannerDone === resolve) this.bannerDone = null;
+        done();
+      };
+      this.bannerDone = resolve;
       this.scene.tweens.add({
         targets: this.bannerRoot,
         alpha: 1,
@@ -285,7 +318,8 @@ export class Hud {
             resolve();
             return;
           }
-          this.scene.time.delayedCall(hold, () => {
+          this.bannerTimer = this.scene.time.delayedCall(hold, () => {
+            this.bannerTimer = null;
             this.scene.tweens.add({
               targets: this.bannerRoot,
               alpha: 0,

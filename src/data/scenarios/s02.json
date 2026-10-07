@@ -1,0 +1,317 @@
+{
+  "id": "s02",
+  "title": "第2话 坊市暗潮",
+  "width": 22,
+  "height": 16,
+  "legend": {
+    ".": "plain",
+    "r": "road",
+    "f": "forest",
+    "m": "mountain",
+    "c": "city",
+    "b": "base",
+    "~": "sea",
+    "w": "river"
+  },
+  "rows": [
+    "ccc.cccc.bbbb.cccc.ccc",
+    "ccc.cccc.bbbb.cccc.ccc",
+    "rrrrrrrrrrrrrrrrrrrrrr",
+    "cc.r..cc..r...cc..r.cc",
+    "cc.r..cc..r...cc..r.cc",
+    "...r......r.......r...",
+    "wwwrwwwwwwrwwwwwwwwrww",
+    "...r......r.......r...",
+    "cc.r.cc...r....cc.r.cc",
+    "cc.rrrrrrrrrrrrrrrr.cc",
+    "...r.cc...r....cc.r...",
+    "ff.r......r.......r.ff",
+    "ff.r..cc..r...cc..r.ff",
+    "...rrrrrrrrrrrrrrrr...",
+    "cc....cc......cc....cc",
+    "cc....cc......cc....cc"
+  ],
+  "deploy": [
+    {
+      "character": "yunheng",
+      "team": "player",
+      "x": 2,
+      "y": 13
+    },
+    {
+      "character": "shipojun",
+      "team": "player",
+      "x": 1,
+      "y": 12
+    },
+    {
+      "character": "suqinghan",
+      "team": "player",
+      "x": 2,
+      "y": 14
+    },
+    {
+      "character": "linxuan",
+      "team": "player",
+      "x": 16,
+      "y": 10
+    },
+    {
+      "character": "suohun",
+      "team": "enemy",
+      "x": 17,
+      "y": 9
+    },
+    {
+      "character": "suohun",
+      "team": "enemy",
+      "x": 15,
+      "y": 11
+    },
+    {
+      "character": "guideng",
+      "team": "enemy",
+      "x": 13,
+      "y": 7
+    },
+    {
+      "character": "tieliao",
+      "team": "enemy",
+      "x": 11,
+      "y": 8
+    },
+    {
+      "character": "huiyuan",
+      "team": "enemy",
+      "x": 7,
+      "y": 4
+    },
+    {
+      "unit": "mingwang",
+      "pilot": "yanwuchang",
+      "team": "enemy",
+      "x": 11,
+      "y": 1,
+      "boss": true,
+      "hold": 3
+    }
+  ],
+  "win": "boss",
+  "lose": "leader",
+  "leaders": [
+    "yunheng"
+  ],
+  "winText": "击败偃无常（六臂明王）",
+  "loseText": "云衡被击败",
+  "next": "s03",
+  "events": [
+    {
+      "when": {
+        "type": "start"
+      },
+      "talk": [
+        {
+          "who": "旁白",
+          "text": "百珍坊市，夜市。灯笼底下什么都有人卖——包括修士的骨头。"
+        },
+        {
+          "who": "yanwuchang",
+          "text": "下一件！问剑宗剑修灵骨一截，剑意未散，起价三千灵石！"
+        },
+        {
+          "who": "linxuan",
+          "text": "天工宗的狗！太素剑阁林玄在此，失踪的修士，是不是都进了你的炉子？"
+        },
+        {
+          "who": "yanwuchang",
+          "text": "哟，太素剑阁的首席？好骨相。来人，给林公子松松筋骨。"
+        },
+        {
+          "who": "shipojun",
+          "text": "少主，那小白脸被围了！帮不帮？"
+        },
+        {
+          "who": "yunheng",
+          "text": "……帮。顺便把那截骨头抢回来。"
+        },
+        {
+          "who": "剑灵",
+          "text": "高台上那具六臂傀儡是天工宗的镇宗货色。它不动，你别去惹。"
+        },
+        {
+          "who": "旁白",
+          "text": "提示：林玄可以操作。击败偃无常即可胜利，其余敌人会随之撤退。"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "turn",
+        "turn": 2
+      },
+      "talk": [
+        {
+          "who": "linxuan",
+          "text": "云衡？！……问剑宗那个，三年前就该死了的云衡？"
+        },
+        {
+          "who": "yunheng",
+          "text": "没死成。林师兄别来无恙，出剑还是那么慢。"
+        },
+        {
+          "who": "linxuan",
+          "text": "你！……哼，一个跌回炼气的废人，也配说我？"
+        },
+        {
+          "who": "yanwuchang",
+          "text": "云衡……想起来了。厉长老剜了剑骨的那个小废物！"
+        },
+        {
+          "who": "yanwuchang",
+          "text": "今晚运气真好，剑骨的主人自己送上门来了。"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "turn",
+        "turn": 3
+      },
+      "talk": [
+        {
+          "who": "yanwuchang",
+          "text": "玩够了。明王，起！"
+        },
+        {
+          "who": "旁白",
+          "text": "高台上的六臂明王睁开双目。北面夜空，传来傀儡鸢的尖啸。"
+        }
+      ],
+      "release": [
+        "yanwuchang"
+      ],
+      "spawn": [
+        {
+          "character": "huiyuan",
+          "team": "enemy",
+          "x": 5,
+          "y": 0
+        },
+        {
+          "character": "huiyuan",
+          "team": "enemy",
+          "x": 16,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "battle",
+        "a": "yunheng",
+        "b": "yanwuchang"
+      },
+      "talk": [
+        {
+          "who": "yanwuchang",
+          "text": "剑骨都没了，还提着把断剑？你拿什么跟我斗？"
+        },
+        {
+          "who": "yunheng",
+          "text": "拿剑。剑骨没了，剑还在。"
+        },
+        {
+          "who": "剑灵",
+          "text": "说得好。就是声音抖了点。"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "battle",
+        "a": "linxuan",
+        "b": "yanwuchang"
+      },
+      "talk": [
+        {
+          "who": "linxuan",
+          "text": "太素剑阁的剑，斩的就是你这种东西！"
+        },
+        {
+          "who": "yanwuchang",
+          "text": "年轻人，嗓门大，可不等于剑快。"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "hpBelow",
+        "who": "yanwuchang",
+        "pct": 50
+      },
+      "talk": [
+        {
+          "who": "yanwuchang",
+          "text": "好、好！一群小崽子，把明王打成这样……"
+        },
+        {
+          "who": "yanwuchang",
+          "text": "明王，开第三臂！"
+        }
+      ],
+      "spirit": [
+        {
+          "who": "yanwuchang",
+          "id": "狂怒"
+        },
+        {
+          "who": "yanwuchang",
+          "id": "坚守"
+        }
+      ]
+    },
+    {
+      "when": {
+        "type": "clear"
+      },
+      "talk": [
+        {
+          "who": "旁白",
+          "text": "六臂明王轰然跪倒。偃无常捏碎遁符，化作一道青烟。"
+        },
+        {
+          "who": "yanwuchang",
+          "text": "云衡！厉长老会亲自来收你的骨头！"
+        },
+        {
+          "who": "suqinghan",
+          "text": "他掉了东西。……是本账册。"
+        },
+        {
+          "who": "suqinghan",
+          "text": "「剑骨一副，送镇岳天城，厉长老亲收。」地点：问剑峰。"
+        },
+        {
+          "who": "yunheng",
+          "text": "……问剑峰。三年了，他们还占着问剑峰。"
+        },
+        {
+          "who": "linxuan",
+          "text": "云衡。今晚的事，太素剑阁记下了。我跟你去问剑峰。"
+        },
+        {
+          "who": "yunheng",
+          "text": "林师兄不嫌我是废人了？"
+        },
+        {
+          "who": "linxuan",
+          "text": "废人是废人。剑……还算凑合。"
+        },
+        {
+          "who": "shipojun",
+          "text": "哈哈哈！又多一个！少主，咱们这是要重开宗门啊！"
+        }
+      ]
+    }
+  ]
+}

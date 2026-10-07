@@ -5,11 +5,13 @@ async function state(page: Page): Promise<DebugState> {
   return page.evaluate(() => window.__srpg!.getState());
 }
 
+/** Waits for one of the wanted states, clicking through any story dialogue that isn't wanted. */
 async function waitState(page: Page, wanted: string[], timeout = 20_000): Promise<DebugState> {
   try {
     await page.waitForFunction(
       (list) => {
         const st = window.__srpg?.getState().state;
+        if (st === 'dialogue' && !list.includes(st)) window.__srpg!.confirm();
         return st !== undefined && list.includes(st);
       },
       wanted,
@@ -19,6 +21,20 @@ async function waitState(page: Page, wanted: string[], timeout = 20_000): Promis
     const s = await state(page).catch(() => null);
     throw new Error(`${(e as Error).message}\nwanted ${wanted.join('|')}, state ${s?.state}\nhistory: ${s?.history.join(' ')}`);
   }
+  return state(page);
+}
+
+/** Waits until it is the player's turn `turn` (dialogue clicked through). */
+async function waitTurn(page: Page, turn: number, timeout = 90_000): Promise<DebugState> {
+  await page.waitForFunction(
+    (t) => {
+      const st = window.__srpg?.getState();
+      if (st?.state === 'dialogue') window.__srpg!.confirm();
+      return st?.turn === t && st.state === 'idle';
+    },
+    turn,
+    { timeout },
+  );
   return state(page);
 }
 
@@ -117,15 +133,7 @@ test('boots, moves a unit, undoes, and survives an enemy phase', async ({ page }
 
   await page.keyboard.press('KeyE');
   await page.waitForFunction(() => window.__srpg?.getState().phase === 'enemy', null, { timeout: 10_000 });
-  await page.waitForFunction(
-    () => {
-      const st = window.__srpg?.getState();
-      return st?.turn === 2 && st.state === 'idle';
-    },
-    null,
-    { timeout: 60_000 },
-  );
-  s = await state(page);
+  s = await waitTurn(page, 2, 60_000);
   expect(s.units.filter((u) => u.team === 'enemy').some((u) => u.x < 15)).toBe(true);
   await page.screenshot({ path: 'test-results/04-turn2.png' });
 
@@ -412,10 +420,83 @@ test('神通: menu, 神行 widens movement, effects show and expire next turn', 
   await page.evaluate(() => window.__srpg!.cancel());
   await waitState(page, ['idle']);
   await page.evaluate(() => window.__srpg!.endTurn());
-  await page.waitForFunction(() => window.__srpg?.getState().turn === 2 && window.__srpg?.getState().state === 'idle', null, { timeout: 90_000 });
+  await waitTurn(page, 2);
   // turn-long effects (破妄, 神行) expired; 身法 lasts until he is attacked
   const next = (await state(page)).units.find((u) => u.uid === me.uid)!.spirits;
   expect(next).not.toContain('破妄');
   expect(next).not.toContain('神行');
+  expect(errors).toEqual([]);
+});
+
+test('story: 第1话 opens with dialogue; clearing each stage leads on, keeps progress, and bosses end 第2话/第3话', async ({ page }) => {
+  test.setTimeout(300_000);
+  const errors = collectErrors(page);
+  await boot(page, 5);
+  await page.evaluate(() => window.__srpg!.setBattleAnim(false));
+
+  // opening conversation, then the objectives
+  let s = await waitState(page, ['dialogue']);
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: 'test-results/60-dialogue.png' });
+  await page.evaluate(() => window.__srpg!.cancel()); // skip the conversation
+  await page.waitForTimeout(400);
+  s = await waitState(page, ['dialogue', 'idle']);
+  if (s.state === 'dialogue') {
+    await page.screenshot({ path: 'test-results/61-objectives.png' });
+    await page.evaluate(() => window.__srpg!.cancel());
+  }
+  s = await waitState(page, ['idle']);
+  expect(s.scenario).toBe('s01');
+
+  const defeatAll = async (team: 'enemy' | 'player', filter: (u: DebugState['units'][number]) => boolean = () => true): Promise<void> => {
+    for (const u of (await state(page)).units.filter((x) => x.team === team && x.alive && filter(x))) {
+      const st = await waitState(page, ['idle', 'gameOver']);
+      if (st.state === 'gameOver') return;
+      await page.evaluate((uid) => window.__srpg!.defeat(uid), u.uid);
+    }
+  };
+
+  // 第1话: wipe the ambush -> clear dialogue -> stage complete
+  await defeatAll('enemy');
+  s = await waitState(page, ['gameOver'], 60_000);
+  expect(s.outcome).toBe('win');
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: 'test-results/62-stage-clear.png' });
+  await confirm(page);
+
+  // 第2话: 林玄 is already fighting; the boss holds until turn 3, when reinforcements come
+  s = await waitState(page, ['dialogue'], 30_000);
+  expect(s.scenario).toBe('s02');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('wjl.save') ?? '{}').scenarioId)).toBe('s02');
+  s = await waitState(page, ['idle'], 60_000);
+  await page.screenshot({ path: 'test-results/63-s02.png' });
+  expect(s.units.filter((u) => u.team === 'player').map((u) => u.unitId)).toContain('linxuan');
+  const boss = s.units.find((u) => u.unitId === 'mingwang')!;
+  const enemiesAtStart = s.units.filter((u) => u.team === 'enemy').length;
+  await page.evaluate(() => window.__srpg!.endTurn());
+  await waitTurn(page, 2);
+  const afterHold = (await state(page)).units.find((u) => u.uid === boss.uid)!;
+  expect([afterHold.x, afterHold.y]).toEqual([boss.x, boss.y]); // held its post
+  await page.evaluate(() => window.__srpg!.endTurn());
+  s = await waitTurn(page, 3);
+  expect(s.units.filter((u) => u.team === 'enemy').length).toBe(enemiesAtStart + 2);
+
+  await page.evaluate((uid) => window.__srpg!.defeat(uid), boss.uid);
+  s = await waitState(page, ['gameOver'], 60_000);
+  expect(s.outcome).toBe('win');
+  expect(s.units.filter((u) => u.team === 'enemy' && u.alive)).toHaveLength(0); // the rest withdrew
+  await confirm(page);
+
+  // 第3话 resumes from the save after a reload; losing 云衡 is a defeat
+  s = await waitState(page, ['idle'], 60_000);
+  expect(s.scenario).toBe('s03');
+  await page.reload();
+  s = await waitState(page, ['idle'], 60_000);
+  expect(s.scenario).toBe('s03');
+  await page.screenshot({ path: 'test-results/64-s03.png' });
+  expect(s.units.find((u) => u.unitId === 'tiancheng')).toBeTruthy();
+  await defeatAll('player', (u) => u.unitId === 'yunheng');
+  s = await waitState(page, ['gameOver'], 30_000);
+  expect(s.outcome).toBe('lose');
   expect(errors).toEqual([]);
 });

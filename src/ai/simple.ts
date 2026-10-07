@@ -19,6 +19,8 @@ export interface AiContext {
   actor: UnitState;
   /** Build a combatant view of a unit, optionally as if it stood at `at`. */
   combatant(u: UnitState, at?: Vec2): Combatant;
+  /** Stay on the current tile (a boss guarding its post); still attacks whatever is in range. */
+  hold?: boolean;
 }
 
 export interface AiAttack {
@@ -53,8 +55,8 @@ export function planAction(ctx: AiContext): AiPlan {
     moveTypes: def.moveTypes,
     blocked,
   });
-  const stops = stoppableTiles(reach, occupied, actor);
   const stay = { x: actor.x, y: actor.y };
+  const stops = ctx.hold ? [stay] : stoppableTiles(reach, occupied, actor);
 
   let best: { dest: Vec2; attack: AiAttack } | null = null;
   for (const dest of stops) {
@@ -79,7 +81,7 @@ export function planAction(ctx: AiContext): AiPlan {
   }
   if (best) return { dest: best.dest, path: pathTo(reach, best.dest), attack: best.attack };
 
-  if (foes.length === 0) return { dest: stay, path: [stay], attack: null };
+  if (foes.length === 0 || ctx.hold) return { dest: stay, path: [stay], attack: null };
   let bestDest = stay;
   let bestScore = Infinity;
   for (const dest of stops) {

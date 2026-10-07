@@ -78,7 +78,7 @@ export interface UnitDef {
   color: string;
   /** human 修士 / construct 机关傀儡 / beast 神兽妖兽: affects defeat text and presentation only. */
   species?: Species;
-  /** Faction or title shown under the name, e.g. 青云剑宗 / 天工宗傀儡. */
+  /** Faction or title shown under the name, e.g. 太素剑阁 / 天工宗傀儡. */
   title?: string;
 }
 
@@ -120,6 +120,10 @@ export interface UnitState {
   alive: boolean;
   /** Active 神通 effects (see core/spirit.ts). */
   spirit?: import('./spirit').SpiritState;
+  /** Stage boss: defeating every boss wins a `win: "boss"` stage. */
+  boss?: boolean;
+  /** Holds position (attacks only from where it stands) until damaged, released by an event, or this turn. */
+  hold?: boolean | number;
 }
 
 export interface GameMap {
@@ -141,6 +145,40 @@ export interface Deployment {
   team: Team;
   x: number;
   y: number;
+  /** Stage boss (see ScenarioDef.win). */
+  boss?: boolean;
+  /** Stay put until damaged / released; a number also releases at the start of that player turn. */
+  hold?: boolean | number;
+}
+
+/** One line of dialogue. `who` is a character id (name + portrait) or a literal name; 旁白 = narration. */
+export interface DialogueLine {
+  who: string;
+  text: string;
+}
+
+/**
+ * When a scenario event fires (each fires at most once). `who` matches a unit's body or
+ * cultivation id, so a boss riding a puppet can be named by either.
+ */
+export type EventTrigger =
+  | { type: 'start' }
+  | { type: 'turn'; turn: number }
+  | { type: 'defeated'; who: string }
+  | { type: 'hpBelow'; who: string; pct: number }
+  | { type: 'battle'; a: string; b: string }
+  | { type: 'clear' };
+
+export interface ScenarioEvent {
+  when: EventTrigger;
+  talk?: DialogueLine[];
+  /** Reinforcements, placed on the nearest free tile if the spot is taken. */
+  spawn?: Deployment[];
+  morale?: { who: string; add: number }[];
+  /** 神通 cast by the named unit (enemy bosses), if it can afford it. */
+  spirit?: { who: string; id: string }[];
+  /** Ends `hold` for the named units. */
+  release?: string[];
 }
 
 export interface ScenarioDef {
@@ -153,6 +191,15 @@ export interface ScenarioDef {
   /** One string per row, `width` glyphs each. */
   rows: string[];
   deploy: Deployment[];
-  win: 'annihilate';
-  lose: 'annihilate';
+  /** annihilate = defeat every enemy; boss = defeat every boss (annihilation also wins). */
+  win: 'annihilate' | 'boss';
+  /** annihilate = every player unit down; leader = any of `leaders` down (default 云衡). */
+  lose: 'annihilate' | 'leader';
+  leaders?: string[];
+  /** Objectives shown at the start, e.g. 击败偃无常. */
+  winText?: string;
+  loseText?: string;
+  /** Scenario that follows a clear; none = end of the current volume. */
+  next?: string;
+  events?: ScenarioEvent[];
 }

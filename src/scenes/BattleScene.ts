@@ -519,7 +519,9 @@ export class BattleScene extends Phaser.Scene {
 
     const tx = side === 'left' ? x + 38 : x + 6;
     this.add.text(tx, y + 4, `${s.def.name}`, TEXT_STYLE).setDepth(61);
-    const sub = s.def.species === 'human' || !s.def.species ? realmName(s.pilot.level) : (s.def.title ?? realmName(s.pilot.level));
+    // a 天工宗 elder riding a 镇宗傀儡 is named under the puppet
+    const rider = s.def.species && s.def.species !== 'human' && s.pilot.name !== s.def.name ? `${s.pilot.name} 驾驭` : null;
+    const sub = rider ?? (s.def.species === 'human' || !s.def.species ? realmName(s.pilot.level) : (s.def.title ?? realmName(s.pilot.level)));
     this.add.text(tx, y + 17, sub, { ...TEXT_STYLE, color: '#cfd8dc' }).setDepth(61);
     const hpBar = this.add.graphics().setDepth(61);
     const hpText = this.add.text(tx + 92, y + 28, '', TEXT_STYLE).setDepth(62);
