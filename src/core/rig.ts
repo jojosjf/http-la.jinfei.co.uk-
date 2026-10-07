@@ -183,12 +183,278 @@ function resolveName(name: string, w: 'l' | 'r', held: Partial<Record<'l' | 'r',
   return name;
 }
 
+/** Rig override, then the skeleton type's pose, then the generic library; unknown names fall back to idle. */
 export function getPose(rig: RigDef, name: string): RigPose {
-  return rig.poses?.[name] ?? POSE_LIBRARY[name] ?? POSE_LIBRARY.idle;
+  const found = rig.poses?.[name] ?? archetypePoses(rig)[name] ?? POSE_LIBRARY[name];
+  return found ?? (name === 'idle' ? POSE_LIBRARY.idle : getPose(rig, 'idle'));
 }
 
 export function poseNames(rig: RigDef): string[] {
-  return [...new Set([...Object.keys(POSE_LIBRARY), ...Object.keys(rig.poses ?? {})])];
+  return [...new Set([...Object.keys(POSE_LIBRARY), ...Object.keys(archetypePoses(rig)), ...Object.keys(rig.poses ?? {})])];
+}
+
+// ---------------------------------------------------------------- skeleton archetypes
+
+export type Archetype =
+  | 'humanoid'
+  | 'wheeled'
+  | 'sixarm'
+  | 'quadruped'
+  | 'serpent'
+  | 'floater'
+  | 'spider'
+  | 'bird'
+  | 'tripod'
+  | 'hexapod';
+
+/** Classify a rig by its part names (the 天工仙甲 naming scheme). */
+export function archetypeOf(rig: RigDef): Archetype {
+  const has = (id: string): boolean => rig.parts.some((p) => p.id === id);
+  if (has('segment_1')) return 'serpent';
+  if (has('front_upper_l')) return 'quadruped';
+  if (has('leg_8')) return 'spider';
+  if (has('leg_upper_6')) return 'hexapod';
+  if (has('leg_upper_3')) return 'tripod';
+  if (has('arm_top_l')) return 'sixarm';
+  if (has('wing_l') && has('talon_l')) return 'bird';
+  if (has('wheel_l')) return 'wheeled';
+  if ((has('thigh_l') || has('leg_l')) && has('upper_arm_l')) return 'humanoid';
+  return 'floater';
+}
+
+type Angles = Record<string, number>;
+interface Frame {
+  a: Angles;
+  dx?: number;
+  dy?: number;
+}
+
+/** A looping pose sampled from a periodic function of phase (0..2pi) at n even steps. */
+function cycle(duration: number, n: number, f: (ph: number) => Frame): RigPose {
+  const keys: RigKey[] = [];
+  for (let i = 0; i <= n; i++) {
+    const fr = f((i % n) * ((2 * Math.PI) / n));
+    keys.push({ t: i / n, a: fr.a, dx: fr.dx ?? 0, dy: fr.dy ?? 0 });
+  }
+  return { duration, loop: true, keys };
+}
+
+/** A one-shot pose from (t, frame) pairs; starts and ends at rest unless the frames say otherwise. */
+function shot(duration: number, frames: Array<[number, Frame]>): RigPose {
+  const keys: RigKey[] = [{ t: 0, a: {} }];
+  for (const [t, fr] of frames) keys.push({ t, a: fr.a, dx: fr.dx ?? 0, dy: fr.dy ?? 0 });
+  if (frames[frames.length - 1][0] < 1) keys.push({ t: 1, a: {} });
+  return { duration, loop: false, keys };
+}
+
+const ids = (rig: RigDef, re: RegExp): string[] => rig.parts.map((p) => p.id).filter((id) => re.test(id));
+const all = (list: string[], v: number): Angles => Object.fromEntries(list.map((id) => [id, v]));
+const merge = (...xs: Angles[]): Angles => Object.assign({}, ...xs);
+
+/** Chain from the root outwards (serpents): root's children first, following single links. */
+function chainFrom(rig: RigDef, re: RegExp): string[] {
+  const order: string[] = [];
+  const seen = new Set([rig.root]);
+  let frontier = [rig.root];
+  while (frontier.length) {
+    const next: string[] = [];
+    for (const id of frontier) {
+      for (const j of rig.joints) {
+        const other = j.a === id ? j.b : j.b === id ? j.a : null;
+        if (!other || seen.has(other)) continue;
+        seen.add(other);
+        next.push(other);
+        if (re.test(other)) order.push(other);
+      }
+    }
+    frontier = next;
+  }
+  return order;
+}
+
+function buildArchetypePoses(rig: RigDef): Record<string, RigPose> {
+  const kind = archetypeOf(rig);
+  switch (kind) {
+    case 'quadruped': {
+      const fl = ids(rig, /^front_upper_l$/);
+      const fr = ids(rig, /^front_upper_r$/);
+      const rl = ids(rig, /^rear_upper_l$/);
+      const rr = ids(rig, /^rear_upper_r$/);
+      const front = [...fl, ...fr];
+      const lowerF = ids(rig, /^front_lower_/);
+      const tail = ids(rig, /^tail/);
+      return {
+        idle: cycle(1.8, 6, (ph) => ({ a: merge({ head: 0.04 * Math.sin(ph), torso: 0.01 * Math.sin(ph) }, all(tail, 0.12 * Math.sin(ph))), dy: Math.sin(ph) > 0 ? 1 : 0 })),
+        walk: cycle(0.7, 8, (ph) => ({
+          a: merge(all([...fl, ...rr], 0.35 * Math.sin(ph)), all([...fr, ...rl], -0.35 * Math.sin(ph)), all(lowerF, 0.15 * Math.max(0, Math.sin(ph))), { head: 0.05 * Math.sin(2 * ph) }),
+          dy: -Math.abs(Math.sin(ph)) * 2,
+        })),
+        melee: shot(0.65, [
+          [0.35, { a: merge({ torso: -0.14, head: -0.2 }, all(front, -0.7), all(lowerF, 0.4), all(tail, -0.3)), dx: -3, dy: -2 }],
+          [0.6, { a: merge({ torso: 0.16, head: 0.28 }, all(front, 0.35), all(tail, 0.25)), dx: 7, dy: 2 }],
+          [0.85, { a: merge({ torso: 0.05, head: 0.1 }, all(front, 0.1)), dx: 2 }],
+        ]),
+        shoot: shot(0.6, [
+          [0.3, { a: merge({ torso: -0.08, head: -0.32 }, all(tail, 0.3)), dy: -1 }],
+          [0.7, { a: merge({ torso: -0.04, head: -0.22 }), dx: -2 }],
+        ]),
+        block: shot(0.3, [[1, { a: merge({ torso: 0.08, head: 0.2 }, all(front, 0.25)), dy: 3 }]]),
+        hit: shot(0.4, [[0.25, { a: merge({ torso: -0.18, head: -0.3 }, all(front, -0.3), all(tail, 0.4)), dx: -6, dy: -1 }]]),
+      };
+    }
+    case 'serpent': {
+      const chain = chainFrom(rig, /^(neck|segment_\d+|tail_root|tail_tip|tail)$/);
+      const wave = (ph: number, amp: number, k = 0.9): Angles => Object.fromEntries(chain.map((id, i) => [id, amp * Math.sin(ph - i * k)]));
+      const root = rig.root;
+      // The head is the root: turning it would swing the whole body. The first link turns back by
+      // most of the head's angle so the body stays level and only the head strikes / rears.
+      const head = (a: number, w: Angles): Angles => merge(w, { [root]: a }, chain[0] ? { [chain[0]]: (w[chain[0]] ?? 0) - a * 0.9 } : {});
+      return {
+        idle: cycle(2.0, 8, (ph) => ({ a: head(0.04 * Math.sin(ph), wave(ph, 0.1)), dy: 2 * Math.sin(ph) })),
+        walk: cycle(0.9, 8, (ph) => ({ a: head(0.06 * Math.sin(ph), wave(ph, 0.16)), dy: 2 * Math.sin(ph) })),
+        melee: shot(0.7, [
+          [0.35, { a: head(-0.22, wave(1, 0.22)), dx: -6, dy: -3 }],
+          [0.6, { a: head(0.3, wave(2.5, 0.14)), dx: 10, dy: 3 }],
+          [0.85, { a: head(0.1, wave(3.5, 0.08)), dx: 3 }],
+        ]),
+        shoot: shot(0.7, [
+          [0.3, { a: head(-0.3, wave(0.5, 0.12)), dy: -3 }],
+          [0.7, { a: head(-0.18, wave(2, 0.1)), dx: -3 }],
+        ]),
+        block: shot(0.35, [[1, { a: head(0.12, all(chain, 0.12)), dy: 2 }]]),
+        hit: shot(0.45, [[0.25, { a: head(-0.3, Object.fromEntries(chain.map((id, i) => [id, i % 2 ? 0.2 : -0.2]))), dx: -7 }]]),
+      };
+    }
+    case 'floater': {
+      const arms = ids(rig, /^(upper_arm_|arm_upper_)/);
+      const lowers = ids(rig, /^(forearm_hand_|arm_lower_)/);
+      const swing = ids(rig, /^(pendulum|tassel|chain_|staff)/);
+      const sideSign = (id: string): number => (rig.parts.find((p) => p.id === id)?.x ?? 0) >= 0 ? 1 : -1;
+      const armsOut = (v: number): Angles => Object.fromEntries(arms.map((id) => [id, v * sideSign(id)]));
+      return {
+        idle: cycle(2.4, 8, (ph) => ({ a: merge({ [rig.root]: 0.03 * Math.sin(ph) }, armsOut(0.08 * Math.sin(ph)), all(swing, 0.12 * Math.sin(ph + 1))), dy: -3 + 3 * Math.sin(ph) })),
+        walk: cycle(1.2, 8, (ph) => ({ a: merge({ [rig.root]: 0.06 }, all(swing, -0.2 + 0.1 * Math.sin(ph))), dy: -4 + 2 * Math.sin(ph) })),
+        melee: shot(0.65, [
+          [0.35, { a: merge({ [rig.root]: -0.08 }, all(arms, -0.9), all(lowers, -0.4), all(swing, 0.3)), dx: -3, dy: -6 }],
+          [0.6, { a: merge({ [rig.root]: 0.12 }, all(arms, -0.2), all(lowers, 0.3), all(swing, -0.4)), dx: 8, dy: -2 }],
+        ]),
+        shoot: shot(0.7, [
+          [0.3, { a: merge({ [rig.root]: -0.05 }, armsOut(-0.9), all(lowers, -0.3)), dy: -8 }],
+          [0.75, { a: merge({ [rig.root]: -0.03 }, armsOut(-1.0), all(lowers, -0.4)), dx: -2, dy: -8 }],
+        ]),
+        block: shot(0.3, [[1, { a: merge(armsOut(0.6), all(lowers, 0.8)), dy: 2 }]]),
+        hit: shot(0.45, [[0.25, { a: merge({ [rig.root]: -0.2 }, armsOut(0.5), all(swing, 0.5)), dx: -6, dy: -2 }]]),
+      };
+    }
+    case 'spider': {
+      const legs = ids(rig, /^leg_\d$/);
+      const x = (id: string): number => rig.parts.find((p) => p.id === id)?.x ?? 0;
+      const front = legs.filter((id) => x(id) > 0).sort((a, b) => x(b) - x(a)).slice(0, 2);
+      const odd = legs.filter((id) => Number(id.slice(4)) % 2 === 1);
+      const even = legs.filter((id) => Number(id.slice(4)) % 2 === 0);
+      return {
+        idle: cycle(1.4, 6, (ph) => ({ a: merge(all(odd, 0.04 * Math.sin(ph)), all(even, -0.04 * Math.sin(ph)), { mandible: 0.08 * Math.sin(2 * ph) }) })),
+        walk: cycle(0.5, 8, (ph) => ({ a: merge(all(odd, 0.25 * Math.sin(ph)), all(even, -0.25 * Math.sin(ph))), dy: -Math.abs(Math.sin(ph)) })),
+        melee: shot(0.6, [
+          [0.35, { a: merge({ [rig.root]: -0.18, head: -0.15 }, all(front, -0.8)), dx: -2, dy: -3 }],
+          [0.6, { a: merge({ [rig.root]: 0.12, head: 0.2, mandible: 0.3 }, all(front, 0.4)), dx: 8, dy: 1 }],
+        ]),
+        shoot: shot(0.6, [
+          [0.3, { a: merge({ [rig.root]: -0.12, injector: -0.4 }), dy: -2 }],
+          [0.7, { a: merge({ [rig.root]: -0.06, injector: -0.2 }), dx: -2 }],
+        ]),
+        block: shot(0.3, [[1, { a: merge(all(legs, 0.15)), dy: 3 }]]),
+        hit: shot(0.4, [[0.25, { a: merge({ [rig.root]: -0.2 }, all(odd, 0.3), all(even, -0.3)), dx: -6 }]]),
+      };
+    }
+    case 'bird': {
+      const flap = (v: number): Angles => ({ wing_l: v, wing_r: -v });
+      return {
+        idle: cycle(0.8, 8, (ph) => ({ a: merge(flap(0.3 * Math.sin(ph)), { tail: 0.08 * Math.sin(ph) }), dy: -2 * Math.sin(ph) })),
+        walk: cycle(0.5, 8, (ph) => ({ a: merge(flap(0.45 * Math.sin(ph)), { torso: 0.1 }), dy: -3 * Math.sin(ph) })),
+        melee: shot(0.65, [
+          [0.35, { a: merge(flap(0.7), { torso: -0.2, head: -0.1, leg_l: -0.4, leg_r: -0.4 }), dx: -4, dy: -10 }],
+          [0.6, { a: merge(flap(-0.3), { torso: 0.3, head: 0.2, leg_l: -0.9, leg_r: -0.9 }), dx: 10, dy: 4 }],
+        ]),
+        shoot: shot(0.7, [
+          [0.3, { a: merge(flap(0.5), { torso: -0.05 }), dy: -8 }],
+          [0.6, { a: merge(flap(-0.2), { torso: 0.05, bomb_pod_l: 0.3, bomb_pod_r: -0.3 }), dy: -6 }],
+        ]),
+        block: shot(0.3, [[1, { a: merge(flap(-0.6)), dy: 2 }]]),
+        hit: shot(0.45, [[0.25, { a: merge(flap(0.8), { torso: -0.25, head: -0.3 }), dx: -7, dy: -3 }]]),
+      };
+    }
+    case 'tripod':
+    case 'hexapod': {
+      const uppers = ids(rig, /^leg_upper_\d$/);
+      const lowers = ids(rig, /^leg_lower_\d$/);
+      const n = (id: string): number => Number(id.split('_').pop());
+      const A = uppers.filter((id) => n(id) % 2 === 1);
+      const B = uppers.filter((id) => n(id) % 2 === 0);
+      const x = (id: string): number => rig.parts.find((p) => p.id === id)?.x ?? 0;
+      const frontLeg = uppers.slice().sort((a, b) => x(b) - x(a))[0];
+      const heavy = kind === 'hexapod';
+      const cannons = ids(rig, /^(cannon_|bow_stock|bolt|loader_arm)/);
+      return {
+        idle: cycle(heavy ? 2.6 : 1.8, 6, (ph) => ({ a: { head: 0.03 * Math.sin(ph) }, dy: Math.sin(ph) > 0 ? 1 : 0 })),
+        walk: cycle(heavy ? 1.2 : 0.8, 8, (ph) => ({
+          a: merge(all(A, 0.2 * Math.sin(ph)), all(B, -0.2 * Math.sin(ph)), all(lowers, 0.08 * Math.sin(ph + 1))),
+          dy: -Math.abs(Math.sin(ph)) * (heavy ? 1 : 2),
+        })),
+        melee: shot(0.7, [
+          [0.35, { a: merge({ [rig.root]: -0.06 }, frontLeg ? { [frontLeg]: -0.7 } : {}), dx: -2, dy: -2 }],
+          [0.6, { a: merge({ [rig.root]: 0.06 }, frontLeg ? { [frontLeg]: 0.15 } : {}), dx: heavy ? 5 : 7, dy: 2 }],
+        ]),
+        shoot: shot(0.7, [
+          [0.3, { a: merge({ [rig.root]: -0.05 }, all(cannons, -0.12)) }],
+          [0.5, { a: merge({ [rig.root]: 0.02 }, all(cannons, 0.06)), dx: heavy ? -2 : -4 }],
+          [0.8, { a: merge({ [rig.root]: -0.02 }, all(cannons, -0.04)), dx: -1 }],
+        ]),
+        block: shot(0.3, [[1, { a: merge(all(uppers, 0.1), all(lowers, -0.1)), dy: 3 }]]),
+        hit: shot(0.45, [[0.25, { a: merge({ [rig.root]: -0.08, head: -0.2 }, all(uppers, -0.1)), dx: heavy ? -3 : -6 }]]),
+      };
+    }
+    case 'sixarm': {
+      return {
+        idle: cycle(2.2, 6, (ph) => ({
+          a: { arm_top_l: 0.05 * Math.sin(ph), arm_top_r: -0.05 * Math.sin(ph), arm_middle_l: 0.04 * Math.sin(ph + 1), arm_middle_r: -0.04 * Math.sin(ph + 1), halo: 0.03 * Math.sin(ph) },
+          dy: Math.sin(ph) > 0 ? 1 : 0,
+        })),
+        melee: shot(0.75, [
+          [0.35, { a: { torso: -0.08, arm_top_l: -0.5, arm_middle_l: -0.3, arm_top_r: 0.2 }, dx: -3 }],
+          [0.6, { a: { torso: 0.12, arm_top_l: 2.0, arm_middle_l: 1.2, arm_bottom_l: 0.6, arm_top_r: -0.2 }, dx: 6, dy: 2 }],
+          [0.85, { a: { torso: 0.05, arm_top_l: 1.2, arm_middle_l: 0.6 }, dx: 2 }],
+        ]),
+        shoot: shot(0.8, [
+          [0.25, { a: { arm_top_r: -0.35, halo: 0.2 }, dy: -2 }],
+          [0.45, { a: { arm_top_r: 0.25, halo: -0.2 } }],
+          [0.65, { a: { arm_top_r: -0.3, halo: 0.15 }, dx: -2 }],
+        ]),
+        block: shot(0.3, [[1, { a: { arm_middle_r: -0.5, arm_bottom_r: -0.3, torso: -0.04 }, dy: 2 }]]),
+        hit: shot(0.45, [[0.25, { a: { torso: -0.12, head: -0.15, arm_top_l: -0.3, arm_top_r: 0.3 }, dx: -5 }]]),
+      };
+    }
+    case 'wheeled': {
+      const wheels = ids(rig, /^wheel_[lr]$/);
+      return {
+        walk: cycle(0.6, 8, (ph) => ({ a: merge(all(wheels, ph), { torso: 0.08, upper_arm_l: -0.2, upper_arm_r: -0.2 }), dy: Math.sin(2 * ph) > 0 ? -1 : 0 })),
+      };
+    }
+    default:
+      return {};
+  }
+}
+
+const archetypeCache = new WeakMap<RigDef, Record<string, RigPose>>();
+
+/** Poses for the rig's skeleton type (humanoids use POSE_LIBRARY directly). Memoised per rig. */
+export function archetypePoses(rig: RigDef): Record<string, RigPose> {
+  let poses = archetypeCache.get(rig);
+  if (!poses) {
+    poses = buildArchetypePoses(rig);
+    archetypeCache.set(rig, poses);
+  }
+  return poses;
 }
 
 export interface PoseSample {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { heldParts, samplePose, solvePose, subtree, validateRig, weaponSide, type RigDef } from '../../src/core/rig';
+import { getPose, heldParts, samplePose, solvePose, subtree, validateRig, weaponSide, type RigDef } from '../../src/core/rig';
 
 /** Torso at the origin's top, an arm hanging from its right edge, a weapon in the hand. */
 function rig(): RigDef {
@@ -80,8 +80,9 @@ describe('poses', () => {
 
   it('loops looping poses and falls back to idle for unknown names', () => {
     const r = rig();
+    const period = getPose(r, 'idle').duration;
     const a = samplePose(r, 'idle', 0.4);
-    const b = samplePose(r, 'idle', 0.4 + 1.6);
+    const b = samplePose(r, 'idle', 0.4 + period);
     expect(b.dy).toBeCloseTo(a.dy);
     expect(samplePose(r, 'nope', 0.4)).toEqual(a);
   });

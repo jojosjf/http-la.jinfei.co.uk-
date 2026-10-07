@@ -23,7 +23,7 @@ pnpm e2e        # Playwright 自动试玩
 
 ## 导入机体美术
 
-当前美术是「天工仙甲」24 台拆件骨架机甲：`node tools/import-rig.mjs <原型目录> [id...]` 导入，`?view=dolls` 预览动作和击坠物理，`?view=battle&a=zhaoye&d=e_liaoya&w=guandao&kill=1` 预览战斗画面。24 台已全部导入；第 1 关为我方照夜、撼岳、飞燕对敌方血螳、黑垒、焚炉、锁魂。
+当前美术是「天工仙甲」24 台拆件骨架机甲：`node tools/import-rig.mjs <原型目录> [id...]` 导入，`?view=dolls` 预览动作和击坠物理，`?view=battle&a=zhaoye&d=e_liaoya&w=guandao&kill=1` 预览战斗画面。24 台已全部导入，都有骨架动作、击坠物理和数值；第 1 关为我方照夜、撼岳、飞燕对敌方血螳、黑垒、焚炉、锁魂。
 
 机体是布娃娃（分部件图层）。把 PNG + `doll.json` 放进 `public/mechs/<id>/` 并登记到 `public/mechs/index.json`，启动后访问 `?view=dolls` 预览。Aseprite 用户按 [docs/art-spec.md](docs/art-spec.md) 的约定导出，再跑 `node tools/aseprite-to-doll.mjs`。样例：`public/mechs/cangqiong/`。给外部美术或美术 AI 的交付说明：[docs/art-brief-for-chatgpt.md](docs/art-brief-for-chatgpt.md)。整帧精灵表用 `node tools/sheet-to-doll.mjs` 转换。
 

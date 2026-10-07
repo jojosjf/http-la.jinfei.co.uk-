@@ -296,7 +296,17 @@ export function convertMech(protoDir, id, opts = {}) {
   }
   const heldX = bodies.filter((b) => heldIds.has(b.id)).map((b) => b.x);
   // Mirror when the held item(s) sit on the left, so the weapon side faces forward (+x).
-  const mirror = heldX.length > 0 && heldX.reduce((a, v) => a + v, 0) / heldX.length < -1;
+  let mirror = heldX.length > 0 && heldX.reduce((a, v) => a + v, 0) / heldX.length < -1;
+  if (heldX.length === 0) {
+    // No hand-held weapon: face the head (or drill / beak) forward.
+    const rootBody = bodies.find((b) => b.id === 'torso') ?? bodies.slice().sort((a, b) => b.mass - a.mass)[0];
+    const lead = bodies.find((b) => b.id === 'head') ?? bodies.find((b) => b.id === 'drill') ?? bodies.find((b) => b.id === 'beak');
+    if (lead && rootBody && lead !== rootBody) mirror = lead.x < rootBody.x - 4;
+    else if (lead) {
+      const tail = bodies.find((b) => /^tail/.test(b.id));
+      mirror = tail ? lead.x < tail.x : false;
+    }
+  }
   const sx = mirror ? -1 : 1;
 
   const images = [];

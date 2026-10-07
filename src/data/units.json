@@ -358,5 +358,474 @@
     "money": 3200,
     "exp": 32,
     "color": "#7a5aa8"
+  },
+  "xuanlei": {
+    "id": "xuanlei",
+    "name": "玄垒",
+    "hp": 7000,
+    "en": 140,
+    "armor": 1700,
+    "mobility": 55,
+    "limit": 240,
+    "move": 4,
+    "size": "L",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "A",
+      "space": "B"
+    },
+    "weapons": [
+      "xuanwu_dunji",
+      "guijia_chong"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#2f6b5e"
+  },
+  "liuxian": {
+    "id": "liuxian",
+    "name": "流弦",
+    "hp": 3400,
+    "en": 120,
+    "armor": 800,
+    "mobility": 120,
+    "limit": 340,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "liuxing_jian",
+      "yuegong_she",
+      "gong_shao"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#9a7fd0"
+  },
+  "qinghe": {
+    "id": "qinghe",
+    "name": "青禾",
+    "hp": 3000,
+    "en": 180,
+    "armor": 700,
+    "mobility": 115,
+    "limit": 320,
+    "move": 5,
+    "size": "S",
+    "moveTypes": [
+      "air",
+      "land"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "yuhu_ling",
+      "qingyu_zhang"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#9fd8b0"
+  },
+  "chilun": {
+    "id": "chilun",
+    "name": "赤轮",
+    "hp": 3300,
+    "en": 110,
+    "armor": 820,
+    "mobility": 130,
+    "limit": 350,
+    "move": 8,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "weapons": [
+      "chilun_qiang",
+      "xuanfeng_tu"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#d84a3c"
+  },
+  "leigu": {
+    "id": "leigu",
+    "name": "雷鼓",
+    "hp": 5600,
+    "en": 150,
+    "armor": 1300,
+    "mobility": 60,
+    "limit": 250,
+    "move": 4,
+    "size": "L",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "weapons": [
+      "leigu_pao",
+      "zhengu_quan"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#3a5bb0"
+  },
+  "baize": {
+    "id": "baize",
+    "name": "白泽",
+    "hp": 4800,
+    "en": 130,
+    "armor": 1000,
+    "mobility": 100,
+    "limit": 300,
+    "move": 7,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "weapons": [
+      "lingjiao_chuang",
+      "ruiguang_xi"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#d9e6d2"
+  },
+  "qianlin": {
+    "id": "qianlin",
+    "name": "潜鳞",
+    "hp": 4200,
+    "en": 130,
+    "armor": 950,
+    "mobility": 105,
+    "limit": 310,
+    "move": 6,
+    "size": "M",
+    "moveTypes": [
+      "sea",
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "B",
+      "sea": "A",
+      "space": "B"
+    },
+    "weapons": [
+      "linwei_jiao",
+      "shuijian"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#2fb8c0"
+  },
+  "tianshu": {
+    "id": "tianshu",
+    "name": "天枢",
+    "hp": 3800,
+    "en": 200,
+    "armor": 850,
+    "mobility": 95,
+    "limit": 300,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "air",
+      "land"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "xingui_bo",
+      "tianxuan_zhao"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#a06ad0"
+  },
+  "tieliao": {
+    "id": "tieliao",
+    "name": "铁獠",
+    "hp": 4200,
+    "en": 110,
+    "armor": 1100,
+    "mobility": 80,
+    "limit": 260,
+    "move": 6,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "weapons": [
+      "liaoya_tu",
+      "tiejia_chong"
+    ],
+    "money": 4000,
+    "exp": 40,
+    "color": "#b0552a"
+  },
+  "guideng": {
+    "id": "guideng",
+    "name": "鬼灯",
+    "hp": 3200,
+    "en": 150,
+    "armor": 780,
+    "mobility": 105,
+    "limit": 300,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "air",
+      "land"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "youhuo",
+      "suolian_zhua"
+    ],
+    "money": 3800,
+    "exp": 38,
+    "color": "#b090d8"
+  },
+  "duzhu": {
+    "id": "duzhu",
+    "name": "毒蛛",
+    "hp": 3300,
+    "en": 110,
+    "armor": 900,
+    "mobility": 95,
+    "limit": 280,
+    "move": 5,
+    "size": "S",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "weapons": [
+      "duzhen",
+      "zhuzu_ci"
+    ],
+    "money": 3500,
+    "exp": 35,
+    "color": "#3f8a3a"
+  },
+  "huiyuan": {
+    "id": "huiyuan",
+    "name": "灰鸢",
+    "hp": 3400,
+    "en": 110,
+    "armor": 820,
+    "mobility": 115,
+    "limit": 320,
+    "move": 7,
+    "size": "M",
+    "moveTypes": [
+      "air"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "C",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "fengdan",
+      "yuanzhua"
+    ],
+    "money": 3600,
+    "exp": 36,
+    "color": "#8a8f98"
+  },
+  "liedi": {
+    "id": "liedi",
+    "name": "裂地",
+    "hp": 4600,
+    "en": 120,
+    "armor": 1200,
+    "mobility": 60,
+    "limit": 240,
+    "move": 4,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "D",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "weapons": [
+      "liedi_zuan",
+      "posui_shi"
+    ],
+    "money": 4200,
+    "exp": 42,
+    "color": "#b08a3a"
+  },
+  "chuanyun": {
+    "id": "chuanyun",
+    "name": "穿云",
+    "hp": 3600,
+    "en": 140,
+    "armor": 900,
+    "mobility": 70,
+    "limit": 280,
+    "move": 4,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "weapons": [
+      "chuanyun_nu",
+      "sanzu_ta"
+    ],
+    "money": 4400,
+    "exp": 44,
+    "color": "#3a4a7a"
+  },
+  "mingwang": {
+    "id": "mingwang",
+    "name": "六臂明王",
+    "hp": 22000,
+    "en": 250,
+    "armor": 1700,
+    "mobility": 90,
+    "limit": 300,
+    "move": 4,
+    "size": "LL",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "jingang_chui",
+      "mingwang_ji",
+      "fanzhong_yin",
+      "liubi_luanwu"
+    ],
+    "money": 30000,
+    "exp": 300,
+    "color": "#c08a30"
+  },
+  "tiancheng": {
+    "id": "tiancheng",
+    "name": "镇岳天城",
+    "hp": 32000,
+    "en": 300,
+    "armor": 2200,
+    "mobility": 40,
+    "limit": 240,
+    "move": 3,
+    "size": "LL",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "weapons": [
+      "tiancheng_pao",
+      "zhenyue_ta",
+      "taotie_fangshe"
+    ],
+    "money": 40000,
+    "exp": 400,
+    "color": "#6a5a3a"
+  },
+  "zhulong": {
+    "id": "zhulong",
+    "name": "烛龙天机",
+    "hp": 26000,
+    "en": 280,
+    "armor": 1500,
+    "mobility": 110,
+    "limit": 320,
+    "move": 6,
+    "size": "LL",
+    "moveTypes": [
+      "air",
+      "land"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "A",
+      "space": "A"
+    },
+    "weapons": [
+      "zhulong_zhao",
+      "longzhu_guang",
+      "tianhuo_fenshi"
+    ],
+    "money": 45000,
+    "exp": 450,
+    "color": "#e0c070"
   }
 }

@@ -258,3 +258,46 @@ test('battle demo: 照夜 vs 血螳 — slash kill, counter exchange, 照夜 des
   await page.screenshot({ path: 'test-results/23-demo-zhaoye-destroyed.png' });
   expect(errors).toEqual([]);
 });
+
+test('every imported mech poses without errors (screenshots per pose)', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors = collectErrors(page);
+  await page.goto('/?view=dolls');
+  await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
+  const ids = await page.evaluate(() => window.__dolls!.ids.filter((id) => id !== 'cangqiong'));
+  expect(ids.length).toBe(24);
+  for (const id of ids) {
+    await page.evaluate((x) => window.__dolls!.select(x), id);
+    expect(await page.evaluate(() => window.__dolls!.current().kind)).toBe('rig');
+    for (const [pose, at] of [
+      ['melee', 230],
+      ['melee', 390],
+      ['shoot', 330],
+    ] as const) {
+      await page.evaluate((p) => window.__dolls!.setPose(p), pose);
+      await page.waitForTimeout(at);
+      await page.screenshot({ path: `test-results/poses/${id}-${pose}-${at}.png`, clip: { x: 0, y: 120, width: 560, height: 380 } });
+    }
+  }
+  expect(errors).toEqual([]);
+});
+
+test('non-humanoid mechs fight on the battle screen', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = collectErrors(page);
+  const bouts: Array<[string, string]> = [
+    ['/?view=battle&a=baize&d=tieliao&kill=1', '24-baize-vs-tieliao'],
+    ['/?view=battle&a=zhaoye&d=zhulong&w=lingguang', '25-zhaoye-vs-zhulong'],
+    ['/?view=battle&a=huiyuan&ateam=enemy&d=duzhu&kill=1', '26-huiyuan-vs-duzhu'],
+    ['/?view=battle&a=tiancheng&ateam=enemy&d=qianlin&dteam=player&w=tiancheng_pao', '27-tiancheng-vs-qianlin'],
+  ];
+  for (const [url, name] of bouts) {
+    await page.goto(url);
+    await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
+    await page.waitForTimeout(1050);
+    await page.screenshot({ path: `test-results/${name}-a.png` });
+    await page.waitForTimeout(2300);
+    await page.screenshot({ path: `test-results/${name}-b.png` });
+  }
+  expect(errors).toEqual([]);
+});
