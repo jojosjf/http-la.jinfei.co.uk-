@@ -670,18 +670,33 @@ export class BattleScene extends Phaser.Scene {
         g.fillTriangle(0, GROUND_Y, 160, 140, 320, GROUND_Y);
         break;
       case 'city':
+        // 坊市: far rooftops, then white-walled shops with upturned eaves and red lanterns
         g.fillStyle(far, 1);
-        for (let x = 0; x < GAME_WIDTH; x += 34) {
-          const h = 40 + ((x * 7) % 50);
-          g.fillRect(x, GROUND_Y - h, 26, h);
+        for (let x = -10; x < GAME_WIDTH; x += 38) {
+          const h = 30 + ((x * 7) % 26);
+          g.fillRect(x + 4, GROUND_Y - h, 28, h);
+          this.eaveRoof(g, x + 18, GROUND_Y - h, 40, 8, far);
         }
-        g.fillStyle(0x5a6a94, 1);
-        for (let x = 10; x < GAME_WIDTH; x += 46) {
-          const h = 24 + ((x * 5) % 30);
-          g.fillRect(x, GROUND_Y - h, 30, h);
-          g.fillStyle(0xffe38f, 1);
-          for (let wy = GROUND_Y - h + 4; wy < GROUND_Y - 4; wy += 6) g.fillRect(x + 4, wy, 2, 2);
-          g.fillStyle(0x5a6a94, 1);
+        for (let x = 6; x < GAME_WIDTH; x += 58) {
+          const h = 22 + ((x * 5) % 14);
+          const top = GROUND_Y - h;
+          g.fillStyle(0xe6e1d4, 1);
+          g.fillRect(x, top, 40, h);
+          g.fillStyle(0xb9b2a2, 1);
+          g.fillRect(x, top, 40, 3);
+          g.fillStyle(0xa8322b, 1);
+          g.fillRect(x + 2, top, 3, h);
+          g.fillRect(x + 35, top, 3, h);
+          g.fillStyle(0x6b2a22, 1);
+          g.fillRect(x + 15, GROUND_Y - 14, 10, 14);
+          g.fillStyle(0x7a5a3a, 1);
+          g.fillRect(x + 8, top + 6, 5, 5);
+          g.fillRect(x + 27, top + 6, 5, 5);
+          this.eaveRoof(g, x + 20, top, 54, 10, 0x3b4150);
+          g.fillStyle(0xe8453a, 1);
+          g.fillRect(x + 1, top + 4, 4, 5);
+          g.fillStyle(0xffd27a, 1);
+          g.fillRect(x + 2, top + 6, 2, 1);
         }
         break;
       case 'forest':
@@ -691,16 +706,50 @@ export class BattleScene extends Phaser.Scene {
         for (let x = 0; x < GAME_WIDTH + 10; x += 26) g.fillCircle(x, GROUND_Y - 4, 14);
         break;
       case 'base':
-        g.fillStyle(0x7f8c7c, 1);
-        g.fillRect(40, GROUND_Y - 44, 140, 44);
-        g.fillRect(300, GROUND_Y - 36, 120, 36);
-        g.fillStyle(0x97a593, 1);
-        for (let x = 44; x < 180; x += 6) g.fillRect(x, GROUND_Y - 44, 2, 12);
-        g.fillStyle(0x5f6b5d, 1);
-        g.fillRect(230, GROUND_Y - 70, 14, 70);
-        g.fillRect(218, GROUND_Y - 78, 38, 12);
-        g.fillStyle(0xd84a3c, 1);
-        g.fillRect(236, GROUND_Y - 84, 2, 6);
+        // 山门: misty peaks, a pagoda on the ridge, stone steps up to a 牌坊 gate
+        g.fillStyle(0x7d93b8, 1);
+        g.fillTriangle(-40, GROUND_Y, 70, 96, 190, GROUND_Y);
+        g.fillTriangle(300, GROUND_Y, 420, 84, 540, GROUND_Y);
+        g.fillStyle(0x92a8c8, 1);
+        g.fillTriangle(120, GROUND_Y, 250, 120, 380, GROUND_Y);
+        g.fillStyle(0xdfe8f2, 0.7);
+        g.fillRect(0, GROUND_Y - 46, GAME_WIDTH, 6);
+        g.fillRect(40, GROUND_Y - 40, 180, 4);
+        // pagoda
+        g.fillStyle(0x51596c, 1);
+        for (let i = 0; i < 5; i++) {
+          const w = 14 - i * 2;
+          const y = 160 - i * 13;
+          g.fillRect(420 - w / 2, y - 9, w, 9);
+          this.eaveRoof(g, 420, y - 9, w + 12, 5, 0x3b4150);
+        }
+        g.fillRect(419, 92, 2, 8);
+        // steps
+        g.fillStyle(0xa6a196, 1);
+        for (let i = 0; i < 4; i++) g.fillRect(170 + i * 6, GROUND_Y - 8 + i * 2, 140 - i * 12, 2);
+        // 牌坊: three bays, four stone pillars, a raised centre roof over a gilt plaque
+        for (const px of [176, 214, 262, 300]) {
+          g.fillStyle(0x6f6b62, 1);
+          g.fillRect(px + 2, GROUND_Y - 58, 4, 58);
+          g.fillStyle(0x9a958a, 1);
+          g.fillRect(px, GROUND_Y - 58, 4, 58);
+          g.fillRect(px - 2, GROUND_Y - 6, 10, 6);
+        }
+        g.fillStyle(0x8a857a, 1);
+        g.fillRect(176, GROUND_Y - 50, 130, 4);
+        g.fillRect(214, GROUND_Y - 64, 54, 6);
+        g.fillStyle(0x2c3346, 1);
+        g.fillRect(224, GROUND_Y - 80, 34, 16);
+        g.fillStyle(0xd9b44a, 1);
+        g.fillRect(226, GROUND_Y - 78, 30, 12);
+        g.fillStyle(0x2c3346, 1);
+        g.fillRect(233, GROUND_Y - 74, 5, 5);
+        g.fillRect(244, GROUND_Y - 74, 5, 5);
+        this.eaveRoof(g, 194, GROUND_Y - 50, 52, 8, 0x2f3646);
+        this.eaveRoof(g, 287, GROUND_Y - 50, 52, 8, 0x2f3646);
+        this.eaveRoof(g, 241, GROUND_Y - 80, 74, 11, 0x2f3646);
+        g.fillStyle(0xd9b44a, 1);
+        g.fillRect(238, GROUND_Y - 93, 6, 2);
         break;
       case 'sea':
       case 'river':
@@ -719,12 +768,36 @@ export class BattleScene extends Phaser.Scene {
 
     // ground plane
     const water = terrain.domain === 'sea';
+    if (!water && (terrain.id === 'city' || terrain.id === 'base')) {
+      // flagstones
+      g.fillStyle(0xa6a196, 1);
+      g.fillRect(0, GROUND_Y, GAME_WIDTH, GAME_HEIGHT - GROUND_Y);
+      g.fillStyle(0x7d786d, 1);
+      g.fillRect(0, GROUND_Y, GAME_WIDTH, 2);
+      for (let y = GROUND_Y + 10, row = 0; y < GAME_HEIGHT; y += 12, row++) {
+        g.fillRect(0, y, GAME_WIDTH, 1);
+        for (let x = (row % 2) * 14; x < GAME_WIDTH; x += 28) g.fillRect(x, y - 11, 1, 11);
+      }
+      return;
+    }
     g.fillStyle(water ? 0x3b7bc4 : 0x5f9c3b, 1);
     g.fillRect(0, GROUND_Y, GAME_WIDTH, GAME_HEIGHT - GROUND_Y);
     g.fillStyle(water ? 0x2f68ad : 0x497f2e, 1);
     g.fillRect(0, GROUND_Y, GAME_WIDTH, 2);
     g.fillStyle(water ? 0x86bdeb : 0x80bb52, 0.8);
     for (let i = 0; i < 40; i++) g.fillRect(Phaser.Math.Between(0, GAME_WIDTH), Phaser.Math.Between(GROUND_Y + 4, GAME_HEIGHT - 2), 3, 1);
+  }
+
+  /** A Chinese roof: a flat ridge with eaves that sweep up at both tips; (cx, baseY) is the eave line. */
+  private eaveRoof(g: Phaser.GameObjects.Graphics, cx: number, baseY: number, w: number, h: number, color: number): void {
+    const half = w / 2;
+    g.fillStyle(color, 1);
+    g.fillRect(cx - half + 4, baseY - h + 2, w - 8, h - 2);
+    g.fillRect(cx - half * 0.55, baseY - h, w * 0.55, 2);
+    g.fillTriangle(cx - half, baseY - 4, cx - half + 8, baseY - h + 2, cx - half + 8, baseY);
+    g.fillTriangle(cx + half, baseY - 4, cx + half - 8, baseY - h + 2, cx + half - 8, baseY);
+    g.fillStyle(0x000000, 0.25);
+    g.fillRect(cx - half + 6, baseY - 1, w - 12, 1);
   }
 
   // ------------------------------------------------------------------ helpers

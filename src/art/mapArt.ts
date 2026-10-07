@@ -271,27 +271,35 @@ class MapPainter {
     }
   }
 
+  /** 坊市 ground: grey brick paving with offset courses. */
   private cityBase(ox: number, oy: number): void {
     const ctx = this.ctx;
-    rect(ctx, ox, oy, TILE, TILE, PAL.city.asphalt);
-    rect(ctx, ox, oy, TILE, 3, PAL.city.sidewalk);
-    rect(ctx, ox, oy + TILE - 3, TILE, 3, PAL.city.sidewalk);
-    rect(ctx, ox, oy, 3, TILE, PAL.city.sidewalk);
-    rect(ctx, ox + TILE - 3, oy, 3, TILE, PAL.city.sidewalk);
-    rect(ctx, ox + 3, oy + 3, TILE - 6, 1, PAL.city.sidewalkDark);
-    rect(ctx, ox + 3, oy + 3, 1, TILE - 6, PAL.city.sidewalkDark);
-    rect(ctx, ox + 3, oy + TILE - 4, TILE - 6, 1, PAL.city.asphaltDark);
-    rect(ctx, ox + TILE - 4, oy + 3, 1, TILE - 6, PAL.city.asphaltDark);
+    rect(ctx, ox, oy, TILE, TILE, PAL.city.paving);
+    for (let row = 0; row < TILE; row += 4) {
+      rect(ctx, ox, oy + row, TILE, 1, PAL.city.pavingDark);
+      const off = (row / 4) % 2 ? 4 : 0;
+      for (let col = off; col < TILE; col += 8) rect(ctx, ox + col, oy + row, 1, 4, PAL.city.pavingDark);
+      rect(ctx, ox, oy + row + 1, TILE, 1, PAL.city.pavingLight);
+    }
   }
 
+  /** 山门 ground: large flagstones with dark joints. */
   private baseConcrete(ox: number, oy: number): void {
     const ctx = this.ctx;
-    rect(ctx, ox, oy, TILE, TILE, PAL.base.concrete);
-    for (let k = 0; k < TILE; k += 8) {
-      rect(ctx, ox + k, oy, 1, TILE, PAL.base.concreteDark);
-      rect(ctx, ox, oy + k, TILE, 1, PAL.base.concreteDark);
-      rect(ctx, ox + k + 1, oy, 1, TILE, PAL.base.line);
-      rect(ctx, ox, oy + k + 1, TILE, 1, PAL.base.line);
+    rect(ctx, ox, oy, TILE, TILE, PAL.base.stone);
+    for (const [x, y, w, h] of [
+      [0, 0, 15, 11],
+      [16, 0, 16, 7],
+      [16, 8, 16, 9],
+      [0, 12, 10, 10],
+      [11, 12, 4, 10],
+      [0, 23, 18, 9],
+      [16, 18, 16, 6],
+      [19, 25, 13, 7],
+    ] as const) {
+      rect(ctx, ox + x, oy + y, w, 1, PAL.base.stoneLight);
+      rect(ctx, ox + x + w - 1, oy + y, 1, h, PAL.base.joint);
+      rect(ctx, ox + x, oy + y + h - 1, w, 1, PAL.base.joint);
     }
   }
 
@@ -412,79 +420,117 @@ class MapPainter {
     }
   }
 
+  /** 坊市: two small houses with white walls, dark tiled roofs with upturned eaves, red doors. */
   private buildings(ox: number, oy: number, rng: Rng): void {
-    const bottom = oy + TILE - 5;
-    const specs = [
-      { bx: ox + 5, w: 10, h: ri(rng, 12, 20) },
-      { bx: ox + 18, w: 10, h: ri(rng, 10, 22) },
-    ];
-    for (const s of specs) {
-      const idx = ri(rng, 0, PAL.city.wall.length - 1);
-      this.building(s.bx, bottom, s.w, s.h, PAL.city.wall[idx], PAL.city.wallShade[idx], rng);
-    }
+    const bottom = oy + TILE - 3;
+    const tall = rng() < 0.5;
+    this.house(ox + 2, bottom, 13, tall ? 13 : 10, rng);
+    this.house(ox + 17, bottom - (tall ? 0 : 2), 13, tall ? 10 : 14, rng);
   }
 
-  private building(bx: number, bottom: number, w: number, h: number, wall: string, shade: string, rng: Rng): void {
+  private house(bx: number, bottom: number, w: number, h: number, rng: Rng): void {
     const ctx = this.ctx;
     const top = bottom - h;
-    rect(ctx, bx + 2, top + 2, w, h, PAL.shadow);
-    rect(ctx, bx - 1, top - 1, w + 2, h + 2, PAL.outline);
-    rect(ctx, bx, top, w, h, wall);
-    rect(ctx, bx + w - 2, top, 2, h, shade);
-    rect(ctx, bx, top, w, 2, rng() < 0.3 ? PAL.city.roofAlt : PAL.city.roof);
-    for (let wy = top + 4; wy < bottom - 4; wy += 3) {
-      for (let wx = bx + 2; wx < bx + w - 3; wx += 3) {
-        rect(ctx, wx, wy, 1, 2, rng() < 0.55 ? PAL.city.winLit : PAL.city.winDark);
-      }
+    const i = ri(rng, 0, PAL.city.wall.length - 1);
+    rect(ctx, bx + 2, top + 3, w, h - 1, PAL.shadow);
+    // walls
+    rect(ctx, bx - 1, top + 3, w + 2, h - 2, PAL.outline);
+    rect(ctx, bx, top + 4, w, h - 4, PAL.city.wall[i]);
+    rect(ctx, bx + w - 2, top + 4, 2, h - 4, PAL.city.wallShade[i]);
+    // red pillars and door
+    rect(ctx, bx + 1, top + 5, 1, h - 6, PAL.city.pillar);
+    rect(ctx, bx + w - 3, top + 5, 1, h - 6, PAL.city.pillar);
+    rect(ctx, bx + Math.floor(w / 2) - 2, bottom - 5, 4, 5, PAL.city.door);
+    rect(ctx, bx + Math.floor(w / 2) - 2, bottom - 5, 4, 1, PAL.city.lattice);
+    if (h >= 12) rect(ctx, bx + 3, top + 6, 3, 2, PAL.city.lattice);
+    // roof with upturned eaves
+    rect(ctx, bx - 2, top, w + 4, 4, PAL.outline);
+    rect(ctx, bx - 1, top + 1, w + 2, 2, PAL.city.roof);
+    rect(ctx, bx, top - 1, w, 2, PAL.outline);
+    rect(ctx, bx + 1, top, w - 2, 1, PAL.city.roofLight);
+    px(ctx, bx - 3, top - 1, PAL.outline);
+    px(ctx, bx + w + 2, top - 1, PAL.outline);
+    px(ctx, bx - 2, top, PAL.city.roofDark);
+    px(ctx, bx + w + 1, top, PAL.city.roofDark);
+    rect(ctx, bx, top + 3, w, 1, PAL.city.roofDark);
+    // lantern
+    if (rng() < 0.6) {
+      const lx = bx + (rng() < 0.5 ? 2 : w - 3);
+      rect(ctx, lx, top + 4, 1, 1, PAL.outline);
+      rect(ctx, lx - 1, top + 5, 3, 3, PAL.city.lantern);
+      px(ctx, lx, top + 6, PAL.city.lanternGlow);
     }
-    rect(ctx, bx + Math.floor(w / 2) - 1, bottom - 3, 2, 3, PAL.city.door);
-    if (h >= 18) rect(ctx, bx + 2, top - 4, 1, 4, PAL.outline);
   }
 
+  /** 山门 grounds: a 牌坊 gate and a glowing 阵法台 altar alternate, ringed by a stone balustrade. */
   private baseProps(x: number, y: number, ox: number, oy: number): void {
-    const ctx = this.ctx;
     const bm = neighborMask(this.map, x, y, isBase, true);
-    for (const [dir, draw] of [
-      [N, (): void => this.hazardStrip(ox, oy, TILE, 1, true)],
-      [S, (): void => this.hazardStrip(ox, oy + TILE - 1, TILE, 1, true)],
-      [W, (): void => this.hazardStrip(ox, oy, 1, TILE, false)],
-      [E, (): void => this.hazardStrip(ox + TILE - 1, oy, 1, TILE, false)],
-    ] as const) {
-      if (!(bm & dir)) draw();
-    }
-    if ((x + y) % 2 === 0) {
-      const hx = ox + 3;
-      const hy = oy + 6;
-      const hw = 26;
-      const hh = 21;
-      rect(ctx, hx + 2, hy + 2, hw, hh, PAL.shadow);
-      rect(ctx, hx - 1, hy - 1, hw + 2, hh + 2, PAL.outline);
-      rect(ctx, hx, hy, hw, hh, PAL.base.hangar);
-      for (let k = 0; k < hw; k += 2) rect(ctx, hx + k, hy, 1, 7, k % 4 === 0 ? PAL.base.hangarLight : PAL.base.hangarDark);
-      rect(ctx, hx, hy + 7, hw, 1, PAL.outline);
-      rect(ctx, hx + hw - 3, hy + 8, 3, hh - 8, PAL.base.hangarDark);
-      rect(ctx, hx + 7, hy + 9, 12, 1, PAL.base.hazard);
-      rect(ctx, hx + 7, hy + 10, 12, 11, PAL.base.door);
-      rect(ctx, hx + 13, hy + 10, 1, 11, PAL.base.hangarDark);
-      px(ctx, hx + 1, hy + 1, PAL.base.red);
-    } else {
-      const cx = ox + TILE / 2;
-      const cy = oy + TILE / 2;
-      disc(ctx, cx, cy, 11, PAL.base.padRing);
-      disc(ctx, cx, cy, 10, PAL.base.pad);
-      rect(ctx, cx - 6, cy - 6, 3, 13, PAL.base.padH);
-      rect(ctx, cx + 3, cy - 6, 3, 13, PAL.base.padH);
-      rect(ctx, cx - 3, cy - 1, 6, 3, PAL.base.padH);
-    }
+    if (!(bm & N)) this.balustrade(ox, oy, TILE, true);
+    if (!(bm & S)) this.balustrade(ox, oy + TILE - 3, TILE, true);
+    if (!(bm & W)) this.balustrade(ox, oy, TILE, false);
+    if (!(bm & E)) this.balustrade(ox + TILE - 3, oy, TILE, false);
+    if ((x + y) % 2 === 0) this.paifang(ox, oy);
+    else this.altar(ox, oy);
   }
 
-  private hazardStrip(x: number, y: number, w: number, h: number, horizontal: boolean): void {
+  private paifang(ox: number, oy: number): void {
     const ctx = this.ctx;
-    rect(ctx, x, y, w, h, PAL.base.hazardDark);
-    const len = horizontal ? w : h;
-    for (let k = 0; k < len; k += 6) {
-      if (horizontal) rect(ctx, x + k, y, 3, h, PAL.base.hazard);
-      else rect(ctx, x, y + k, w, 3, PAL.base.hazard);
+    const l = ox + 6;
+    const r = ox + 24;
+    const top = oy + 8;
+    const bottom = oy + 28;
+    rect(ctx, l + 2, top + 4, 2, bottom - top - 2, PAL.shadow);
+    rect(ctx, r + 2, top + 4, 2, bottom - top - 2, PAL.shadow);
+    for (const cx of [l, r]) {
+      rect(ctx, cx - 1, top + 2, 4, bottom - top - 2, PAL.outline);
+      rect(ctx, cx, top + 3, 2, bottom - top - 4, PAL.base.pillar);
+      rect(ctx, cx + 1, top + 3, 1, bottom - top - 4, PAL.base.pillarDark);
+      rect(ctx, cx - 2, bottom - 2, 6, 2, PAL.base.stoneDark);
+    }
+    // beam and plaque
+    rect(ctx, l - 1, top + 6, r - l + 4, 3, PAL.outline);
+    rect(ctx, l, top + 7, r - l + 2, 1, PAL.base.pillar);
+    rect(ctx, ox + 12, top + 9, 8, 5, PAL.outline);
+    rect(ctx, ox + 13, top + 10, 6, 3, PAL.base.plaque);
+    rect(ctx, ox + 14, top + 11, 4, 1, PAL.base.gold);
+    // roof with upturned eaves
+    rect(ctx, l - 4, top + 1, r - l + 10, 4, PAL.outline);
+    rect(ctx, l - 3, top + 2, r - l + 8, 2, PAL.base.roof);
+    rect(ctx, l - 1, top - 1, r - l + 4, 3, PAL.outline);
+    rect(ctx, l, top, r - l + 2, 1, PAL.base.roofLight);
+    px(ctx, l - 5, top, PAL.outline);
+    px(ctx, r + 6, top, PAL.outline);
+    px(ctx, ox + 16, top - 2, PAL.base.gold);
+  }
+
+  private altar(ox: number, oy: number): void {
+    const ctx = this.ctx;
+    const cx = ox + TILE / 2;
+    const cy = oy + TILE / 2 + 1;
+    disc(ctx, cx + 1, cy + 2, 11, PAL.shadow);
+    disc(ctx, cx, cy, 12, PAL.outline);
+    disc(ctx, cx, cy, 11, PAL.base.altarDark);
+    disc(ctx, cx, cy, 10, PAL.base.altar);
+    disc(ctx, cx, cy, 7, PAL.base.runeDim);
+    disc(ctx, cx, cy, 6, PAL.base.altar);
+    disc(ctx, cx, cy, 2, PAL.base.rune);
+    for (let k = 0; k < 8; k++) {
+      const a = (k / 8) * Math.PI * 2;
+      px(ctx, Math.round(cx + Math.cos(a) * 8.5), Math.round(cy + Math.sin(a) * 8.5), PAL.base.rune);
+    }
+    for (const [dx, dy] of [[-4, 0], [4, 0], [0, -4], [0, 4]] as const) px(ctx, cx + dx, cy + dy, PAL.base.runeDim);
+  }
+
+  private balustrade(x: number, y: number, len: number, horizontal: boolean): void {
+    const ctx = this.ctx;
+    if (horizontal) {
+      rect(ctx, x, y, len, 3, PAL.base.railDark);
+      rect(ctx, x, y, len, 1, PAL.base.rail);
+      for (let k = 2; k < len; k += 7) rect(ctx, x + k, y - 1, 2, 4, PAL.base.rail);
+    } else {
+      rect(ctx, x, y, 3, len, PAL.base.railDark);
+      rect(ctx, x, y, 1, len, PAL.base.rail);
+      for (let k = 2; k < len; k += 7) rect(ctx, x - 1, y + k, 4, 2, PAL.base.rail);
     }
   }
 

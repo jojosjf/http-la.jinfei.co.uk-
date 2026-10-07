@@ -16,7 +16,7 @@ export const PAL = {
   water: { base: '#3b7bc4', deep: '#2f68ad', shallow: '#4f8fd4', foam: '#9fd0f2', wave: '#86bdeb', waveDark: '#2b5f9e' },
   sand: { base: '#d6c38d', dark: '#b8a46f' },
 
-  city: { asphalt: '#6a6b74', asphaltDark: '#5a5b63', sidewalk: '#9fa0aa', sidewalkDark: '#80818b', wall: ['#c3c3cc', '#b1aeb8', '#c9bfae', '#a9b2bc'], wallShade: ['#8e8e99', '#817e88', '#948b7a', '#79828c'], roof: '#4e4f59', roofAlt: '#7a4b4b', winLit: '#ffe38f', winDark: '#3a3b47', door: '#2f3038' },
+  city: { paving: '#8c8a86', pavingDark: '#77756f', pavingLight: '#a3a19b', wall: ['#e8e2d4', '#ddd5c2', '#efe8da'], wallShade: ['#c4bba6', '#b8ae98', '#cfc6b2'], roof: '#3d4452', roofLight: '#56607a', roofDark: '#2a2f3a', pillar: '#a8322c', pillarDark: '#7a2420', door: '#5a2a1e', lattice: '#c9a66b', lantern: '#e0402c', lanternGlow: '#ffb35a' },
 
-  base: { concrete: '#9b9a8c', concreteDark: '#88877a', line: '#c9c8b9', hangar: '#7f8c7c', hangarLight: '#97a593', hangarDark: '#5f6b5d', door: '#3a423a', hazard: '#f2c744', hazardDark: '#2a2a2a', pad: '#8d8c80', padRing: '#e6e6dc', padH: '#ffffff', red: '#d84a3c' },
+  base: { stone: '#a6a196', stoneDark: '#8e897e', stoneLight: '#bdb8ac', joint: '#7c776c', rail: '#d8d3c6', railDark: '#9a958a', pillar: '#b8342c', pillarDark: '#86241e', roof: '#2f4a3e', roofLight: '#46695a', roofDark: '#1f3129', gold: '#e2b84a', plaque: '#253a5a', altar: '#c8c2b2', altarDark: '#9c968a', rune: '#7ff0ff', runeDim: '#3aa8c0' },
 } as const;
