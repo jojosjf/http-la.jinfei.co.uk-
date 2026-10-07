@@ -1650,5 +1650,70 @@
     "postMove": false,
     "beam": false,
     "kind": "ranged"
+  },
+  "liuyun_jian": {
+    "id": "liuyun_jian",
+    "name": "流云剑",
+    "power": 2400,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 10,
+    "crit": 15,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "yujian_feihong": {
+    "id": "yujian_feihong",
+    "name": "御剑·飞鸿",
+    "power": 2000,
+    "rangeMin": 2,
+    "rangeMax": 4,
+    "hit": 20,
+    "crit": 5,
+    "en": 10,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged",
+    "fx": "sword"
+  },
+  "jianxia_qixing": {
+    "id": "jianxia_qixing",
+    "name": "剑匣·七星",
+    "power": 3700,
+    "rangeMin": 1,
+    "rangeMax": 3,
+    "hit": 5,
+    "crit": 20,
+    "en": 35,
+    "ammo": null,
+    "morale": 120,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged",
+    "fx": "sword"
   }
 }

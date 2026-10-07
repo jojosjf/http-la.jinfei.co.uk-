@@ -1,0 +1,711 @@
+{
+  "id": "yunheng",
+  "name": "云衡",
+  "bodies": [
+    {
+      "id": "torso",
+      "tile": 1,
+      "x": 0,
+      "y": 0,
+      "w": 98,
+      "h": 108,
+      "mass": 2.94,
+      "layer": 3
+    },
+    {
+      "id": "head",
+      "tile": 0,
+      "x": 0,
+      "y": -90,
+      "w": 78,
+      "h": 91,
+      "mass": 1.9716666666666667,
+      "layer": 9
+    },
+    {
+      "id": "pelvis",
+      "tile": 6,
+      "x": 0,
+      "y": 72,
+      "w": 108,
+      "h": 59,
+      "mass": 1.77,
+      "layer": 7
+    },
+    {
+      "id": "upper_arm_l",
+      "tile": 2,
+      "x": -63,
+      "y": 35,
+      "w": 39,
+      "h": 78,
+      "mass": 0.845,
+      "layer": 3
+    },
+    {
+      "id": "forearm_hand_l",
+      "tile": 4,
+      "x": -77,
+      "y": 103,
+      "w": 38,
+      "h": 87,
+      "mass": 0.9183333333333333,
+      "layer": 6
+    },
+    {
+      "id": "thigh_l",
+      "tile": 7,
+      "x": -25,
+      "y": 122,
+      "w": 38,
+      "h": 83,
+      "mass": 0.8761111111111111,
+      "layer": 1
+    },
+    {
+      "id": "shin_l",
+      "tile": 9,
+      "x": -27,
+      "y": 189,
+      "w": 35,
+      "h": 79,
+      "mass": 0.7680555555555556,
+      "layer": 1
+    },
+    {
+      "id": "foot_l",
+      "tile": 11,
+      "x": -34,
+      "y": 239,
+      "w": 57,
+      "h": 46,
+      "mass": 0.7283333333333334,
+      "layer": 6
+    },
+    {
+      "id": "sleeve_l",
+      "tile": 16,
+      "x": -68,
+      "y": 42,
+      "w": 83,
+      "h": 114,
+      "mass": 2.6283333333333334,
+      "layer": 5
+    },
+    {
+      "id": "robe_l",
+      "tile": 18,
+      "x": -37,
+      "y": 147,
+      "w": 89,
+      "h": 160,
+      "mass": 3.9555555555555557,
+      "layer": 4
+    },
+    {
+      "id": "upper_arm_r",
+      "tile": 3,
+      "x": 63,
+      "y": 35,
+      "w": 39,
+      "h": 78,
+      "mass": 0.845,
+      "layer": 3
+    },
+    {
+      "id": "forearm_hand_r",
+      "tile": 5,
+      "x": 77,
+      "y": 103,
+      "w": 38,
+      "h": 87,
+      "mass": 0.9183333333333333,
+      "layer": 6
+    },
+    {
+      "id": "thigh_r",
+      "tile": 8,
+      "x": 25,
+      "y": 122,
+      "w": 38,
+      "h": 83,
+      "mass": 0.8761111111111111,
+      "layer": 1
+    },
+    {
+      "id": "shin_r",
+      "tile": 10,
+      "x": 27,
+      "y": 189,
+      "w": 35,
+      "h": 79,
+      "mass": 0.7680555555555556,
+      "layer": 1
+    },
+    {
+      "id": "foot_r",
+      "tile": 12,
+      "x": 34,
+      "y": 239,
+      "w": 57,
+      "h": 46,
+      "mass": 0.7283333333333334,
+      "layer": 6
+    },
+    {
+      "id": "sleeve_r",
+      "tile": 17,
+      "x": 68,
+      "y": 42,
+      "w": 83,
+      "h": 114,
+      "mass": 2.6283333333333334,
+      "layer": 5
+    },
+    {
+      "id": "robe_r",
+      "tile": 19,
+      "x": 37,
+      "y": 147,
+      "w": 89,
+      "h": 160,
+      "mass": 3.9555555555555557,
+      "layer": 4
+    },
+    {
+      "id": "hair_back",
+      "tile": 13,
+      "x": -30,
+      "y": -9,
+      "w": 92,
+      "h": 216,
+      "mass": 5.52,
+      "layer": -2
+    },
+    {
+      "id": "hair_front",
+      "tile": 14,
+      "x": -23,
+      "y": -43,
+      "w": 32,
+      "h": 95,
+      "mass": 0.8444444444444444,
+      "layer": 10
+    },
+    {
+      "id": "robe_back",
+      "tile": 20,
+      "x": 0,
+      "y": 147,
+      "w": 145,
+      "h": 160,
+      "mass": 6.444444444444445,
+      "layer": 0
+    },
+    {
+      "id": "weapon",
+      "tile": 15,
+      "x": -74,
+      "y": 178,
+      "w": 47,
+      "h": 176,
+      "mass": 2.2977777777777777,
+      "layer": 8
+    },
+    {
+      "id": "backpack",
+      "tile": 21,
+      "x": -65,
+      "y": -22,
+      "w": 88,
+      "h": 177,
+      "mass": 4.326666666666667,
+      "layer": -5
+    },
+    {
+      "id": "bundle",
+      "tile": 22,
+      "x": -94,
+      "y": -78,
+      "w": 90,
+      "h": 42,
+      "mass": 1.05,
+      "layer": -4
+    },
+    {
+      "id": "spare_sword_l",
+      "tile": 23,
+      "x": -98,
+      "y": -100,
+      "w": 31,
+      "h": 137,
+      "mass": 1.1797222222222221,
+      "layer": -6
+    },
+    {
+      "id": "spare_sword_r",
+      "tile": 24,
+      "x": -69,
+      "y": -106,
+      "w": 30,
+      "h": 141,
+      "mass": 1.175,
+      "layer": -6
+    },
+    {
+      "id": "scroll",
+      "tile": 25,
+      "x": -94,
+      "y": -25,
+      "w": 72,
+      "h": 26,
+      "mass": 0.52,
+      "layer": -3
+    },
+    {
+      "id": "gourd",
+      "tile": 26,
+      "x": -105,
+      "y": 37,
+      "w": 38,
+      "h": 59,
+      "mass": 0.6227777777777778,
+      "layer": -3
+    },
+    {
+      "id": "straps",
+      "tile": 27,
+      "x": 0,
+      "y": -1,
+      "w": 96,
+      "h": 89,
+      "mass": 2.3733333333333335,
+      "layer": 8
+    },
+    {
+      "id": "ribbon",
+      "tile": 28,
+      "x": -77,
+      "y": -10,
+      "w": 37,
+      "h": 187,
+      "mass": 1.9219444444444445,
+      "layer": -3
+    },
+    {
+      "id": "pouch",
+      "tile": 29,
+      "x": -58,
+      "y": 92,
+      "w": 35,
+      "h": 40,
+      "mass": 0.3888888888888889,
+      "layer": 8
+    },
+    {
+      "id": "collar",
+      "tile": 30,
+      "x": 0,
+      "y": -15,
+      "w": 61,
+      "h": 63,
+      "mass": 1.0675,
+      "layer": 6
+    },
+    {
+      "id": "tassel",
+      "tile": 31,
+      "x": 32,
+      "y": 115,
+      "w": 19,
+      "h": 78,
+      "mass": 0.4116666666666667,
+      "layer": 8
+    }
+  ],
+  "joints": [
+    {
+      "a": "torso",
+      "b": "head",
+      "anchor": [
+        0,
+        -51
+      ],
+      "min": -0.35,
+      "max": 0.35,
+      "detachable": false
+    },
+    {
+      "a": "torso",
+      "b": "pelvis",
+      "anchor": [
+        0,
+        47
+      ],
+      "min": -0.25,
+      "max": 0.25,
+      "detachable": false
+    },
+    {
+      "a": "torso",
+      "b": "upper_arm_l",
+      "anchor": [
+        -40,
+        -24
+      ],
+      "min": -1.8,
+      "max": 1.8,
+      "detachable": false
+    },
+    {
+      "a": "upper_arm_l",
+      "b": "forearm_hand_l",
+      "anchor": [
+        -71,
+        66
+      ],
+      "min": -1.5,
+      "max": 1.5,
+      "detachable": false
+    },
+    {
+      "a": "pelvis",
+      "b": "thigh_l",
+      "anchor": [
+        -25,
+        88
+      ],
+      "min": -0.85,
+      "max": 0.85,
+      "detachable": false
+    },
+    {
+      "a": "thigh_l",
+      "b": "shin_l",
+      "anchor": [
+        -26,
+        155
+      ],
+      "min": 0,
+      "max": 1.4,
+      "detachable": false
+    },
+    {
+      "a": "shin_l",
+      "b": "foot_l",
+      "anchor": [
+        -29,
+        221
+      ],
+      "min": -0.4,
+      "max": 0.4,
+      "detachable": false
+    },
+    {
+      "a": "upper_arm_l",
+      "b": "sleeve_l",
+      "anchor": [
+        -41,
+        -20
+      ],
+      "min": -0.3,
+      "max": 0.3,
+      "detachable": false
+    },
+    {
+      "a": "pelvis",
+      "b": "robe_l",
+      "anchor": [
+        -25,
+        84
+      ],
+      "min": -0.45,
+      "max": 0.45,
+      "detachable": false
+    },
+    {
+      "a": "torso",
+      "b": "upper_arm_r",
+      "anchor": [
+        40,
+        -24
+      ],
+      "min": -1.8,
+      "max": 1.8,
+      "detachable": false
+    },
+    {
+      "a": "upper_arm_r",
+      "b": "forearm_hand_r",
+      "anchor": [
+        71,
+        66
+      ],
+      "min": -1.5,
+      "max": 1.5,
+      "detachable": false
+    },
+    {
+      "a": "pelvis",
+      "b": "thigh_r",
+      "anchor": [
+        25,
+        88
+      ],
+      "min": -0.85,
+      "max": 0.85,
+      "detachable": false
+    },
+    {
+      "a": "thigh_r",
+      "b": "shin_r",
+      "anchor": [
+        26,
+        155
+      ],
+      "min": 0,
+      "max": 1.4,
+      "detachable": false
+    },
+    {
+      "a": "shin_r",
+      "b": "foot_r",
+      "anchor": [
+        29,
+        221
+      ],
+      "min": -0.4,
+      "max": 0.4,
+      "detachable": false
+    },
+    {
+      "a": "upper_arm_r",
+      "b": "sleeve_r",
+      "anchor": [
+        41,
+        -20
+      ],
+      "min": -0.3,
+      "max": 0.3,
+      "detachable": false
+    },
+    {
+      "a": "pelvis",
+      "b": "robe_r",
+      "anchor": [
+        25,
+        84
+      ],
+      "min": -0.45,
+      "max": 0.45,
+      "detachable": false
+    },
+    {
+      "a": "head",
+      "b": "hair_back",
+      "anchor": [
+        -13,
+        -111
+      ],
+      "min": -0.35,
+      "max": 0.35,
+      "detachable": false
+    },
+    {
+      "a": "head",
+      "b": "hair_front",
+      "anchor": [
+        -18,
+        -110
+      ],
+      "min": -0.3,
+      "max": 0.3,
+      "detachable": false
+    },
+    {
+      "a": "pelvis",
+      "b": "robe_back",
+      "anchor": [
+        0,
+        89
+      ],
+      "min": -0.35,
+      "max": 0.35,
+      "detachable": false
+    },
+    {
+      "a": "forearm_hand_l",
+      "b": "weapon",
+      "anchor": [
+        -75,
+        130
+      ],
+      "min": -3.141592653589793,
+      "max": 3.141592653589793,
+      "detachable": true
+    },
+    {
+      "a": "torso",
+      "b": "backpack",
+      "anchor": [
+        -34,
+        -17
+      ],
+      "min": -0.18,
+      "max": 0.18,
+      "detachable": false
+    },
+    {
+      "a": "backpack",
+      "b": "bundle",
+      "anchor": [
+        -79,
+        -71
+      ],
+      "min": -0.25,
+      "max": 0.25,
+      "detachable": false
+    },
+    {
+      "a": "backpack",
+      "b": "spare_sword_l",
+      "anchor": [
+        -87,
+        -60
+      ],
+      "min": -0.18,
+      "max": 0.18,
+      "detachable": true
+    },
+    {
+      "a": "backpack",
+      "b": "spare_sword_r",
+      "anchor": [
+        -65,
+        -63
+      ],
+      "min": -0.18,
+      "max": 0.18,
+      "detachable": true
+    },
+    {
+      "a": "backpack",
+      "b": "scroll",
+      "anchor": [
+        -79,
+        -17
+      ],
+      "min": -0.3,
+      "max": 0.3,
+      "detachable": false
+    },
+    {
+      "a": "backpack",
+      "b": "gourd",
+      "anchor": [
+        -89,
+        13
+      ],
+      "min": -0.7,
+      "max": 0.7,
+      "detachable": true
+    },
+    {
+      "a": "torso",
+      "b": "straps",
+      "anchor": [
+        0,
+        -37
+      ],
+      "min": -0.03,
+      "max": 0.03,
+      "detachable": false
+    },
+    {
+      "a": "head",
+      "b": "ribbon",
+      "anchor": [
+        -24,
+        -118
+      ],
+      "min": -0.5,
+      "max": 0.5,
+      "detachable": false
+    },
+    {
+      "a": "pelvis",
+      "b": "pouch",
+      "anchor": [
+        -46,
+        77
+      ],
+      "min": -0.5,
+      "max": 0.5,
+      "detachable": true
+    },
+    {
+      "a": "torso",
+      "b": "collar",
+      "anchor": [
+        0,
+        -39
+      ],
+      "min": -0.03,
+      "max": 0.03,
+      "detachable": false
+    },
+    {
+      "a": "pelvis",
+      "b": "tassel",
+      "anchor": [
+        28,
+        78
+      ],
+      "min": -0.55,
+      "max": 0.55,
+      "detachable": false
+    }
+  ],
+  "status": "cultivator first-pass calibrated prototype",
+  "atlas": "atlases/yunheng.png",
+  "atlasColumns": 4,
+  "atlasRows": 8,
+  "atlasParts": [
+    "head",
+    "torso",
+    "upper_arm_l",
+    "upper_arm_r",
+    "forearm_hand_l",
+    "forearm_hand_r",
+    "pelvis",
+    "thigh_l",
+    "thigh_r",
+    "shin_l",
+    "shin_r",
+    "foot_l",
+    "foot_r",
+    "hair_back",
+    "hair_front",
+    "weapon",
+    "sleeve_l",
+    "sleeve_r",
+    "robe_l",
+    "robe_r",
+    "robe_back",
+    "backpack",
+    "bundle",
+    "spare_sword_l",
+    "spare_sword_r",
+    "scroll",
+    "gourd",
+    "straps",
+    "ribbon",
+    "pouch",
+    "collar",
+    "tassel"
+  ],
+  "coordinateUnit": "preview logical pixel",
+  "angleUnit": "radian",
+  "collision": "rectangular prototype; self-collision disabled",
+  "jointLimits": "soft hinges; clothing represented by lightweight hinged parts"
+}

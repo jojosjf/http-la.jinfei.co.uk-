@@ -1,6 +1,13 @@
 {
   "dolls": [
     {
+      "id": "yunheng",
+      "rig": "mechs/yunheng/yunheng.rig.json",
+      "icon": "mechs/yunheng/icon.png",
+      "portrait": "mechs/yunheng/portrait_s.png",
+      "portraitLarge": "mechs/yunheng/portrait.png"
+    },
+    {
       "id": "linxuan",
       "rig": "mechs/linxuan/linxuan.rig.json",
       "icon": "mechs/linxuan/icon.png"

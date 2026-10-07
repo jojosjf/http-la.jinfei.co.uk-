@@ -22,6 +22,9 @@ export interface MechIndexEntry {
   rig?: string;
   /** Optional 32x32 map icon PNG that replaces the placeholder `unit_<id>`. */
   icon?: string;
+  /** Optional 28x28 battle-panel portrait (texture `portrait_<id>`) and 64x64 dialogue portrait. */
+  portrait?: string;
+  portraitLarge?: string;
 }
 
 export interface MechIndex {
@@ -76,6 +79,8 @@ export async function loadMechAssets(scene: Phaser.Scene): Promise<void> {
       if (e.rig) l.json(`rig:${e.id}`, e.rig);
       else if (e.doll) l.json(`doll:${e.id}`, e.doll);
       if (e.icon) l.image(`unit_${e.id}`, e.icon);
+      if (e.portrait) l.image(`portrait_${e.id}`, e.portrait);
+      if (e.portraitLarge) l.image(`portraitL_${e.id}`, e.portraitLarge);
     }
   });
 

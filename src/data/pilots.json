@@ -689,5 +689,28 @@
       "space": "A"
     },
     "spirits": []
+  },
+  "yunheng": {
+    "id": "yunheng",
+    "name": "云衡",
+    "level": 5,
+    "melee": 158,
+    "ranged": 148,
+    "hit": 162,
+    "evade": 165,
+    "skill": 158,
+    "defense": 122,
+    "sp": 60,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [
+      "凝神",
+      "破妄",
+      "剑心"
+    ]
   }
 }

@@ -31,7 +31,8 @@ pnpm test:watch   # Vitest 监听模式
 - **一人即一个战斗单位**：部署写 `{ "character": "<id>" }`，`units.json`（气血 / 灵力 / 护体 / 身法 / 法宝栏）和 `pilots.json`（修为属性）用同一个 id。内部仍是 unit + pilot 两张表，只是一一对应，不能换乘。
 - **名词**：HP→气血、EN→灵力、气力→战意、精神指令→神通、资金→灵石、等级→境界（`src/core/realm.ts`，只是名字，不加规则）、弹药→次数。代码里的字段名不变（hp / en / morale）。
 - **species**：`human` 修士（不断肢，被击败后倒地并化作光点）、`construct` 机关傀儡（天工宗，可断肢、留残骸）、`beast` 神兽（倒地）。只影响表现和文案。
-- **天工仙甲 24 台** 现在是敌方：天工宗傀儡 + 神兽（白泽 / 潜鳞 / 烛龙）。我方修士目前是 `tools/gen-cultivators.mjs` 生成的占位（林玄 / 苏清寒 / 石破军），正式素材按 `docs/art-brief-for-chatgpt.md` 的修士部分交付后替换。
+- **天工仙甲 24 台** 现在是敌方：天工宗傀儡 + 神兽（白泽 / 潜鳞 / 烛龙）。**主角云衡（`yunheng`）是第一位正式修士素材**（外部交付的 4×8 图集 + atlas-regions.json + rig + 头像，源素材存于 `art-src/yunheng/`，用 `node tools/import-rig.mjs art-src/yunheng yunheng` 重新导入）；苏清寒 / 石破军 / 林玄仍是 `tools/gen-cultivators.mjs` 生成的占位，正式素材到了按同样方式替换。
+- **导入人物的规则**：有 `atlas-regions.json` 就用它的裁切矩形（不再按透明像素猜），`atlasColumns/atlasRows` 不写死；站立原点按鞋底（`foot_*` 最低点），不按下垂的剑；人物不按武器镜像，默认原图面朝右，包里写 `"facing": "left"` 或命令行 `--facing left` 才翻转；`original/approved-portrait.png` 自动生成 28×28 战斗面板头像（纹理 `portrait_<id>`）和 64×64 对话头像（`portraitL_<id>`）。
 - **随动部件**：头发 / 衣袍下摆 / 袖 / 飘带（`hair* robe* skirt* sleeve* ribbon* sash* tassel* cape*`，或 rig 的 `follow` 列表）由 `src/core/follow.ts` 的阻尼弹簧驱动，随身体加速度摆动并有微风。
 - **武器特效** `fx`：`sword` 飞剑 / `thunder` 雷法 / `ice` 冰 / `fire` 火；未写时按格斗 / 光束 / 弹幕 / 抛射自动选。
 - 不加五行相克、境界压制等新规则。

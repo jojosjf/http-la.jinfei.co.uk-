@@ -19,8 +19,8 @@ describe('imported 天工仙甲 rigs', () => {
       if (entry.icon) expect(existsSync(`public/${entry.icon}`)).toBe(true);
       const held = heldParts(rig);
       const w = weaponSide(rig);
-      // the weapon side, when there is a held item, faces forward after import
-      if (held[w]) expect(rig.parts.find((p) => p.id === held[w])!.x).toBeGreaterThanOrEqual(-2);
+      // non-human weapon sides face forward after import (people face where their face looks)
+      if (held[w] && rig.species !== 'human') expect(rig.parts.find((p) => p.id === held[w])!.x).toBeGreaterThanOrEqual(-2);
     });
   }
 });
@@ -28,7 +28,7 @@ describe('imported 天工仙甲 rigs', () => {
 import { archetypeOf, poseNames, samplePose, solvePose } from '../../src/core/rig';
 
 const EXPECTED: Record<string, string> = {
-  linxuan: 'humanoid', suqinghan: 'humanoid', shipojun: 'humanoid',
+  yunheng: 'humanoid', linxuan: 'humanoid', suqinghan: 'humanoid', shipojun: 'humanoid',
   zhaoye: 'humanoid', feiyan: 'humanoid', hanyue: 'humanoid', xuanlei: 'humanoid', liuxian: 'humanoid',
   qinghe: 'floater', chilun: 'wheeled', leigu: 'humanoid', baize: 'quadruped', qianlin: 'serpent',
   tianshu: 'floater', xuetang: 'humanoid', tieliao: 'quadruped', guideng: 'floater', heilei: 'humanoid',

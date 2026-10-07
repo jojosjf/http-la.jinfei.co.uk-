@@ -1,0 +1,546 @@
+[
+  {
+    "x": 43,
+    "y": 13,
+    "w": 234,
+    "h": 294,
+    "native_size": [
+      239,
+      300
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      70,
+      17,
+      309,
+      317
+    ]
+  },
+  {
+    "x": 337,
+    "y": 19,
+    "w": 286,
+    "h": 281,
+    "native_size": [
+      286,
+      281
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      309,
+      26,
+      595,
+      307
+    ]
+  },
+  {
+    "x": 725,
+    "y": 34,
+    "w": 150,
+    "h": 252,
+    "native_size": [
+      150,
+      252
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      689,
+      46,
+      839,
+      298
+    ]
+  },
+  {
+    "x": 1040,
+    "y": 31,
+    "w": 159,
+    "h": 258,
+    "native_size": [
+      159,
+      258
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      1003,
+      43,
+      1162,
+      301
+    ]
+  },
+  {
+    "x": 107,
+    "y": 333,
+    "w": 105,
+    "h": 294,
+    "native_size": [
+      105,
+      295
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      110,
+      341,
+      215,
+      636
+    ]
+  },
+  {
+    "x": 417,
+    "y": 333,
+    "w": 125,
+    "h": 294,
+    "native_size": [
+      128,
+      302
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      411,
+      334,
+      539,
+      636
+    ]
+  },
+  {
+    "x": 669,
+    "y": 344,
+    "w": 262,
+    "h": 272,
+    "native_size": [
+      262,
+      272
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      637,
+      364,
+      899,
+      636
+    ]
+  },
+  {
+    "x": 1041,
+    "y": 342,
+    "w": 157,
+    "h": 275,
+    "native_size": [
+      157,
+      275
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      1007,
+      326,
+      1164,
+      601
+    ]
+  },
+  {
+    "x": 83,
+    "y": 653,
+    "w": 153,
+    "h": 294,
+    "native_size": [
+      166,
+      318
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      73,
+      636,
+      239,
+      954
+    ]
+  },
+  {
+    "x": 426,
+    "y": 653,
+    "w": 108,
+    "h": 294,
+    "native_size": [
+      117,
+      318
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      411,
+      636,
+      528,
+      954
+    ]
+  },
+  {
+    "x": 750,
+    "y": 653,
+    "w": 100,
+    "h": 294,
+    "native_size": [
+      108,
+      318
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      721,
+      636,
+      829,
+      954
+    ]
+  },
+  {
+    "x": 1042,
+    "y": 653,
+    "w": 155,
+    "h": 294,
+    "native_size": [
+      168,
+      318
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      1018,
+      636,
+      1186,
+      954
+    ]
+  },
+  {
+    "x": 71,
+    "y": 995,
+    "w": 177,
+    "h": 250,
+    "native_size": [
+      177,
+      250
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      39,
+      954,
+      216,
+      1204
+    ]
+  },
+  {
+    "x": 368,
+    "y": 973,
+    "w": 224,
+    "h": 294,
+    "native_size": [
+      226,
+      297
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      342,
+      954,
+      568,
+      1251
+    ]
+  },
+  {
+    "x": 721,
+    "y": 985,
+    "w": 158,
+    "h": 270,
+    "native_size": [
+      158,
+      270
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      694,
+      954,
+      852,
+      1224
+    ]
+  },
+  {
+    "x": 1085,
+    "y": 973,
+    "w": 69,
+    "h": 294,
+    "native_size": [
+      71,
+      302
+    ],
+    "source_sheet": "body",
+    "source_crop": [
+      1050,
+      954,
+      1121,
+      1256
+    ]
+  },
+  {
+    "x": 63,
+    "y": 1293,
+    "w": 194,
+    "h": 294,
+    "native_size": [
+      206,
+      312
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      58,
+      9,
+      264,
+      321
+    ]
+  },
+  {
+    "x": 383,
+    "y": 1293,
+    "w": 194,
+    "h": 294,
+    "native_size": [
+      206,
+      312
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      369,
+      9,
+      575,
+      321
+    ]
+  },
+  {
+    "x": 678,
+    "y": 1293,
+    "w": 244,
+    "h": 294,
+    "native_size": [
+      255,
+      307
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      617,
+      14,
+      872,
+      321
+    ]
+  },
+  {
+    "x": 1006,
+    "y": 1293,
+    "w": 228,
+    "h": 294,
+    "native_size": [
+      238,
+      307
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      972,
+      14,
+      1210,
+      321
+    ]
+  },
+  {
+    "x": 27,
+    "y": 1613,
+    "w": 266,
+    "h": 294,
+    "native_size": [
+      290,
+      321
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      15,
+      321,
+      305,
+      642
+    ]
+  },
+  {
+    "x": 359,
+    "y": 1613,
+    "w": 242,
+    "h": 294,
+    "native_size": [
+      263,
+      319
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      305,
+      321,
+      568,
+      640
+    ]
+  },
+  {
+    "x": 672,
+    "y": 1630,
+    "w": 255,
+    "h": 260,
+    "native_size": [
+      255,
+      260
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      633,
+      321,
+      888,
+      581
+    ]
+  },
+  {
+    "x": 1047,
+    "y": 1613,
+    "w": 146,
+    "h": 294,
+    "native_size": [
+      159,
+      321
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      1014,
+      321,
+      1173,
+      642
+    ]
+  },
+  {
+    "x": 99,
+    "y": 1933,
+    "w": 121,
+    "h": 294,
+    "native_size": [
+      131,
+      317
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      106,
+      647,
+      237,
+      964
+    ]
+  },
+  {
+    "x": 351,
+    "y": 1997,
+    "w": 257,
+    "h": 165,
+    "native_size": [
+      257,
+      165
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      338,
+      735,
+      595,
+      900
+    ]
+  },
+  {
+    "x": 711,
+    "y": 1957,
+    "w": 178,
+    "h": 245,
+    "native_size": [
+      178,
+      245
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      684,
+      661,
+      862,
+      906
+    ]
+  },
+  {
+    "x": 989,
+    "y": 1933,
+    "w": 261,
+    "h": 294,
+    "native_size": [
+      263,
+      296
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      933,
+      668,
+      1196,
+      964
+    ]
+  },
+  {
+    "x": 59,
+    "y": 2253,
+    "w": 201,
+    "h": 294,
+    "native_size": [
+      209,
+      305
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      50,
+      964,
+      259,
+      1269
+    ]
+  },
+  {
+    "x": 396,
+    "y": 2294,
+    "w": 167,
+    "h": 212,
+    "native_size": [
+      167,
+      212
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      381,
+      1012,
+      548,
+      1224
+    ]
+  },
+  {
+    "x": 697,
+    "y": 2275,
+    "w": 205,
+    "h": 249,
+    "native_size": [
+      205,
+      249
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      661,
+      988,
+      866,
+      1237
+    ]
+  },
+  {
+    "x": 1087,
+    "y": 2253,
+    "w": 65,
+    "h": 294,
+    "native_size": [
+      67,
+      305
+    ],
+    "source_sheet": "clothes",
+    "source_crop": [
+      1038,
+      964,
+      1105,
+      1269
+    ]
+  }
+]

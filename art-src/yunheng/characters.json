@@ -1,0 +1,48 @@
+[
+  {
+    "id": "yunheng",
+    "name": "云衡",
+    "parts": [
+      "head",
+      "torso",
+      "upper_arm_l",
+      "upper_arm_r",
+      "forearm_hand_l",
+      "forearm_hand_r",
+      "pelvis",
+      "thigh_l",
+      "thigh_r",
+      "shin_l",
+      "shin_r",
+      "foot_l",
+      "foot_r",
+      "hair_back",
+      "hair_front",
+      "weapon",
+      "sleeve_l",
+      "sleeve_r",
+      "robe_l",
+      "robe_r",
+      "robe_back",
+      "backpack",
+      "bundle",
+      "spare_sword_l",
+      "spare_sword_r",
+      "scroll",
+      "gourd",
+      "straps",
+      "ribbon",
+      "pouch",
+      "collar",
+      "tassel"
+    ],
+    "image_size": [
+      1280,
+      2560
+    ],
+    "alpha_channel": true,
+    "atlas": "atlases/yunheng.png",
+    "atlasColumns": 4,
+    "atlasRows": 8
+  }
+]

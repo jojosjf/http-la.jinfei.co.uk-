@@ -104,12 +104,12 @@ test('boots, moves a unit, undoes, and survives an enemy phase', async ({ page }
   await page.evaluate(() => window.__srpg!.setCursor(6, 10));
   await page.keyboard.press('KeyZ');
   s = await waitState(page, ['actionMenu']);
-  expect(s.units.find((u) => u.unitId === 'linxuan')).toMatchObject({ x: 6, y: 10 });
+  expect(s.units.find((u) => u.unitId === 'yunheng')).toMatchObject({ x: 6, y: 10 });
   await page.screenshot({ path: 'test-results/03-action-menu.png' });
 
   await page.keyboard.press('KeyX');
   s = await waitState(page, ['unitSelected']);
-  expect(s.units.find((u) => u.unitId === 'linxuan')).toMatchObject({ x: 2, y: 10 });
+  expect(s.units.find((u) => u.unitId === 'yunheng')).toMatchObject({ x: 2, y: 10 });
   await page.keyboard.press('KeyX');
   await waitState(page, ['idle']);
 
@@ -265,7 +265,7 @@ test('every imported mech poses without errors (screenshots per pose)', async ({
   await page.goto('/?view=dolls');
   await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
   const ids = await page.evaluate(() => window.__dolls!.ids.filter((id) => id !== 'cangqiong'));
-  expect(ids.length).toBe(27);
+  expect(ids.length).toBe(28);
   for (const id of ids) {
     await page.evaluate((x) => window.__dolls!.select(x), id);
     expect(await page.evaluate(() => window.__dolls!.current().kind)).toBe('rig');
@@ -336,5 +336,42 @@ test('修士: cloth follows a dash, defeat dissolves into light, battle effects'
     await page.waitForTimeout(at);
     await page.screenshot({ path: `test-results/${name}.png` });
   }
+  expect(errors).toEqual([]);
+});
+
+test('云衡 (imported protagonist): poses, cloth, weapon drop, defeat, and battle with portrait', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = collectErrors(page);
+  await page.goto('/?view=dolls');
+  await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
+  expect(await page.evaluate(() => window.__dolls!.ids[0])).toBe('yunheng');
+  await page.evaluate(() => window.__dolls!.select('yunheng'));
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: 'test-results/40-yunheng-idle.png' });
+  for (const [pose, at] of [['walk', 300], ['melee', 210], ['melee', 380], ['shoot', 320], ['hit', 120], ['block', 330]] as const) {
+    await page.evaluate((p) => window.__dolls!.setPose(p), pose);
+    await page.waitForTimeout(at);
+    await page.screenshot({ path: `test-results/41-yunheng-${pose}-${at}.png` });
+  }
+  await page.evaluate(() => window.__dolls!.reset());
+  await page.evaluate(() => window.__dolls!.dash(40));
+  await page.waitForTimeout(120);
+  await page.screenshot({ path: 'test-results/42-yunheng-dash.png' });
+  await page.evaluate(() => window.__dolls!.reset());
+  await page.evaluate(() => window.__dolls!.dropWeapon());
+  await page.waitForTimeout(900);
+  await page.screenshot({ path: 'test-results/43-yunheng-drop.png' });
+  await page.evaluate(() => window.__dolls!.die(true));
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: 'test-results/44-yunheng-fallen.png' });
+
+  await page.goto('/?view=battle&a=yunheng&d=xuetang&w=liuyun_jian');
+  await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
+  await page.waitForTimeout(1000);
+  await page.screenshot({ path: 'test-results/45-yunheng-battle-slash.png' });
+  await page.goto('/?view=battle&a=yunheng&d=heilei&w=jianxia_qixing');
+  await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: 'test-results/46-yunheng-battle-qixing.png' });
   expect(errors).toEqual([]);
 });

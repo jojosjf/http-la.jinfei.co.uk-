@@ -966,5 +966,36 @@
     "color": "#c8823a",
     "species": "human",
     "title": "散修"
+  },
+  "yunheng": {
+    "id": "yunheng",
+    "name": "云衡",
+    "hp": 4800,
+    "en": 150,
+    "armor": 1050,
+    "mobility": 120,
+    "limit": 330,
+    "move": 6,
+    "size": "M",
+    "moveTypes": [
+      "land",
+      "air"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "liuyun_jian",
+      "yujian_feihong",
+      "jianxia_qixing"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#e8e4d4",
+    "species": "human",
+    "title": "游方剑修"
   }
 }

@@ -2,7 +2,7 @@
 /**
  * Import mechs from the 「天工仙甲」 ragdoll prototype (mecha-ragdoll-v1) into the game.
  *
- *   node tools/import-rig.mjs <prototype-dir> [id ...] [--out public/mechs] [--scale 0.32] [--max-height 140] [--max-width 170] [--colors 48]
+ *   node tools/import-rig.mjs <prototype-dir> [id ...] [--out public/mechs] [--scale 0.32] [--max-height 140] [--max-width 170] [--colors 48] [--species human] [--facing left]
  *
  * For each mech it reads characters.json, rigs/<id>.json and the 4x4 part atlas, then:
  *  1. finds every part like the prototype does (largest opaque connected region per cell);
@@ -296,10 +296,14 @@ export function convertMech(protoDir, id, opts = {}) {
   const rows = src.atlasRows ?? 4;
   const report = [];
 
-  const regions = findRegions(atlas, cols, rows);
+  // Explicit crop rectangles (atlas-regions.json, one per tile) beat alpha-based detection.
+  const regionsPath = join(protoDir, 'atlas-regions.json');
+  const explicit = existsSync(regionsPath) ? JSON.parse(readFileSync(regionsPath, 'utf8')) : null;
+  const regions = explicit ? explicit.map((r) => (r && r.w > 0 && r.h > 0 ? { x: r.x, y: r.y, w: r.w, h: r.h } : undefined)) : findRegions(atlas, cols, rows);
+  if (explicit) report.push(`使用 atlas-regions.json 的 ${regions.filter(Boolean).length} 个裁切矩形（${cols}×${rows} 图集）`);
   const cw = atlas.width / cols;
   const chh = atlas.height / rows;
-  regions.forEach((r, tile) => {
+  if (!explicit) regions.forEach((r, tile) => {
     if (!r) return;
     const cx0 = (tile % cols) * cw;
     const cy0 = Math.floor(tile / cols) * chh;
@@ -309,7 +313,9 @@ export function convertMech(protoDir, id, opts = {}) {
 
   const bodies = src.bodies;
   const minY = Math.min(...bodies.map((b) => b.y - b.h / 2));
-  const maxY = Math.max(...bodies.map((b) => b.y + b.h / 2));
+  // Stand on the soles when there are feet (a hanging sword or tail must not lift the figure).
+  const feet = bodies.filter((b) => /^foot/.test(b.id));
+  const maxY = feet.length ? Math.max(...feet.map((b) => b.y + b.h / 2)) : Math.max(...bodies.map((b) => b.y + b.h / 2));
   const restHeight = maxY - minY;
   const restWidth = Math.max(...bodies.map((b) => b.x + b.w / 2)) - Math.min(...bodies.map((b) => b.x - b.w / 2));
   const scale = Math.min(scaleOpt, maxHeight / restHeight, maxWidth / restWidth);
@@ -323,7 +329,12 @@ export function convertMech(protoDir, id, opts = {}) {
   const heldX = bodies.filter((b) => heldIds.has(b.id)).map((b) => b.x);
   // Mirror when the held item(s) sit on the left, so the weapon side faces forward (+x).
   let mirror = heldX.length > 0 && heldX.reduce((a, v) => a + v, 0) / heldX.length < -1;
-  if (heldX.length === 0) {
+  const isHuman = (src.species ?? ch.species ?? opts.species) === 'human' || bodies.some((b) => /^hair/.test(b.id));
+  if (isHuman) {
+    // People face where their face looks, not where the sword hangs: the brief asks for art facing right,
+    // so only mirror when the package says the figure faces left.
+    mirror = (src.facing ?? ch.facing ?? opts.facing) === 'left';
+  } else if (heldX.length === 0) {
     // No hand-held weapon: face the head (or drill / beak) forward.
     const rootBody = bodies.find((b) => b.id === 'torso') ?? bodies.slice().sort((a, b) => b.mass - a.mass)[0];
     const lead = bodies.find((b) => b.id === 'head') ?? bodies.find((b) => b.id === 'drill') ?? bodies.find((b) => b.id === 'beak');
@@ -388,7 +399,7 @@ export function convertMech(protoDir, id, opts = {}) {
   parts.forEach((p, i) => (p.frame = frames[i]));
 
   const outId = opts.as ?? id;
-  const species = src.species ?? ch.species ?? (BEASTS.has(id) ? 'beast' : 'construct');
+  const species = src.species ?? ch.species ?? opts.species ?? (BEASTS.has(id) ? 'beast' : bodies.some((b) => /^hair/.test(b.id)) ? 'human' : 'construct');
   const rig = {
     id: outId,
     name: src.name ?? ch.name ?? id,
@@ -405,7 +416,21 @@ export function convertMech(protoDir, id, opts = {}) {
 
   const icon = composeIcon(parts, images, palette);
 
-  return { rig, sheet, icon, report };
+  // Portrait for the battle panel (28x28) and dialogue (64x64), if the package has one.
+  let portraits = null;
+  const portraitPath = ['original/approved-portrait.png', 'portrait.png'].map((f) => join(protoDir, f)).find((f) => existsSync(f));
+  if (portraitPath) {
+    const src = readPng(portraitPath);
+    const side = Math.min(src.width, src.height);
+    const rect = { x: Math.floor((src.width - side) / 2), y: 0, w: side, h: side };
+    const opaque = (img) => {
+      for (let i = 3; i < img.data.length; i += 4) img.data[i] = 255;
+      return img;
+    };
+    portraits = { small: opaque(resample(src, rect, 28, 28)), large: opaque(resample(src, rect, 64, 64)) };
+  }
+
+  return { rig, sheet, icon, portraits, report };
 }
 
 // ---------------------------------------------------------------- cli
@@ -425,6 +450,8 @@ if (isMain) {
   const maxHeight = Number(opt('--max-height', '140'));
   const maxWidth = Number(opt('--max-width', '170'));
   const colors = Number(opt('--colors', '48'));
+  const species = opt('--species', undefined);
+  const facing = opt('--facing', undefined);
   const [protoDir, ...wanted] = args;
   if (!protoDir) {
     console.error('usage: node tools/import-rig.mjs <prototype-dir> [id ...] [--out public/mechs] [--scale 0.32]');
@@ -436,13 +463,19 @@ if (isMain) {
   const index = existsSync(indexPath) ? JSON.parse(readFileSync(indexPath, 'utf8')) : { dolls: [] };
   index.dolls ??= [];
   for (const id of ids) {
-    const { rig, sheet, icon, report } = convertMech(protoDir, id, { scale, maxHeight, maxWidth, colors });
+    const { rig, sheet, icon, portraits, report } = convertMech(protoDir, id, { scale, maxHeight, maxWidth, colors, species, facing });
     const dir = join(out, id);
     mkdirSync(dir, { recursive: true });
     writePng(join(dir, `${id}.png`), sheet);
     writePng(join(dir, 'icon.png'), icon);
     writeFileSync(join(dir, `${id}.rig.json`), JSON.stringify(rig, null, 1) + '\n');
     const entry = { id, rig: `mechs/${id}/${id}.rig.json`, icon: `mechs/${id}/icon.png` };
+    if (portraits) {
+      writePng(join(dir, 'portrait_s.png'), portraits.small);
+      writePng(join(dir, 'portrait.png'), portraits.large);
+      entry.portrait = `mechs/${id}/portrait_s.png`;
+      entry.portraitLarge = `mechs/${id}/portrait.png`;
+    }
     const i = index.dolls.findIndex((d) => d.id === id);
     if (i >= 0) index.dolls[i] = entry;
     else index.dolls.push(entry);

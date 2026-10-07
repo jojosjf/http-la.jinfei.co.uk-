@@ -1,0 +1,48 @@
+{
+  "id": "yunheng",
+  "body": {
+    "source": "/Users/jinfeishi/.codex/generated_images/01a112ad-c9c6-7c73-a9f1-7ed64c78b979/exec-e0a449b0-b3b9-4568-91e0-7fb32fc79cb8.png",
+    "prompt": "Create a modular pixel-art transparent part atlas for the approved adult Chinese xianxia swordsman Yunheng in the reference. This is a NEW isolated part sheet, not an assembled figure and not an edit of the full figure. Match his face, ivory cloud-embroidered robe, jade green layers, black hair, ancient Chinese equipment and clean pixel-art rendering. Exactly 4 columns x 4 rows equal invisible square cells, exactly one specified isolated complete part per cell in reading order. TRUE TRANSPARENT BACKGROUND. No grid or labels or text. Parts individually centered within cells with 12 percent margin, no crossing cell boundaries. Finish hidden joint overlap surfaces. All long parts must fit vertically inside their cell. Natural human anatomy, not mecha pieces. Crisp pixel clusters, sparse broad folds, no tiny filigree. No shadows floating around pieces, no detached extra ornaments, no duplicates.  BODY sheet. Cell sequence: row1 [head including approved face and topknot jade hairpin but NO long hanging hair, torso wearing fitted ivory-and-jade Chinese crossed-collar inner robe from neck to waist NO arms or long hem, left upper arm in fitted jade undersleeve, right upper arm in fitted jade undersleeve]. row2 [left forearm and naturally closed sword-gripping hand with jade wraps NO sword, right forearm and relaxed hand with jade wraps, pelvis as short ivory-and-jade waist belt section NO legs or long skirt, left thigh in plain charcoal cloth trousers]. row3 [right thigh charcoal trousers, left shin in charcoal trousers with pale crisscross ties, right shin in charcoal trousers with pale crisscross ties, left dark Chinese cloth boot with jade accents]. row4 [right dark Chinese cloth boot with jade accents, separate long flowing rear black hair WITHOUT face/head, separate narrow front black side-lock hair strand WITHOUT face/head, ONE substantially broad Chinese straight double-edged jian sword with jade-bronze guard and dark green grip, blade points down and hilt up, no hand]. Left/right parts designed for front three-quarter view facing right. Separate robes and equipment will be on another sheet so DO NOT add them here.",
+    "parts": [
+      "head",
+      "torso",
+      "upper_arm_l",
+      "upper_arm_r",
+      "forearm_hand_l",
+      "forearm_hand_r",
+      "pelvis",
+      "thigh_l",
+      "thigh_r",
+      "shin_l",
+      "shin_r",
+      "foot_l",
+      "foot_r",
+      "hair_back",
+      "hair_front",
+      "weapon"
+    ]
+  },
+  "clothes": {
+    "source": "/Users/jinfeishi/.codex/generated_images/01a112ad-c9c6-7c73-a9f1-7ed64c78b979/exec-b2cde9db-7fdf-4338-ac22-6ce3804af88a.png",
+    "prompt": "Create a modular pixel-art transparent part atlas for the approved adult Chinese xianxia swordsman Yunheng in the reference. This is a NEW isolated part sheet, not an assembled figure and not an edit of the full figure. Match his face, ivory cloud-embroidered robe, jade green layers, black hair, ancient Chinese equipment and clean pixel-art rendering. Exactly 4 columns x 4 rows equal invisible square cells, exactly one specified isolated complete part per cell in reading order. TRUE TRANSPARENT BACKGROUND. No grid or labels or text. Parts individually centered within cells with 12 percent margin, no crossing cell boundaries. Finish hidden joint overlap surfaces. All long parts must fit vertically inside their cell. Natural human anatomy, not mecha pieces. Crisp pixel clusters, sparse broad folds, no tiny filigree. No shadows floating around pieces, no detached extra ornaments, no duplicates.  CLOTHING AND EQUIPMENT sheet. All cloth EMPTY with no arms or body inside; keep chest and shoulders absent except explicitly requested collar/straps. Cell sequence: row1 [left ivory wide oversleeve with gold cloud trim EMPTY hanging cloth including shoulder overlap, right ivory wide oversleeve with gold cloud trim EMPTY hanging cloth, left long split front robe skirt panel ivory with gold edge and jade lining NO leg, right long split front robe skirt panel ivory with gold edge and jade lining NO leg]. row2 [single rear long ivory robe skirt panel jade lining NO body, bare ancient Chinese dark wooden rectangular back carrying frame with cross braces NO contents, tightly tied green cloth bundle on its own, first spare sword in dark green sheath with jade Chinese hilt upright NO hand]. row3 [second spare sword in brown sheath with gold Chinese hilt upright NO hand, rolled parchment scroll cylinder tied with brown cord, single ornate bronze treasure gourd with small tie loop, pair of front leather shoulder straps connected at top as ONE standalone harness without torso or limbs]. row4 [single long thin flowing jade-green hair ribbon NO hair or head, small tied brown equipment pouch, small ivory-jade crossed-collar front lapel insert NO torso, single jade pendant and tassel dangling from belt NO belt or body]. Isolated gear has no clothing or hands attached. Exactly 16 parts.",
+    "parts": [
+      "sleeve_l",
+      "sleeve_r",
+      "robe_l",
+      "robe_r",
+      "robe_back",
+      "backpack",
+      "bundle",
+      "spare_sword_l",
+      "spare_sword_r",
+      "scroll",
+      "gourd",
+      "straps",
+      "ribbon",
+      "pouch",
+      "collar",
+      "tassel"
+    ]
+  },
+  "method": "built-in image_gen"
+}

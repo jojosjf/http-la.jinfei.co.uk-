@@ -510,7 +510,12 @@ export class BattleScene extends Phaser.Scene {
     g.fillRect(px, y + 5, 28, 28);
     g.lineStyle(1, 0xe8eef8, 1);
     g.strokeRect(px + 0.5, y + 5.5, 27, 27);
-    this.add.text(px + 14, y + 19, [...s.pilot.name][0] ?? '?', { ...TEXT_STYLE, fontSize: '12px' }).setOrigin(0.5).setDepth(61);
+    if (this.textures.exists(`portrait_${s.def.id}`)) {
+      const img = this.add.image(px, y + 5, `portrait_${s.def.id}`).setOrigin(0, 0).setDepth(61);
+      if (side === 'right') img.setFlipX(true);
+    } else {
+      this.add.text(px + 14, y + 19, [...s.pilot.name][0] ?? '?', { ...TEXT_STYLE, fontSize: '12px' }).setOrigin(0.5).setDepth(61);
+    }
 
     const tx = side === 'left' ? x + 38 : x + 6;
     this.add.text(tx, y + 4, `${s.def.name}`, TEXT_STYLE).setDepth(61);
