@@ -333,7 +333,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "thunder"
   },
   "leiting_zhan": {
     "id": "leiting_zhan",
@@ -501,7 +502,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "sword"
   },
   "dun_ji": {
     "id": "dun_ji",
@@ -564,7 +566,8 @@
     },
     "postMove": true,
     "beam": false,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "fire"
   },
   "tie_quan": {
     "id": "tie_quan",
@@ -753,7 +756,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "ice"
   },
   "qingyu_zhang": {
     "id": "qingyu_zhang",
@@ -900,7 +904,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "ice"
   },
   "linwei_jiao": {
     "id": "linwei_jiao",
@@ -963,7 +968,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "thunder"
   },
   "tianxuan_zhao": {
     "id": "tianxuan_zhao",
@@ -1047,7 +1053,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "fire"
   },
   "suolian_zhua": {
     "id": "suolian_zhua",
@@ -1299,7 +1306,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "thunder"
   },
   "liubi_luanwu": {
     "id": "liubi_luanwu",
@@ -1425,7 +1433,8 @@
     },
     "postMove": false,
     "beam": true,
-    "kind": "ranged"
+    "kind": "ranged",
+    "fx": "fire"
   },
   "tianhuo_fenshi": {
     "id": "tianhuo_fenshi",
@@ -1446,6 +1455,200 @@
     },
     "postMove": false,
     "beam": true,
+    "kind": "ranged",
+    "fx": "fire"
+  },
+  "qingfeng_jian": {
+    "id": "qingfeng_jian",
+    "name": "青锋剑诀",
+    "power": 2400,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 10,
+    "crit": 15,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "yujian_shu": {
+    "id": "yujian_shu",
+    "name": "御剑术",
+    "power": 2000,
+    "rangeMin": 2,
+    "rangeMax": 4,
+    "hit": 20,
+    "crit": 5,
+    "en": 10,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged",
+    "fx": "sword"
+  },
+  "tianhe_jianzhen": {
+    "id": "tianhe_jianzhen",
+    "name": "天河剑阵",
+    "power": 3600,
+    "rangeMin": 1,
+    "rangeMax": 3,
+    "hit": 5,
+    "crit": 20,
+    "en": 35,
+    "ammo": null,
+    "morale": 120,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged",
+    "fx": "sword"
+  },
+  "hanshuang_jue": {
+    "id": "hanshuang_jue",
+    "name": "寒霜诀",
+    "power": 1900,
+    "rangeMin": 2,
+    "rangeMax": 5,
+    "hit": 20,
+    "crit": 5,
+    "en": 10,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": true,
+    "kind": "ranged",
+    "fx": "ice"
+  },
+  "zhangxin_lei": {
+    "id": "zhangxin_lei",
+    "name": "掌心雷",
+    "power": 2300,
+    "rangeMin": 1,
+    "rangeMax": 3,
+    "hit": 10,
+    "crit": 10,
+    "en": 15,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
+    "kind": "ranged",
+    "fx": "thunder"
+  },
+  "xuanbing_zhang": {
+    "id": "xuanbing_zhang",
+    "name": "玄冰掌",
+    "power": 1700,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 10,
+    "crit": 5,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "bengshan_quan": {
+    "id": "bengshan_quan",
+    "name": "崩山拳",
+    "power": 2500,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 5,
+    "crit": 10,
+    "en": 0,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "jingang_zhang": {
+    "id": "jingang_zhang",
+    "name": "金刚伏魔掌",
+    "power": 3300,
+    "rangeMin": 1,
+    "rangeMax": 1,
+    "hit": 0,
+    "crit": 20,
+    "en": 15,
+    "ammo": null,
+    "morale": 110,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": true,
+    "beam": false,
+    "kind": "melee"
+  },
+  "zhendi_jin": {
+    "id": "zhendi_jin",
+    "name": "震地劲",
+    "power": 2100,
+    "rangeMin": 1,
+    "rangeMax": 3,
+    "hit": 0,
+    "crit": 0,
+    "en": 12,
+    "ammo": null,
+    "morale": 100,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "postMove": false,
+    "beam": false,
     "kind": "ranged"
   }
 }

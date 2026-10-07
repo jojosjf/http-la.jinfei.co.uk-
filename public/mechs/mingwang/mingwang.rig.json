@@ -3,6 +3,7 @@
  "name": "六臂明王",
  "version": 2,
  "image": "mingwang.png",
+ "species": "construct",
  "root": "torso",
  "height": 140,
  "parts": [

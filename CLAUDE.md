@@ -1,7 +1,7 @@
-# 钢铁战线（暂定名）— 项目说明给 Claude Code
+# 问剑录（暂定名）— 项目说明给 Claude Code
 
-2D 像素风回合制机器人 SRPG，对标《超级机器人大战 F 完结篇》的系统。网页优先（Phaser 3 + TypeScript + Vite）。
-全部机体 / 角色 / 剧情必须原创，不得使用任何版权作品的名称、设定或剪影。
+2D 像素风回合制**修仙**战棋 SRPG，玩法系统对标《超级机器人大战 F 完结篇》（2026-10 由机甲题材改为修仙题材，规则不变）。网页优先（Phaser 3 + TypeScript + Vite）。
+全部角色 / 法宝 / 招式 / 剧情必须原创，不得使用任何版权作品（含知名修仙小说、仙侠游戏）的人名、宗门名、招式名或造型。
 
 ## 常用命令
 
@@ -26,6 +26,16 @@ pnpm test:watch   # Vitest 监听模式
 - `tests/unit/` Vitest；`tests/e2e/` Playwright，通过 `window.__srpg`（见 `src/debug.ts`）读取状态并操控光标。
 - `docs/game-plan.md` 总体制作计划与任务表；`docs/art-spec.md` 美术规格。
 
+## 题材约定（修仙版）
+
+- **一人即一个战斗单位**：部署写 `{ "character": "<id>" }`，`units.json`（气血 / 灵力 / 护体 / 身法 / 法宝栏）和 `pilots.json`（修为属性）用同一个 id。内部仍是 unit + pilot 两张表，只是一一对应，不能换乘。
+- **名词**：HP→气血、EN→灵力、气力→战意、精神指令→神通、资金→灵石、等级→境界（`src/core/realm.ts`，只是名字，不加规则）、弹药→次数。代码里的字段名不变（hp / en / morale）。
+- **species**：`human` 修士（不断肢，被击败后倒地并化作光点）、`construct` 机关傀儡（天工宗，可断肢、留残骸）、`beast` 神兽（倒地）。只影响表现和文案。
+- **天工仙甲 24 台** 现在是敌方：天工宗傀儡 + 神兽（白泽 / 潜鳞 / 烛龙）。我方修士目前是 `tools/gen-cultivators.mjs` 生成的占位（林玄 / 苏清寒 / 石破军），正式素材按 `docs/art-brief-for-chatgpt.md` 的修士部分交付后替换。
+- **随动部件**：头发 / 衣袍下摆 / 袖 / 飘带（`hair* robe* skirt* sleeve* ribbon* sash* tassel* cape*`，或 rig 的 `follow` 列表）由 `src/core/follow.ts` 的阻尼弹簧驱动，随身体加速度摆动并有微风。
+- **武器特效** `fx`：`sword` 飞剑 / `thunder` 雷法 / `ice` 冰 / `fire` 火；未写时按格斗 / 光束 / 弹幕 / 抛射自动选。
+- 不加五行相克、境界压制等新规则。
+
 ## 设计规则
 
 - 内部分辨率 480×270，整数倍缩放，`pixelArt: true`；地图格 32×32。
@@ -33,5 +43,5 @@ pnpm test:watch   # Vitest 监听模式
 - 数值公式以 `docs/game-plan.md` §6 为准，改公式先改文档再改 `src/core/battle.ts` 和测试。
 - 占位美术的贴图 key 约定：`unit_<unitId>`、`cursor`、`team_player`、`team_enemy`；地图整张由 `renderMapTexture()` 生成（key `map_<scenarioId>`）。正式像素图按同名 key 替换；正式地块到位后把 `mapArt.ts` 换成 Tiled 图层渲染。
 - HUD 文字统一用 `TEXT_STYLE`（Fusion Pixel 12px 粗体 + 1px 阴影），面板用 `drawBox()`。
-- 采用的美术是「天工仙甲」24 台（仙侠机甲）：0 照夜（主角）、1–10 同伴、11–20 敌人、21–23 Boss；机体 id 沿用原型拼音（如 `xuetang`），旧的 `e_*`、`cangqiong` 等占位机体只留给测试。规则层不随美术改变：部位破坏、断肢只做视觉，不影响 HP / 命中 / 伤害公式。
+- 角色 id 用拼音（`linxuan`、`xuetang`）；旧的 `e_*`、`cangqiong`、`linkai` 等占位只留给测试。规则层不随美术改变：断肢、化光只做视觉，不影响气血 / 命中 / 伤害公式。
 - 提交前运行 `pnpm check`；涉及场景交互的改动再跑 `pnpm e2e`。

@@ -3,6 +3,7 @@
  "name": "玄垒",
  "version": 2,
  "image": "xuanlei.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

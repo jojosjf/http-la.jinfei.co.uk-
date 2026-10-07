@@ -1,0 +1,481 @@
+{
+ "id": "linxuan",
+ "name": "林玄",
+ "version": 2,
+ "image": "linxuan.png",
+ "species": "human",
+ "root": "torso",
+ "height": 103,
+ "follow": [
+  "hair_back",
+  "ribbon",
+  "sleeve_l",
+  "robe",
+  "sleeve_r"
+ ],
+ "parts": [
+  {
+   "id": "hair_back",
+   "frame": {
+    "x": 9,
+    "y": 1,
+    "w": 22,
+    "h": 34
+   },
+   "x": -7,
+   "y": -84,
+   "w": 22,
+   "h": 34,
+   "layer": 0,
+   "mass": 0.6
+  },
+  {
+   "id": "ribbon",
+   "frame": {
+    "x": 63,
+    "y": 1,
+    "w": 5,
+    "h": 30
+   },
+   "x": -12,
+   "y": -52,
+   "w": 5,
+   "h": 30,
+   "layer": 0,
+   "mass": 0.3
+  },
+  {
+   "id": "upper_arm_l",
+   "frame": {
+    "x": 133,
+    "y": 1,
+    "w": 8,
+    "h": 16
+   },
+   "x": -13,
+   "y": -66,
+   "w": 8,
+   "h": 16,
+   "layer": 1,
+   "mass": 1
+  },
+  {
+   "id": "forearm_hand_l",
+   "frame": {
+    "x": 142,
+    "y": 1,
+    "w": 8,
+    "h": 16
+   },
+   "x": -14,
+   "y": -51,
+   "w": 8,
+   "h": 16,
+   "layer": 1,
+   "mass": 1
+  },
+  {
+   "id": "sleeve_l",
+   "frame": {
+    "x": 169,
+    "y": 1,
+    "w": 13,
+    "h": 15
+   },
+   "x": -15,
+   "y": -49,
+   "w": 13,
+   "h": 15,
+   "layer": 2,
+   "mass": 0.4
+  },
+  {
+   "id": "thigh_l",
+   "frame": {
+    "x": 197,
+    "y": 1,
+    "w": 8,
+    "h": 14
+   },
+   "x": -4,
+   "y": -40,
+   "w": 8,
+   "h": 14,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "thigh_r",
+   "frame": {
+    "x": 206,
+    "y": 1,
+    "w": 8,
+    "h": 14
+   },
+   "x": 4,
+   "y": -40,
+   "w": 8,
+   "h": 14,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "shin_l",
+   "frame": {
+    "x": 69,
+    "y": 1,
+    "w": 7,
+    "h": 26
+   },
+   "x": -4,
+   "y": -18,
+   "w": 7,
+   "h": 26,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "shin_r",
+   "frame": {
+    "x": 77,
+    "y": 1,
+    "w": 7,
+    "h": 26
+   },
+   "x": 4,
+   "y": -18,
+   "w": 7,
+   "h": 26,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "foot_l",
+   "frame": {
+    "x": 215,
+    "y": 1,
+    "w": 11,
+    "h": 5
+   },
+   "x": -2,
+   "y": -3,
+   "w": 11,
+   "h": 5,
+   "layer": 3,
+   "mass": 1
+  },
+  {
+   "id": "foot_r",
+   "frame": {
+    "x": 227,
+    "y": 1,
+    "w": 11,
+    "h": 5
+   },
+   "x": 6,
+   "y": -3,
+   "w": 11,
+   "h": 5,
+   "layer": 3,
+   "mass": 1
+  },
+  {
+   "id": "robe",
+   "frame": {
+    "x": 32,
+    "y": 1,
+    "w": 30,
+    "h": 34
+   },
+   "x": 0,
+   "y": -36,
+   "w": 30,
+   "h": 34,
+   "layer": 4,
+   "mass": 1.5
+  },
+  {
+   "id": "torso",
+   "frame": {
+    "x": 85,
+    "y": 1,
+    "w": 22,
+    "h": 26
+   },
+   "x": 0,
+   "y": -66,
+   "w": 22,
+   "h": 26,
+   "layer": 5,
+   "mass": 5
+  },
+  {
+   "id": "head",
+   "frame": {
+    "x": 108,
+    "y": 1,
+    "w": 24,
+    "h": 24
+   },
+   "x": 2,
+   "y": -91,
+   "w": 24,
+   "h": 24,
+   "layer": 6,
+   "mass": 3
+  },
+  {
+   "id": "upper_arm_r",
+   "frame": {
+    "x": 151,
+    "y": 1,
+    "w": 8,
+    "h": 16
+   },
+   "x": 13,
+   "y": -66,
+   "w": 8,
+   "h": 16,
+   "layer": 7,
+   "mass": 1
+  },
+  {
+   "id": "forearm_hand_r",
+   "frame": {
+    "x": 160,
+    "y": 1,
+    "w": 8,
+    "h": 16
+   },
+   "x": 14,
+   "y": -51,
+   "w": 8,
+   "h": 16,
+   "layer": 7,
+   "mass": 1
+  },
+  {
+   "id": "sleeve_r",
+   "frame": {
+    "x": 183,
+    "y": 1,
+    "w": 13,
+    "h": 15
+   },
+   "x": 15,
+   "y": -49,
+   "w": 13,
+   "h": 15,
+   "layer": 8,
+   "mass": 0.4
+  },
+  {
+   "id": "weapon",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 7,
+    "h": 40
+   },
+   "x": 16,
+   "y": -27,
+   "w": 7,
+   "h": 40,
+   "layer": 8,
+   "mass": 1.2
+  }
+ ],
+ "joints": [
+  {
+   "a": "torso",
+   "b": "head",
+   "anchor": [
+    0,
+    -79
+   ],
+   "min": -0.4,
+   "max": 0.4,
+   "detachable": false
+  },
+  {
+   "a": "head",
+   "b": "hair_back",
+   "anchor": [
+    -4,
+    -98
+   ],
+   "min": -0.9,
+   "max": 0.9,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "robe",
+   "anchor": [
+    0,
+    -54
+   ],
+   "min": -0.5,
+   "max": 0.5,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "thigh_l",
+   "anchor": [
+    -4,
+    -50
+   ],
+   "min": -0.9,
+   "max": 0.9,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "thigh_r",
+   "anchor": [
+    4,
+    -50
+   ],
+   "min": -0.9,
+   "max": 0.9,
+   "detachable": false
+  },
+  {
+   "a": "thigh_l",
+   "b": "shin_l",
+   "anchor": [
+    -4,
+    -31
+   ],
+   "min": 0,
+   "max": 1.4,
+   "detachable": false
+  },
+  {
+   "a": "thigh_r",
+   "b": "shin_r",
+   "anchor": [
+    4,
+    -31
+   ],
+   "min": 0,
+   "max": 1.4,
+   "detachable": false
+  },
+  {
+   "a": "shin_l",
+   "b": "foot_l",
+   "anchor": [
+    -4,
+    -6
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "shin_r",
+   "b": "foot_r",
+   "anchor": [
+    4,
+    -6
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_l",
+   "anchor": [
+    -11,
+    -74
+   ],
+   "min": -1.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_r",
+   "anchor": [
+    11,
+    -74
+   ],
+   "min": -1.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_l",
+   "b": "forearm_hand_l",
+   "anchor": [
+    -13,
+    -59
+   ],
+   "min": -1.6,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_r",
+   "b": "forearm_hand_r",
+   "anchor": [
+    13,
+    -59
+   ],
+   "min": -1.6,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "forearm_hand_l",
+   "b": "sleeve_l",
+   "anchor": [
+    -14,
+    -56
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "forearm_hand_r",
+   "b": "sleeve_r",
+   "anchor": [
+    14,
+    -56
+   ],
+   "min": -0.8,
+   "max": 0.8,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "ribbon",
+   "anchor": [
+    -9,
+    -66
+   ],
+   "min": -1,
+   "max": 1,
+   "detachable": false
+  },
+  {
+   "a": "forearm_hand_r",
+   "b": "weapon",
+   "anchor": [
+    15,
+    -44
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": true
+  }
+ ],
+ "source": {
+  "from": "tools/gen-cultivators.mjs",
+  "placeholder": true
+ }
+}

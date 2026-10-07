@@ -3,6 +3,7 @@
  "name": "焚炉",
  "version": 2,
  "image": "fenlu.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

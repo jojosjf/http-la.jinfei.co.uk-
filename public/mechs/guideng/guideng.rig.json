@@ -3,6 +3,7 @@
  "name": "鬼灯",
  "version": 2,
  "image": "guideng.png",
+ "species": "construct",
  "root": "crown",
  "height": 123,
  "parts": [

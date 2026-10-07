@@ -3,6 +3,7 @@
  "name": "铁獠",
  "version": 2,
  "image": "tieliao.png",
+ "species": "construct",
  "root": "torso",
  "height": 80,
  "parts": [

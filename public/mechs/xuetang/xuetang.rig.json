@@ -3,6 +3,7 @@
  "name": "血螳",
  "version": 2,
  "image": "xuetang.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

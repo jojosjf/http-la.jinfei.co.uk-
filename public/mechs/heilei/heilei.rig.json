@@ -3,6 +3,7 @@
  "name": "黑垒",
  "version": 2,
  "image": "heilei.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

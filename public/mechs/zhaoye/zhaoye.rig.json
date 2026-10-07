@@ -3,6 +3,7 @@
  "name": "照夜",
  "version": 2,
  "image": "zhaoye.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

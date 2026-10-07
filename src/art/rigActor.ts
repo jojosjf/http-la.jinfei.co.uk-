@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { breeze, FOLLOW_PART, stepFollow, type FollowState } from '../core/follow';
 import { getPose, samplePose, solvePose, subtree, weaponSide, type PartTransform, type RigDef } from '../core/rig';
 import type { BattleActor } from './dollActor';
 import type { LoadedRig } from './dollRegistry';
@@ -41,6 +42,11 @@ export class RigActor implements BattleActor {
   private loose = new Set<string>();
   private dead = false;
   private group = 0;
+  private clock = 0;
+  /** Secondary motion (hair / robe / sleeves / ribbons). */
+  private readonly followIds: string[];
+  private readonly followState = new Map<string, FollowState>();
+  private readonly followTrack = new Map<string, { x: number; vx: number }>();
   private readonly onUpdate: (time: number, delta: number) => void;
 
   constructor(
@@ -51,6 +57,8 @@ export class RigActor implements BattleActor {
     opts: RigActorOptions = {},
   ) {
     this.def = rig.def;
+    this.followIds = this.def.follow ?? this.def.parts.map((p) => p.id).filter((id) => FOLLOW_PART.test(id));
+    for (const id of this.followIds) this.followState.set(id, { angle: 0, vel: 0 });
     this.node = scene.add.container(x, y);
     const sorted = this.def.parts.map((p, i) => ({ p, i })).sort((a, b) => a.p.layer - b.p.layer || a.i - b.i);
     for (const { p } of sorted) {
@@ -79,6 +87,13 @@ export class RigActor implements BattleActor {
   }
   get isRagdoll(): boolean {
     return this.dead;
+  }
+  get species(): 'human' | 'construct' | 'beast' {
+    return this.def.species ?? 'construct';
+  }
+  /** Current extra angle of a following part (tests / debugging). */
+  followAngle(id: string): number {
+    return this.followState.get(id)?.angle ?? 0;
   }
 
   setFlip(flip: boolean): void {
@@ -148,7 +163,9 @@ export class RigActor implements BattleActor {
   private tick(deltaMs: number): void {
     if (!this.node.active) return;
     const dt = (deltaMs / 1000) * this.scene.time.timeScale;
+    this.clock += dt;
     if (!this.dead) {
+      this.updateFollow(dt);
       this.time += dt;
       const pose = getPose(this.def, this.pose);
       if (!pose.loop && this.time >= pose.duration && this.pose !== 'idle') {
@@ -160,9 +177,32 @@ export class RigActor implements BattleActor {
     this.syncBodies();
   }
 
-  /** Canonical (facing +1) transforms of the animated parts. */
+  /** Canonical (facing +1) transforms of the animated parts, cloth springs included. */
   private solveCanonical(): PartTransform[] {
-    return solvePose(this.def, samplePose(this.def, this.pose, this.time), 1, this.loose.size ? this.loose : undefined);
+    const sample = samplePose(this.def, this.pose, this.time);
+    if (this.followIds.length) {
+      const angles = { ...sample.angles };
+      this.followIds.forEach((id, i) => {
+        angles[id] = (angles[id] ?? 0) + (this.followState.get(id)?.angle ?? 0) + breeze(this.clock, i * 1.3);
+      });
+      sample.angles = angles;
+    }
+    return solvePose(this.def, sample, 1, this.loose.size ? this.loose : undefined);
+  }
+
+  /** Drive each cloth spring from the horizontal acceleration of the part (canonical frame). */
+  private updateFollow(dt: number): void {
+    if (!this.followIds.length || dt <= 0) return;
+    for (const id of this.followIds) {
+      const img = this.images.get(id);
+      if (!img) continue;
+      const x = (this.node.x + img.x) * this.facing;
+      const prev = this.followTrack.get(id);
+      const vx = prev ? (x - prev.x) / dt : 0;
+      const ax = prev ? (vx - prev.vx) / dt : 0;
+      this.followTrack.set(id, { x, vx });
+      this.followState.set(id, stepFollow(this.followState.get(id)!, ax, dt));
+    }
   }
 
   private apply(): void {
@@ -282,7 +322,8 @@ export class RigActor implements BattleActor {
     this.dead = true;
     for (const j of this.def.joints) if (j.detachable) this.cut(j.a, j.b);
     let severed = new Set<string>();
-    if (severe) {
+    // People and beasts never lose limbs; only 机关傀儡 can be torn apart.
+    if (severe && this.species === 'construct') {
       const off = weaponSide(this.def) === 'l' ? 'r' : 'l';
       const arm = `upper_arm_${off}`;
       const j = this.def.joints.find((x) => (x.a === arm || x.b === arm) && (x.a === this.def.root || x.b === this.def.root));
@@ -297,6 +338,29 @@ export class RigActor implements BattleActor {
       M.Body.setAngularVelocity(b, dir * (0.04 + Math.random() * 0.06) * extra);
     }
     this.register();
+  }
+
+  /** 修士 defeat: the fallen body fades into rising motes of light. */
+  dissolve(duration = 900): Promise<void> {
+    const parts = [...this.images.values()].filter((img) => img.visible);
+    for (let i = 0; i < 26; i++) {
+      const src = parts[i % Math.max(1, parts.length)];
+      const x = this.node.x + (src?.x ?? 0) + Phaser.Math.Between(-6, 6);
+      const y = this.node.y + (src?.y ?? 0) + Phaser.Math.Between(-6, 6);
+      const mote = this.scene.add.rectangle(x, y, 2, 2, i % 3 ? 0xbfefff : 0xfff3b0, 1).setDepth(this.node.depth + 1);
+      this.scene.tweens.add({
+        targets: mote,
+        y: y - Phaser.Math.Between(30, 70),
+        x: x + Phaser.Math.Between(-10, 10),
+        alpha: 0,
+        duration: duration + Phaser.Math.Between(0, 500),
+        delay: Phaser.Math.Between(0, duration * 0.6),
+        onComplete: () => mote.destroy(),
+      });
+    }
+    return new Promise((resolve) => {
+      this.scene.tweens.add({ targets: this.node, alpha: 0, duration, ease: 'Sine.easeIn', onComplete: () => resolve() });
+    });
   }
 
   private register(): void {

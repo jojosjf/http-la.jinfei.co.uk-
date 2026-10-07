@@ -1,6 +1,21 @@
 {
   "dolls": [
     {
+      "id": "linxuan",
+      "rig": "mechs/linxuan/linxuan.rig.json",
+      "icon": "mechs/linxuan/icon.png"
+    },
+    {
+      "id": "suqinghan",
+      "rig": "mechs/suqinghan/suqinghan.rig.json",
+      "icon": "mechs/suqinghan/icon.png"
+    },
+    {
+      "id": "shipojun",
+      "rig": "mechs/shipojun/shipojun.rig.json",
+      "icon": "mechs/shipojun/icon.png"
+    },
+    {
       "id": "cangqiong",
       "doll": "mechs/cangqiong/cangqiong.doll.json"
     },

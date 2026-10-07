@@ -28,6 +28,7 @@ describe('imported 天工仙甲 rigs', () => {
 import { archetypeOf, poseNames, samplePose, solvePose } from '../../src/core/rig';
 
 const EXPECTED: Record<string, string> = {
+  linxuan: 'humanoid', suqinghan: 'humanoid', shipojun: 'humanoid',
   zhaoye: 'humanoid', feiyan: 'humanoid', hanyue: 'humanoid', xuanlei: 'humanoid', liuxian: 'humanoid',
   qinghe: 'floater', chilun: 'wheeled', leigu: 'humanoid', baize: 'quadruped', qianlin: 'serpent',
   tianshu: 'floater', xuetang: 'humanoid', tieliao: 'quadruped', guideng: 'floater', heilei: 'humanoid',
@@ -67,5 +68,19 @@ describe('roster data', () => {
       expect(u.weapons.length).toBeGreaterThan(0);
       for (const w of u.weapons) expect(gd.weapons[w], `${entry.id}:${w}`).toBeDefined();
     }
+  });
+});
+
+describe('species', () => {
+  it('cultivators are human with cloth parts; 天工 mechs are constructs or beasts', () => {
+    const gd = loadData();
+    for (const entry of rigs) {
+      const rig = JSON.parse(readFileSync(`public/${entry.rig}`, 'utf8')) as RigDef;
+      expect(rig.species, entry.id).toBeDefined();
+      expect(gd.units[entry.id].species, entry.id).toBe(rig.species);
+      if (rig.species === 'human') expect(rig.follow?.length ?? 0, entry.id).toBeGreaterThan(0);
+    }
+    expect(gd.units.zhulong.species).toBe('beast');
+    expect(gd.units.xuetang.species).toBe('construct');
   });
 });

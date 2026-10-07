@@ -23,6 +23,9 @@ export interface BattleActor {
   ghost(): Phaser.GameObjects.GameObject & { alpha: number };
   /** Physical death (ragdoll). Actors without physics leave this undefined. */
   collapse?(dir: number, severe: boolean): void;
+  /** Fade into light (修士 defeat). */
+  dissolve?(duration?: number): Promise<void>;
+  readonly species?: 'human' | 'construct' | 'beast';
   destroy(): void;
 }
 

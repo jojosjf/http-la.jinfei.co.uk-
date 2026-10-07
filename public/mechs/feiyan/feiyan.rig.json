@@ -3,6 +3,7 @@
  "name": "飞燕",
  "version": 2,
  "image": "feiyan.png",
+ "species": "construct",
  "root": "torso",
  "height": 119,
  "parts": [

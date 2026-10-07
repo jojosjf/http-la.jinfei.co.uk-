@@ -3,6 +3,7 @@
  "name": "镇岳天城",
  "version": 2,
  "image": "tiancheng.png",
+ "species": "construct",
  "root": "fortress_hull",
  "height": 140,
  "parts": [

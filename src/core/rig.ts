@@ -43,6 +43,10 @@ export interface RigDef {
   version: 2;
   image: string;
   root: string;
+  /** human 修士: no dismemberment, dissolves into light; construct: may lose limbs; beast: falls. */
+  species?: 'human' | 'construct' | 'beast';
+  /** Parts with secondary motion (hair, robe, sleeves, ribbons). Defaults to FOLLOW_PART name matches. */
+  follow?: string[];
   /** Rest height in game pixels. */
   height: number;
   parts: RigPart[];

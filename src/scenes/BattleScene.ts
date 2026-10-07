@@ -4,6 +4,7 @@ import { addGround, stepRagdolls } from '../art/rigActor';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config';
 import type { DefenseAction, StrikeResult } from '../core/battle';
 import type { Domain, PilotDef, Team, TerrainDef, UnitDef, WeaponDef } from '../core/types';
+import { realmName } from '../core/realm';
 import { TEXT_STYLE } from '../ui/Hud';
 
 export type BattleSideId = 'left' | 'right';
@@ -43,6 +44,12 @@ export interface BattleSceneData {
 }
 
 const GROUND_Y = 206;
+
+function defeatText(def: UnitDef): string {
+  if (def.species === 'human') return `${def.name} 败退！`;
+  if (def.species === 'beast') return `${def.name} 倒下了！`;
+  return `${def.name} 被击毁！`;
+}
 const POS_X: Record<BattleSideId, number> = { left: 128, right: 352 };
 const SKIP_KEYS = new Set(['KeyZ', 'KeyX', 'Enter', 'Space', 'Escape']);
 
@@ -177,7 +184,11 @@ export class BattleScene extends Phaser.Scene {
     if (s.defense === 'defend' && s.result.hit) this.setMessage('防御！');
     else if (s.defense === 'evade') this.setMessage('回避！');
 
-    if (s.weapon.kind === 'melee') await this.melee(A, D, dir);
+    if (s.weapon.fx === 'sword') await this.flyingSwords(A, D, dir, s.weapon.power >= 3000 ? 5 : 1);
+    else if (s.weapon.fx === 'thunder') await this.thunder(A, D);
+    else if (s.weapon.fx === 'fire') await this.fireball(A, D, dir);
+    else if (s.weapon.kind === 'melee') await this.melee(A, D, dir);
+    else if (s.weapon.fx === 'ice') await this.beam(A, D, dir, 0x9fe8ff, true);
     else if (s.weapon.beam) await this.beam(A, D, dir);
     else if (s.weapon.ammo !== null && s.weapon.ammo >= 10) await this.burst(A, D, dir);
     else await this.shell(A, D, dir);
@@ -198,12 +209,114 @@ export class BattleScene extends Phaser.Scene {
     if (s.targetDestroyed) {
       if (!D.collapse) D.play('down');
       await this.destroy(D, -dir, s.result.crit);
-      this.setMessage(`${this.script[defSide].def.name} 击坠！`);
+      this.setMessage(defeatText(this.script[defSide].def));
       await this.wait(500);
     }
   }
 
   // ------------------------------------------------------------------ attacks
+
+  /** 御剑术: one or more flying swords arc from the caster into the target, leaving afterimages. */
+  private async flyingSwords(A: BattleActor, D: BattleActor, dir: number, count: number): Promise<void> {
+    const start = A.socket('muzzle', dir);
+    const ex = D.x - dir * 6;
+    const ey = D.y - D.height * 0.5;
+    const flights: Promise<void>[] = [];
+    for (let i = 0; i < count; i++) {
+      const sx = start.x + (count > 1 ? Phaser.Math.Between(-20, 20) : 0);
+      const sy = start.y - (count > 1 ? 30 + i * 10 : 6);
+      const sword = this.add.container(sx, sy).setDepth(36);
+      sword.add([
+        this.add.rectangle(dir * 6, 0, 14, 2, 0xe8f4ff),
+        this.add.rectangle(dir * 6, -1, 12, 1, 0xffffff),
+        this.add.rectangle(-dir * 2, 0, 2, 6, 0xd8b04a),
+        this.add.rectangle(-dir * 5, 0, 5, 2, 0x5a3a22),
+      ]);
+      const lift = 26 + i * 6;
+      flights.push(
+        new Promise<void>((resolve) => {
+          this.tweens.addCounter({
+            from: 0,
+            to: 1,
+            duration: 360,
+            delay: i * 90,
+            ease: 'Sine.easeIn',
+            onUpdate: (tw) => {
+              const t = tw.getValue() ?? 0;
+              const x = sx + (ex - sx) * t;
+              const y = sy + (ey - sy) * t - Math.sin(Math.PI * t) * lift;
+              sword.setRotation(Math.atan2(y - sword.y, (x - sword.x) * dir || 0.001) * dir);
+              sword.setPosition(x, y);
+              if (Math.random() < 0.7) {
+                const ghost = this.add.rectangle(x, y, 10, 2, 0x9fe8ff, 0.6).setRotation(sword.rotation).setDepth(35);
+                this.tweens.add({ targets: ghost, alpha: 0, duration: 220, onComplete: () => ghost.destroy() });
+              }
+            },
+            onComplete: () => {
+              sword.destroy();
+              resolve();
+            },
+          });
+        }),
+      );
+    }
+    await Promise.all(flights);
+  }
+
+  /** 雷法: forked lightning strikes the target from the sky. */
+  private async thunder(A: BattleActor, D: BattleActor): Promise<void> {
+    const raise = A.socket('muzzle', 1);
+    const spark = this.add.circle(raise.x, raise.y, 4, 0xd8c8ff, 1).setDepth(36);
+    this.tweens.add({ targets: spark, radius: 9, alpha: 0, duration: 300, onComplete: () => spark.destroy() });
+    await this.wait(200);
+    const flash = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0xe8e0ff, 0.5).setOrigin(0).setDepth(30);
+    this.tweens.add({ targets: flash, alpha: 0, duration: 260, onComplete: () => flash.destroy() });
+    for (let b = 0; b < 2; b++) {
+      const g = this.add.graphics().setDepth(37);
+      let x = D.x + Phaser.Math.Between(-8, 8);
+      let y = 0;
+      const ty = D.y - D.height * 0.5;
+      g.lineStyle(b ? 1 : 3, b ? 0xffffff : 0xb8a0ff, 1);
+      g.beginPath();
+      g.moveTo(x, y);
+      while (y < ty) {
+        y = Math.min(ty, y + Phaser.Math.Between(10, 22));
+        x += Phaser.Math.Between(-9, 9);
+        g.lineTo(x, y);
+      }
+      g.strokePath();
+      this.tweens.add({ targets: g, alpha: 0, duration: 280, delay: 120, onComplete: () => g.destroy() });
+    }
+    this.cameras.main.shake(120, 0.006);
+    await this.wait(160);
+  }
+
+  /** 火法: a blazing orb with an ember trail. */
+  private async fireball(A: BattleActor, D: BattleActor, dir: number): Promise<void> {
+    const m = A.socket('muzzle', dir);
+    const orb = this.add.circle(m.x, m.y, 6, 0xffb347, 1).setDepth(36);
+    const coreDot = this.add.circle(m.x, m.y, 3, 0xfff1a8, 1).setDepth(37);
+    await new Promise<void>((resolve) => {
+      this.tweens.addCounter({
+        from: 0,
+        to: 1,
+        duration: 380,
+        ease: 'Quad.easeIn',
+        onUpdate: (tw) => {
+          const t = tw.getValue() ?? 0;
+          const x = m.x + (D.x - m.x) * t;
+          const y = m.y + (D.y - D.height * 0.5 - m.y) * t;
+          orb.setPosition(x, y);
+          coreDot.setPosition(x, y);
+          const ember = this.add.circle(x - dir * 4, y + Phaser.Math.Between(-3, 3), 2, Math.random() < 0.5 ? 0xff6b3d : 0xffd060, 0.9).setDepth(35);
+          this.tweens.add({ targets: ember, alpha: 0, y: ember.y - 6, duration: 300, onComplete: () => ember.destroy() });
+        },
+        onComplete: () => resolve(),
+      });
+    });
+    orb.destroy();
+    coreDot.destroy();
+  }
 
   private async melee(A: BattleActor, D: BattleActor, dir: number): Promise<void> {
     const home = A.x;
@@ -222,18 +335,25 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.add({ targets: A.node, x: home, duration: 260, ease: 'Quad.easeOut', delay: 180 });
   }
 
-  private async beam(A: BattleActor, D: BattleActor, dir: number): Promise<void> {
+  private async beam(A: BattleActor, D: BattleActor, dir: number, color = 0xfff0a0, shards = false): Promise<void> {
     const { x: gx, y: gy } = A.socket('muzzle', dir);
     const flash = this.add.circle(gx, gy, 7, 0xffffff, 1).setDepth(36);
     await this.wait(80);
     flash.destroy();
     const length = Math.abs(D.x - gx) - 10;
-    const glow = this.add.rectangle(gx, gy, 1, 10, 0xff7bff, 0.55).setOrigin(dir > 0 ? 0 : 1, 0.5).setDepth(34);
+    const glow = this.add.rectangle(gx, gy, 1, 10, color, 0.55).setOrigin(dir > 0 ? 0 : 1, 0.5).setDepth(34);
     const core = this.add.rectangle(gx, gy, 1, 4, 0xffffff, 1).setOrigin(dir > 0 ? 0 : 1, 0.5).setDepth(35);
     await Promise.all([
       this.tween({ targets: glow, width: length, duration: 110 }),
       this.tween({ targets: core, width: length, duration: 110 }),
     ]);
+    if (shards) {
+      for (let i = 0; i < 8; i++) {
+        const sh = this.add.rectangle(D.x + Phaser.Math.Between(-14, 14), D.y - D.height * 0.5 + Phaser.Math.Between(-24, 24), 3, 7, 0xe8fbff, 1)
+          .setAngle(Phaser.Math.Between(-40, 40)).setDepth(37);
+        this.tweens.add({ targets: sh, alpha: 0, y: sh.y + 10, duration: 500, delay: i * 30, onComplete: () => sh.destroy() });
+      }
+    }
     await this.wait(160);
     await Promise.all([
       this.tween({ targets: glow, alpha: 0, duration: 160 }),
@@ -341,12 +461,17 @@ export class BattleScene extends Phaser.Scene {
       this.sparks.explode(30, D.x, cy0);
       await this.wait(90);
       D.unflash();
-      D.collapse(-dir, severe);
+      D.collapse(-dir, severe && D.species === 'construct');
       for (let i = 0; i < 5; i++) {
         const ring = this.add.circle(D.x + Phaser.Math.Between(-24, 24), cy0 + Phaser.Math.Between(-30, 30), 4, i % 2 ? 0xffb347 : 0xff6b3d, 0.95).setDepth(45);
         this.tweens.add({ targets: ring, radius: 26 + i * 4, alpha: 0, duration: 520, delay: 200 + i * 110, onComplete: () => ring.destroy() });
       }
-      await this.wait(1500);
+      if (D.species === 'human' && D.dissolve) {
+        await this.wait(900);
+        await D.dissolve(900);
+      } else {
+        await this.wait(1500);
+      }
       return;
     }
     await this.tween({ targets: D.node, alpha: 0.2, duration: 70, yoyo: true, repeat: 3 });
@@ -389,10 +514,11 @@ export class BattleScene extends Phaser.Scene {
 
     const tx = side === 'left' ? x + 38 : x + 6;
     this.add.text(tx, y + 4, `${s.def.name}`, TEXT_STYLE).setDepth(61);
-    this.add.text(tx, y + 17, `${s.pilot.name}  Lv${s.pilot.level}`, { ...TEXT_STYLE, color: '#cfd8dc' }).setDepth(61);
+    const sub = s.def.species === 'human' || !s.def.species ? realmName(s.pilot.level) : (s.def.title ?? realmName(s.pilot.level));
+    this.add.text(tx, y + 17, sub, { ...TEXT_STYLE, color: '#cfd8dc' }).setDepth(61);
     const hpBar = this.add.graphics().setDepth(61);
-    const hpText = this.add.text(tx + 104, y + 28, '', TEXT_STYLE).setDepth(62);
-    const enText = this.add.text(tx + 104, y + 41, '', { ...TEXT_STYLE, color: '#9ad0ff' }).setDepth(62);
+    const hpText = this.add.text(tx + 92, y + 28, '', TEXT_STYLE).setDepth(62);
+    const enText = this.add.text(tx + 92, y + 41, '', { ...TEXT_STYLE, color: '#9ad0ff' }).setDepth(62);
     const panel: SidePanel = { hpBar, hpText, enText, hp: s.hp, en: s.en };
     this.panels = { ...(this.panels ?? {}), [side]: panel } as Record<BattleSideId, SidePanel>;
     this.redrawPanel(side, tx, y);
@@ -406,7 +532,7 @@ export class BattleScene extends Phaser.Scene {
     const x0 = tx ?? (side === 'left' ? 6 + 38 : GAME_WIDTH - w - 6 + 6);
     const g = p.hpBar;
     g.clear();
-    const barW = 100;
+    const barW = 88;
     const hpRatio = Math.max(0, Math.min(1, p.hp / s.maxHp));
     const enRatio = Math.max(0, Math.min(1, p.en / s.maxEn));
     g.fillStyle(0x000000, 0.8);
@@ -417,8 +543,8 @@ export class BattleScene extends Phaser.Scene {
     g.fillRect(x0, y + 45, barW, 5);
     g.fillStyle(0x5aa9ff, 1);
     g.fillRect(x0 + 1, y + 46, Math.round((barW - 2) * enRatio), 3);
-    p.hpText.setText(`HP ${Math.round(p.hp)}`);
-    p.enText.setText(`EN ${Math.round(p.en)}`);
+    p.hpText.setText(`气血 ${Math.round(p.hp)}`);
+    p.enText.setText(`灵力 ${Math.round(p.en)}`);
   }
 
   private setEn(side: BattleSideId, en: number): void {
@@ -460,7 +586,31 @@ export class BattleScene extends Phaser.Scene {
     if (!airborne) this.add.ellipse(POS_X[side], GROUND_Y - 2, 70, 12, 0x000000, 0.3).setDepth(9);
     const actor = createActor(this, s.def.id, POS_X[side], y, { flip: side === 'right' });
     actor.setDepth(10);
-    if (airborne) {
+    if (airborne && s.def.species === 'human') {
+      // 御剑飞行: standing on a flying sword
+      this.tweens.add({ targets: actor.node, y: y - 4, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      const dirx = side === 'left' ? 1 : -1;
+      const parts: Array<[number, number, number, number, number]> = [
+        [0, 1, 34, 3, 0xe8f4ff],
+        [dirx * 2, 0, 28, 1, 0xffffff],
+        [-dirx * 15, 1, 2, 7, 0xd8b04a],
+        [-dirx * 20, 1, 8, 3, 0x5a3a22],
+      ];
+      for (const [dx, dy, w, h, c] of parts) {
+        const r = this.add.rectangle(0, 0, w, h, c).setDepth(11);
+        this.flames.push({ actor, obj: r, dx, dy: dy + 1 });
+      }
+      const glow = this.add.rectangle(0, 0, 40, 3, 0x9fe8ff, 0.35).setDepth(10);
+      this.tweens.add({ targets: glow, alpha: 0.1, duration: 400, yoyo: true, repeat: -1 });
+      this.flames.push({ actor, obj: glow, dx: 0, dy: 4 });
+    } else if (airborne && s.def.species === 'beast') {
+      // 踏云: a drifting cloud under the beast
+      this.tweens.add({ targets: actor.node, y: y - 4, duration: 1100, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      for (const [dx, dy, w] of [[-14, 2, 22], [0, 0, 30], [14, 2, 22], [0, 4, 44]] as const) {
+        const puff = this.add.rectangle(0, 0, w, 6, 0xffffff, 0.85).setDepth(9);
+        this.flames.push({ actor, obj: puff, dx, dy });
+      }
+    } else if (airborne) {
       this.tweens.add({ targets: actor.node, y: y - 4, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       for (const dx of [-12, 12]) {
         const flame = this.add.rectangle(0, 0, 6, 10, 0xffb347, 0.9).setOrigin(0.5, 0).setDepth(9);

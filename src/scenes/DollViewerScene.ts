@@ -11,12 +11,13 @@ declare global {
   interface Window {
     __dolls?: {
       ids: string[];
-      current(): { id: string | null; pose: string | null; kind: 'rig' | 'doll' | null; ragdoll: boolean };
+      current(): { id: string | null; pose: string | null; kind: 'rig' | 'doll' | null; ragdoll: boolean; follow: Record<string, number> };
       setPose(name: string): void;
       select(id: string): void;
       die(severe?: boolean): void;
       dropWeapon(): void;
       reset(): void;
+      dash(dx: number): void;
     };
   }
 }
@@ -70,7 +71,7 @@ export class DollViewerScene extends Phaser.Scene {
     this.overlay = this.add.graphics().setDepth(20);
     this.info = this.add.text(8, 6, '', TEXT_STYLE).setDepth(30).setLineSpacing(2);
     this.add
-      .text(GAME_WIDTH - 8, GAME_HEIGHT - 14, '←→机体 ↑↓动作 F翻转 D击坠 S断臂击坠 W武器脱手 R复原', { ...TEXT_STYLE, color: '#cfd8dc' })
+      .text(GAME_WIDTH - 8, GAME_HEIGHT - 14, '←→角色 ↑↓动作 F翻转 D倒下 S重创 W兵器脱手 R复原', { ...TEXT_STYLE, color: '#cfd8dc' })
       .setOrigin(1, 0)
       .setDepth(30);
 
@@ -104,7 +105,11 @@ export class DollViewerScene extends Phaser.Scene {
         pose: this.currentPoseName(),
         kind: this.kind(),
         ragdoll: this.actor instanceof RigActor && this.actor.isRagdoll,
+        follow: this.followSnapshot(),
       }),
+      dash: (dx: number) => {
+        if (this.actor) this.tweens.add({ targets: this.actor.node, x: this.actor.x + dx, duration: 160, yoyo: true, ease: 'Quad.easeOut' });
+      },
       setPose: (name) => {
         const i = this.poseNames().indexOf(name);
         if (i >= 0) this.setPoseIndex(i);
@@ -119,6 +124,14 @@ export class DollViewerScene extends Phaser.Scene {
     };
 
     this.rebuild();
+  }
+
+  private followSnapshot(): Record<string, number> {
+    const a = this.actor;
+    const id = this.currentId();
+    const rig = id ? dollRegistry.getRig(id) : undefined;
+    if (!(a instanceof RigActor) || !rig) return {};
+    return Object.fromEntries((rig.def.follow ?? []).map((f) => [f, a.followAngle(f)]));
   }
 
   private currentId(): string | null {
@@ -164,9 +177,12 @@ export class DollViewerScene extends Phaser.Scene {
   }
 
   private die(severe: boolean): void {
-    if (!(this.actor instanceof RigActor)) return;
-    this.actor.collapse(this.flip ? 1 : -1, severe);
+    const a = this.actor;
+    if (!(a instanceof RigActor) || a.isRagdoll) return;
+    a.collapse(this.flip ? 1 : -1, severe);
     this.refreshInfo();
+    // 修士 fade into light after falling; constructs and beasts stay as wreck / body.
+    if (a.species === 'human') this.time.delayedCall(900, () => void a.dissolve(900));
   }
 
   private dropWeapon(): void {
@@ -182,7 +198,7 @@ export class DollViewerScene extends Phaser.Scene {
     this.placeholderLabel = null;
     const id = this.currentId();
     if (!id) {
-      this.info.setText('没有找到导入的机体。\n运行 node tools/import-rig.mjs <原型目录> 或把 doll.json 登记到 public/mechs/index.json。');
+      this.info.setText('没有找到导入的角色。\n运行 node tools/import-rig.mjs <原型目录> 或把 doll.json 登记到 public/mechs/index.json。');
       this.overlay.clear();
       return;
     }
@@ -211,7 +227,8 @@ export class DollViewerScene extends Phaser.Scene {
     const head = `${unit?.name ?? rig?.def.name ?? id}  [${this.index + 1}/${this.ids.length}]`;
     if (rig) {
       const state = this.actor instanceof RigActor && this.actor.isRagdoll ? '布娃娃物理' : `动作 ${pose} (${this.poseIndex + 1}/${this.poseNames().length})`;
-      this.info.setText(`${head}  骨架\n${state}\n部件 ${rig.def.parts.length}  关节 ${rig.def.joints.length}  高 ${rig.def.height}px`);
+      const kind = { human: '修士', construct: '机关傀儡', beast: '神兽' }[rig.def.species ?? 'construct'];
+      this.info.setText(`${head}  ${kind}\n${state}\n部件 ${rig.def.parts.length}  关节 ${rig.def.joints.length}  随动 ${rig.def.follow?.length ?? 0}  高 ${rig.def.height}px`);
       return;
     }
     const doll = dollRegistry.get(id)!;

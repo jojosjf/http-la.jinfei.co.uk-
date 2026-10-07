@@ -3,6 +3,7 @@
  "name": "撼岳",
  "version": 2,
  "image": "hanyue.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

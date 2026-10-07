@@ -1,3 +1,4 @@
+import { deploymentIds } from '../core/scenario';
 import type { PilotDef, ScenarioDef, TerrainDef, UnitDef, WeaponDef } from '../core/types';
 import pilots from './pilots.json';
 import s01 from './scenarios/s01.json';
@@ -45,9 +46,10 @@ export function validateData(gd: GameData): string[] {
     });
     const seen = new Set<string>();
     for (const d of s.deploy) {
-      if (!gd.units[d.unit]) errors.push(`${s.id}: unknown unit ${d.unit}`);
-      if (!gd.pilots[d.pilot]) errors.push(`${s.id}: unknown pilot ${d.pilot}`);
-      if (d.x < 0 || d.y < 0 || d.x >= s.width || d.y >= s.height) errors.push(`${s.id}: ${d.unit} deployed out of bounds`);
+      const { unit, pilot } = deploymentIds(d);
+      if (!gd.units[unit]) errors.push(`${s.id}: unknown character body ${unit}`);
+      if (!gd.pilots[pilot]) errors.push(`${s.id}: unknown character cultivation record ${pilot}`);
+      if (d.x < 0 || d.y < 0 || d.x >= s.width || d.y >= s.height) errors.push(`${s.id}: ${unit} deployed out of bounds`);
       const k = `${d.x},${d.y}`;
       if (seen.has(k)) errors.push(`${s.id}: two units deployed at ${k}`);
       seen.add(k);

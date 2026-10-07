@@ -33,15 +33,15 @@ export interface Menu {
 }
 
 export interface UnitInfo {
-  unit: string;
-  pilot: string;
+  name: string;
+  /** Realm and/or faction line, e.g. 炼气五层 · 青云剑宗. */
+  sub: string;
   team: 'player' | 'enemy';
   hp: number;
   maxHp: number;
   en: number;
   maxEn: number;
   morale: number;
-  level: number;
 }
 
 export interface TerrainInfo {
@@ -104,7 +104,7 @@ class Panel {
   }
 }
 
-const SIDE_W = 150;
+const SIDE_W = 170;
 
 export class Hud {
   private readonly terrainPanel: Panel;
@@ -184,7 +184,7 @@ export class Hud {
       .at(x, 48)
       .show(true)
       .set(
-        `${unit.unit}\n${unit.pilot}  Lv${unit.level}  [${tag}]\nHP ${unit.hp}/${unit.maxHp}\nEN ${unit.en}/${unit.maxEn}  气力 ${unit.morale}`,
+        `${unit.name}  [${tag}]\n${unit.sub}\n气血 ${unit.hp}/${unit.maxHp}\n灵力 ${unit.en}/${unit.maxEn}  战意 ${unit.morale}`,
       );
   }
 
@@ -305,5 +305,5 @@ function fmtSide(s: PreviewSide): string {
   const hit = s.hit === null ? '--' : `${s.hit}%`;
   const dmg = s.damage === null ? '--' : `${s.damage}`;
   const crit = s.crit === null ? '' : `  CT${s.crit}%`;
-  return `${s.name}\n${s.action}\n命中 ${hit}${crit}\n伤害 ${dmg}  HP ${s.hp}/${s.maxHp}`;
+  return `${s.name}\n${s.action}\n命中 ${hit}${crit}\n伤害 ${dmg}  气血 ${s.hp}/${s.maxHp}`;
 }

@@ -3,6 +3,7 @@
  "name": "毒蛛",
  "version": 2,
  "image": "duzhu.png",
+ "species": "construct",
  "root": "abdomen",
  "height": 60,
  "parts": [

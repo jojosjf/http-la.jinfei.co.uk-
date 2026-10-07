@@ -3,6 +3,7 @@
  "name": "灰鸢",
  "version": 2,
  "image": "huiyuan.png",
+ "species": "construct",
  "root": "torso",
  "height": 103,
  "parts": [

@@ -1,6 +1,6 @@
-# 钢铁战线（暂定名）
+# 问剑录（暂定名）
 
-一款 2D 像素风、回合制方格战棋的**原创**机器人 SRPG，核心玩法对标《第四次超级机器人大战》/《超级机器人大战 F·F 完结篇》。网页优先，Phaser 3 + TypeScript。
+一款 2D 像素风、回合制方格战棋的**原创修仙** SRPG，玩法系统对标《第四次超级机器人大战》/《超级机器人大战 F·F 完结篇》：修士即战斗单位，气血、灵力、战意、神通、境界，法宝即武器。网页优先，Phaser 3 + TypeScript。
 
 ## 在线试玩
 
@@ -23,7 +23,7 @@ pnpm e2e        # Playwright 自动试玩
 
 ## 导入机体美术
 
-当前美术是「天工仙甲」24 台拆件骨架机甲：`node tools/import-rig.mjs <原型目录> [id...]` 导入，`?view=dolls` 预览动作和击坠物理，`?view=battle&a=zhaoye&d=e_liaoya&w=guandao&kill=1` 预览战斗画面。24 台已全部导入，都有骨架动作、击坠物理和数值；第 1 关为我方照夜、撼岳、飞燕对敌方血螳、黑垒、焚炉、锁魂。
+敌方美术是「天工仙甲」24 台拆件骨架（现为天工宗机关傀儡与神兽）：`node tools/import-rig.mjs <原型目录> [id...]` 导入，`?view=dolls` 预览动作和击坠物理，`?view=battle&a=zhaoye&d=e_liaoya&w=guandao&kill=1` 预览战斗画面。24 台已全部导入，都有骨架动作、击坠物理和数值；第 1 关为我方修士林玄、苏清寒、石破军（程序生成的占位，`node tools/gen-cultivators.mjs`）对天工宗的血螳、黑垒、焚炉、锁魂。
 
 机体是布娃娃（分部件图层）。把 PNG + `doll.json` 放进 `public/mechs/<id>/` 并登记到 `public/mechs/index.json`，启动后访问 `?view=dolls` 预览。Aseprite 用户按 [docs/art-spec.md](docs/art-spec.md) 的约定导出，再跑 `node tools/aseprite-to-doll.mjs`。样例：`public/mechs/cangqiong/`。给外部美术或美术 AI 的交付说明：[docs/art-brief-for-chatgpt.md](docs/art-brief-for-chatgpt.md)。整帧精灵表用 `node tools/sheet-to-doll.mjs` 转换。
 

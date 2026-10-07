@@ -16,8 +16,9 @@ import { inBounds, key, manhattan, parseKey } from '../core/grid';
 import { MORALE, addMorale } from '../core/morale';
 import { movementRange, pathTo, stoppableTiles, type Reach } from '../core/pathfinding';
 import { inWeaponRange, tilesInRange } from '../core/range';
+import { realmName } from '../core/realm';
 import { mulberry32 } from '../core/rng';
-import { buildMap } from '../core/scenario';
+import { buildMap, deploymentIds } from '../core/scenario';
 import type { Deployment, GameMap, ScenarioDef, TerrainDef, UnitDef, UnitState, Vec2, WeaponDef } from '../core/types';
 import {
   UNAVAILABLE_TEXT,
@@ -199,8 +200,9 @@ export class MapScene extends Phaser.Scene {
   }
 
   private spawn(d: Deployment): void {
-    const def = this.gd.units[d.unit];
-    const pilot = this.gd.pilots[d.pilot];
+    const ids = deploymentIds(d);
+    const def = this.gd.units[ids.unit];
+    const pilot = this.gd.pilots[ids.pilot];
     const u = createUnit(`u${this.units.length}`, def, pilot, this.gd.weapons, d.team, d.x, d.y);
     this.units.push(u);
 
@@ -246,17 +248,23 @@ export class MapScene extends Phaser.Scene {
   private unitInfo(u: UnitState): UnitInfo {
     const def = this.gd.units[u.unitId];
     const pilot = this.gd.pilots[u.pilotId];
+    const realm = realmName(u.level);
+    const title = def.title ?? (pilot.name !== def.name ? pilot.name : '');
     return {
-      unit: def.name,
-      pilot: pilot.name,
+      name: def.name,
+      sub: def.species === 'human' || !def.species ? [realm, title].filter(Boolean).join(' · ') : title || realm,
       team: u.team,
       hp: u.hp,
       maxHp: def.hp,
       en: u.en,
       maxEn: def.en,
       morale: u.morale,
-      level: u.level,
     };
+  }
+
+  /** One fighter, one name; legacy test units still show 驾驶员 / 机体. */
+  private displayName(c: Combatant): string {
+    return c.pilot.name === c.def.name ? c.def.name : `${c.pilot.name} / ${c.def.name}`;
   }
 
   private weaponOptions(u: UnitState, moved: boolean): WeaponOption[] {
@@ -586,7 +594,7 @@ export class MapScene extends Phaser.Scene {
     this.menu = this.hud.openMenu(
       [
         { label: '攻击', enabled: canAtk },
-        { label: '精神', enabled: false },
+        { label: '神通', enabled: false },
         { label: '待机', enabled: true },
       ],
       {
@@ -743,7 +751,7 @@ export class MapScene extends Phaser.Scene {
       if (!first) this.applyRecovery(u);
       this.refreshView(u);
     }
-    this.hud.setTurn(`第${this.turn}回合   资金 ${this.money}`);
+    this.hud.setTurn(`第${this.turn}回合   灵石 ${this.money}`);
     if (first) await this.hud.banner(this.scenario.title, 900);
     await this.hud.banner(`第 ${this.turn} 回合   我方行动`);
     const firstUnit = this.units.find((u) => u.alive && u.team === 'player');
@@ -808,7 +816,7 @@ export class MapScene extends Phaser.Scene {
     this.hud.hidePreview();
     this.clearHighlights();
     this.hud.setHint('按 R 重新开始');
-    void this.hud.banner(enemies === 0 ? `STAGE CLEAR   资金 ${this.money}` : 'GAME OVER', -1);
+    void this.hud.banner(enemies === 0 ? `STAGE CLEAR   灵石 ${this.money}` : 'GAME OVER', -1);
     return true;
   }
 
@@ -819,7 +827,7 @@ export class MapScene extends Phaser.Scene {
     const d = this.combatant(defender);
     const input = { attacker: a, defender: d, weapon, defense: choice.action };
     const left: PreviewSide = {
-      name: `${a.pilot.name} / ${a.def.name}`,
+      name: this.displayName(a),
       action: weapon.name,
       hit: hitChance(input),
       damage: finalDamage(input, false),
@@ -828,7 +836,7 @@ export class MapScene extends Phaser.Scene {
       maxHp: a.def.hp,
     };
     let right: PreviewSide;
-    const dName = `${d.pilot.name} / ${d.def.name}`;
+    const dName = this.displayName(d);
     if (choice.action === 'counter' && choice.weapon) {
       const ci = { attacker: d, defender: a, weapon: choice.weapon, defense: 'counter' as const };
       right = {
@@ -972,7 +980,7 @@ export class MapScene extends Phaser.Scene {
     }
     if (killer.team === 'player' && victim.money > 0) {
       this.money += victim.money;
-      this.hud.setTurn(`第${this.turn}回合   资金 ${this.money}`);
+      this.hud.setTurn(`第${this.turn}回合   灵石 ${this.money}`);
     }
   }
 

@@ -252,9 +252,35 @@ export function pack(images, maxWidth = 256) {
   return { frames, sheet };
 }
 
+/** 32x32 map icon: compose the rest pose in layer order, fit it into 28x27, outline it. */
+export function composeIcon(parts, images, palette) {
+  const minX = Math.min(...parts.map((p) => p.x - p.w / 2));
+  const maxX = Math.max(...parts.map((p) => p.x + p.w / 2));
+  const top = Math.min(...parts.map((p) => p.y - p.h / 2));
+  const comp = newImage(Math.ceil(maxX - minX) + 2, Math.ceil(-top) + 2);
+  parts
+    .map((p, i) => ({ p, i }))
+    .sort((a, b) => a.p.layer - b.p.layer || a.i - b.i)
+    .forEach(({ p, i }) => blit(comp, images[i], Math.round(p.x - p.w / 2 - minX), Math.round(p.y - p.h / 2 - top)));
+  const fit = Math.min(28 / comp.width, 27 / comp.height);
+  const iw = Math.max(1, Math.round(comp.width * fit));
+  const ih = Math.max(1, Math.round(comp.height * fit));
+  const small = resample(comp, { x: 0, y: 0, w: comp.width, h: comp.height }, iw, ih);
+  if (palette?.length) applyPalette(small, palette);
+  const icon = newImage(32, 32);
+  blit(icon, small, Math.floor((32 - iw) / 2), 28 - ih);
+  outline(icon, [11, 12, 16]);
+  return icon;
+}
+
 // ---------------------------------------------------------------- conversion
 
 const r2 = (v) => Math.round(v * 100) / 100;
+
+/** 神兽 / 妖兽 among the 天工仙甲 roster; everything else is a 机关傀儡 (construct). */
+const BEASTS = new Set(['baize', 'qianlin', 'zhulong']);
+/** Cloth / hair parts that get secondary motion in game (mirrors src/core/follow.ts FOLLOW_PART). */
+const FOLLOW = /^(hair|robe|skirt|sleeve|ribbon|sash|tassel|cape|scarf)/;
 
 export function convertMech(protoDir, id, opts = {}) {
   const scaleOpt = opts.scale ?? 0.32;
@@ -362,11 +388,14 @@ export function convertMech(protoDir, id, opts = {}) {
   parts.forEach((p, i) => (p.frame = frames[i]));
 
   const outId = opts.as ?? id;
+  const species = src.species ?? ch.species ?? (BEASTS.has(id) ? 'beast' : 'construct');
   const rig = {
     id: outId,
     name: src.name ?? ch.name ?? id,
     version: 2,
     image: `${outId}.png`,
+    species,
+    ...(parts.some((p) => FOLLOW.test(p.id)) ? { follow: parts.map((p) => p.id).filter((pid) => FOLLOW.test(pid)) } : {}),
     root,
     height: Math.round(restHeight * scale),
     parts: parts.map(({ id: pid, frame, x, y, w, h, layer, mass }) => ({ id: pid, frame, x, y, w, h, layer, mass })),
@@ -374,23 +403,7 @@ export function convertMech(protoDir, id, opts = {}) {
     source: { from: 'mecha-ragdoll-v1', scale: r2(scale), mirrored: mirror, colors: palette.length },
   };
 
-  // map icon: compose the rest pose (layer order), then fit into 30x29 at the bottom of a 32x32 cell
-  const minX = Math.min(...parts.map((p) => p.x - p.w / 2));
-  const maxX = Math.max(...parts.map((p) => p.x + p.w / 2));
-  const top = Math.min(...parts.map((p) => p.y - p.h / 2));
-  const comp = newImage(Math.ceil(maxX - minX) + 2, Math.ceil(-top) + 2);
-  parts
-    .map((p, i) => ({ p, i }))
-    .sort((a, b) => a.p.layer - b.p.layer || a.i - b.i)
-    .forEach(({ p, i }) => blit(comp, images[i], Math.round(p.x - p.w / 2 - minX), Math.round(p.y - p.h / 2 - top)));
-  const fit = Math.min(28 / comp.width, 27 / comp.height);
-  const iw = Math.max(1, Math.round(comp.width * fit));
-  const ih = Math.max(1, Math.round(comp.height * fit));
-  const small = resample(comp, { x: 0, y: 0, w: comp.width, h: comp.height }, iw, ih);
-  applyPalette(small, palette);
-  const icon = newImage(32, 32);
-  blit(icon, small, Math.floor((32 - iw) / 2), 28 - ih);
-  outline(icon, [11, 12, 16]);
+  const icon = composeIcon(parts, images, palette);
 
   return { rig, sheet, icon, report };
 }

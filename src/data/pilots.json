@@ -1,11 +1,693 @@
 {
-  "linkai":  { "id": "linkai",  "name": "林凯",   "level": 5, "melee": 140, "ranged": 155, "hit": 160, "evade": 165, "skill": 150, "defense": 120, "sp": 60, "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "spirits": ["集中", "必中", "热血"] },
-  "shiyan":  { "id": "shiyan",  "name": "石岩",   "level": 5, "melee": 170, "ranged": 120, "hit": 145, "evade": 120, "skill": 130, "defense": 165, "sp": 55, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": ["气合", "铁壁", "热血"] },
-  "zhouyu":  { "id": "zhouyu",  "name": "周雨",   "level": 5, "melee": 110, "ranged": 165, "hit": 170, "evade": 160, "skill": 160, "defense": 110, "sp": 65, "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "spirits": ["集中", "必中", "幸运"] },
-
-  "grunt_a": { "id": "grunt_a", "name": "敌兵A",  "level": 3, "melee": 110, "ranged": 115, "hit": 120, "evade": 115, "skill": 105, "defense": 110, "sp": 20, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
-  "grunt_b": { "id": "grunt_b", "name": "敌兵B",  "level": 3, "melee": 115, "ranged": 110, "hit": 118, "evade": 118, "skill": 100, "defense": 112, "sp": 20, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
-  "grunt_c": { "id": "grunt_c", "name": "敌兵C",  "level": 3, "melee": 108, "ranged": 120, "hit": 122, "evade": 112, "skill": 108, "defense": 108, "sp": 20, "adapt": { "air": "B", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
-  "heavy":   { "id": "heavy",   "name": "重装兵", "level": 4, "melee": 135, "ranged": 120, "hit": 125, "evade": 100, "skill": 115, "defense": 140, "sp": 25, "adapt": { "air": "C", "land": "A", "sea": "B", "space": "B" }, "spirits": [] },
-  "captain": { "id": "captain", "name": "敌队长", "level": 7, "melee": 150, "ranged": 150, "hit": 155, "evade": 150, "skill": 145, "defense": 130, "sp": 40, "adapt": { "air": "A", "land": "A", "sea": "B", "space": "A" }, "spirits": [], "moraleStart": 105 }
+  "linkai": {
+    "id": "linkai",
+    "name": "林凯",
+    "level": 5,
+    "melee": 140,
+    "ranged": 155,
+    "hit": 160,
+    "evade": 165,
+    "skill": 150,
+    "defense": 120,
+    "sp": 60,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [
+      "集中",
+      "必中",
+      "热血"
+    ]
+  },
+  "shiyan": {
+    "id": "shiyan",
+    "name": "石岩",
+    "level": 5,
+    "melee": 170,
+    "ranged": 120,
+    "hit": 145,
+    "evade": 120,
+    "skill": 130,
+    "defense": 165,
+    "sp": 55,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": [
+      "气合",
+      "铁壁",
+      "热血"
+    ]
+  },
+  "zhouyu": {
+    "id": "zhouyu",
+    "name": "周雨",
+    "level": 5,
+    "melee": 110,
+    "ranged": 165,
+    "hit": 170,
+    "evade": 160,
+    "skill": 160,
+    "defense": 110,
+    "sp": 65,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [
+      "集中",
+      "必中",
+      "幸运"
+    ]
+  },
+  "grunt_a": {
+    "id": "grunt_a",
+    "name": "敌兵A",
+    "level": 3,
+    "melee": 110,
+    "ranged": 115,
+    "hit": 120,
+    "evade": 115,
+    "skill": 105,
+    "defense": 110,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "grunt_b": {
+    "id": "grunt_b",
+    "name": "敌兵B",
+    "level": 3,
+    "melee": 115,
+    "ranged": 110,
+    "hit": 118,
+    "evade": 118,
+    "skill": 100,
+    "defense": 112,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "grunt_c": {
+    "id": "grunt_c",
+    "name": "敌兵C",
+    "level": 3,
+    "melee": 108,
+    "ranged": 120,
+    "hit": 122,
+    "evade": 112,
+    "skill": 108,
+    "defense": 108,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "heavy": {
+    "id": "heavy",
+    "name": "重装兵",
+    "level": 4,
+    "melee": 135,
+    "ranged": 120,
+    "hit": 125,
+    "evade": 100,
+    "skill": 115,
+    "defense": 140,
+    "sp": 25,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "captain": {
+    "id": "captain",
+    "name": "敌队长",
+    "level": 7,
+    "melee": 150,
+    "ranged": 150,
+    "hit": 155,
+    "evade": 150,
+    "skill": 145,
+    "defense": 130,
+    "sp": 40,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [],
+    "moraleStart": 105
+  },
+  "linxuan": {
+    "id": "linxuan",
+    "name": "林玄",
+    "level": 5,
+    "melee": 155,
+    "ranged": 145,
+    "hit": 160,
+    "evade": 165,
+    "skill": 155,
+    "defense": 120,
+    "sp": 60,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [
+      "凝神",
+      "破妄",
+      "剑心"
+    ]
+  },
+  "suqinghan": {
+    "id": "suqinghan",
+    "name": "苏清寒",
+    "level": 5,
+    "melee": 110,
+    "ranged": 170,
+    "hit": 170,
+    "evade": 160,
+    "skill": 160,
+    "defense": 110,
+    "sp": 75,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "A",
+      "space": "A"
+    },
+    "spirits": [
+      "凝神",
+      "灵慧",
+      "回春"
+    ]
+  },
+  "shipojun": {
+    "id": "shipojun",
+    "name": "石破军",
+    "level": 5,
+    "melee": 175,
+    "ranged": 115,
+    "hit": 145,
+    "evade": 115,
+    "skill": 130,
+    "defense": 170,
+    "sp": 50,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": [
+      "金刚",
+      "狂怒",
+      "坚守"
+    ]
+  },
+  "zhaoye": {
+    "id": "zhaoye",
+    "name": "照夜",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "feiyan": {
+    "id": "feiyan",
+    "name": "飞燕",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "A",
+      "land": "B",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "hanyue": {
+    "id": "hanyue",
+    "name": "撼岳",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "xuanlei": {
+    "id": "xuanlei",
+    "name": "玄垒",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "A",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "liuxian": {
+    "id": "liuxian",
+    "name": "流弦",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "qinghe": {
+    "id": "qinghe",
+    "name": "青禾",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "chilun": {
+    "id": "chilun",
+    "name": "赤轮",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "leigu": {
+    "id": "leigu",
+    "name": "雷鼓",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "baize": {
+    "id": "baize",
+    "name": "白泽",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "qianlin": {
+    "id": "qianlin",
+    "name": "潜鳞",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "B",
+      "sea": "A",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "tianshu": {
+    "id": "tianshu",
+    "name": "天枢",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "xuetang": {
+    "id": "xuetang",
+    "name": "血螳",
+    "level": 7,
+    "melee": 150,
+    "ranged": 150,
+    "hit": 155,
+    "evade": 150,
+    "skill": 145,
+    "defense": 130,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": [],
+    "moraleStart": 105
+  },
+  "tieliao": {
+    "id": "tieliao",
+    "name": "铁獠",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "guideng": {
+    "id": "guideng",
+    "name": "鬼灯",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "heilei": {
+    "id": "heilei",
+    "name": "黑垒",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "duzhu": {
+    "id": "duzhu",
+    "name": "毒蛛",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "C",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "huiyuan": {
+    "id": "huiyuan",
+    "name": "灰鸢",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "A",
+      "land": "C",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "fenlu": {
+    "id": "fenlu",
+    "name": "焚炉",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "D",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "liedi": {
+    "id": "liedi",
+    "name": "裂地",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "D",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "suohun": {
+    "id": "suohun",
+    "name": "锁魂",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "chuanyun": {
+    "id": "chuanyun",
+    "name": "穿云",
+    "level": 4,
+    "melee": 123,
+    "ranged": 118,
+    "hit": 123,
+    "evade": 113,
+    "skill": 113,
+    "defense": 128,
+    "sp": 20,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "mingwang": {
+    "id": "mingwang",
+    "name": "六臂明王",
+    "level": 12,
+    "melee": 155,
+    "ranged": 150,
+    "hit": 155,
+    "evade": 145,
+    "skill": 145,
+    "defense": 160,
+    "sp": 40,
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "spirits": []
+  },
+  "tiancheng": {
+    "id": "tiancheng",
+    "name": "镇岳天城",
+    "level": 12,
+    "melee": 155,
+    "ranged": 150,
+    "hit": 155,
+    "evade": 145,
+    "skill": 145,
+    "defense": 160,
+    "sp": 40,
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "spirits": []
+  },
+  "zhulong": {
+    "id": "zhulong",
+    "name": "烛龙天机",
+    "level": 12,
+    "melee": 155,
+    "ranged": 150,
+    "hit": 155,
+    "evade": 145,
+    "skill": 145,
+    "defense": 160,
+    "sp": 40,
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "A",
+      "space": "A"
+    },
+    "spirits": []
+  }
 }

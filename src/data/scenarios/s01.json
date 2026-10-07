@@ -1,6 +1,6 @@
 {
   "id": "s01",
-  "title": "第1话 河畔遭遇战",
+  "title": "第1话 河畔遇伏",
   "width": 20,
   "height": 15,
   "legend": {
@@ -32,57 +32,49 @@
   ],
   "deploy": [
     {
-      "unit": "zhaoye",
-      "pilot": "linkai",
+      "character": "linxuan",
       "team": "player",
       "x": 2,
       "y": 10
     },
     {
-      "unit": "hanyue",
-      "pilot": "shiyan",
+      "character": "shipojun",
       "team": "player",
       "x": 1,
       "y": 11
     },
     {
-      "unit": "feiyan",
-      "pilot": "zhouyu",
+      "character": "suqinghan",
       "team": "player",
       "x": 2,
       "y": 12
     },
     {
-      "unit": "fenlu",
-      "pilot": "grunt_a",
+      "character": "fenlu",
       "team": "enemy",
       "x": 16,
       "y": 2
     },
     {
-      "unit": "fenlu",
-      "pilot": "grunt_b",
+      "character": "fenlu",
       "team": "enemy",
       "x": 17,
       "y": 3
     },
     {
-      "unit": "suohun",
-      "pilot": "grunt_c",
+      "character": "suohun",
       "team": "enemy",
       "x": 15,
       "y": 4
     },
     {
-      "unit": "heilei",
-      "pilot": "heavy",
+      "character": "heilei",
       "team": "enemy",
       "x": 18,
       "y": 2
     },
     {
-      "unit": "xuetang",
-      "pilot": "captain",
+      "character": "xuetang",
       "team": "enemy",
       "x": 17,
       "y": 1

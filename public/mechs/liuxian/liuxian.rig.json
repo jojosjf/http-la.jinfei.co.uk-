@@ -3,6 +3,7 @@
  "name": "流弦",
  "version": 2,
  "image": "liuxian.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

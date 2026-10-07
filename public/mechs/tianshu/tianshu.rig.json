@@ -3,6 +3,7 @@
  "name": "天枢",
  "version": 2,
  "image": "tianshu.png",
+ "species": "construct",
  "root": "ring_1",
  "height": 128,
  "parts": [

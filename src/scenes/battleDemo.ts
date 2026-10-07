@@ -16,7 +16,7 @@ declare global {
  */
 export function startBattleDemo(scene: Scene, params: URLSearchParams): void {
   const gd = loadData();
-  const aId = params.get('a') ?? 'zhaoye';
+  const aId = params.get('a') ?? 'linxuan';
   const dId = params.get('d') ?? 'xuetang';
   const aDef = gd.units[aId] ?? Object.values(gd.units)[0];
   const dDef = gd.units[dId] ?? Object.values(gd.units)[1];
@@ -28,9 +28,10 @@ export function startBattleDemo(scene: Scene, params: URLSearchParams): void {
   // a = player side, d = enemy side unless ?ateam=enemy / ?dteam=player
   const aEnemy = params.get('ateam') === 'enemy';
   const dEnemy = params.get('dteam') !== 'player';
-  const pilotFor = (enemy: boolean) => gd.pilots[enemy ? 'captain' : 'linkai'] ?? Object.values(gd.pilots)[0];
-  const pilotA = pilotFor(aEnemy);
-  const pilotD = pilotFor(dEnemy);
+  // A character's own cultivation record when it has one (问剑录 characters), else a stand-in.
+  const pilotFor = (id: string, enemy: boolean) => gd.pilots[id] ?? gd.pilots[enemy ? 'captain' : 'linkai'] ?? Object.values(gd.pilots)[0];
+  const pilotA = pilotFor(aDef.id, aEnemy);
+  const pilotD = pilotFor(dDef.id, dEnemy);
 
   const side = (def: typeof aDef, pilot: typeof pilotA, team: 'player' | 'enemy'): BattleSide => {
     const st = createUnit('demo', def, pilot, gd.weapons, team, 0, 0);

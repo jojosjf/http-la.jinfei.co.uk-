@@ -3,6 +3,7 @@
  "name": "锁魂",
  "version": 2,
  "image": "suohun.png",
+ "species": "construct",
  "root": "torso",
  "height": 112,
  "parts": [

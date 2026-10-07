@@ -3,6 +3,7 @@
  "name": "白泽",
  "version": 2,
  "image": "baize.png",
+ "species": "beast",
  "root": "torso",
  "height": 80,
  "parts": [

@@ -3,6 +3,7 @@
  "name": "裂地",
  "version": 2,
  "image": "liedi.png",
+ "species": "construct",
  "root": "head_socket",
  "height": 51,
  "parts": [

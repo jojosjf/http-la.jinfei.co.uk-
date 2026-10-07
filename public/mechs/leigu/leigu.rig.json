@@ -3,6 +3,7 @@
  "name": "雷鼓",
  "version": 2,
  "image": "leigu.png",
+ "species": "construct",
  "root": "torso",
  "height": 121,
  "parts": [

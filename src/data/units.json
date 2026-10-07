@@ -25,7 +25,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#e8b04a"
+    "color": "#e8b04a",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "cangqiong": {
     "id": "cangqiong",
@@ -221,7 +223,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#d9822b"
+    "color": "#d9822b",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "feiyan": {
     "id": "feiyan",
@@ -249,7 +253,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#5fd3c4"
+    "color": "#5fd3c4",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "xuetang": {
     "id": "xuetang",
@@ -276,7 +282,9 @@
     ],
     "money": 6000,
     "exp": 60,
-    "color": "#c0303a"
+    "color": "#c0303a",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "heilei": {
     "id": "heilei",
@@ -303,7 +311,9 @@
     ],
     "money": 4500,
     "exp": 45,
-    "color": "#3a3f48"
+    "color": "#3a3f48",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "fenlu": {
     "id": "fenlu",
@@ -330,7 +340,9 @@
     ],
     "money": 3000,
     "exp": 30,
-    "color": "#b8402a"
+    "color": "#b8402a",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "suohun": {
     "id": "suohun",
@@ -357,7 +369,9 @@
     ],
     "money": 3200,
     "exp": 32,
-    "color": "#7a5aa8"
+    "color": "#7a5aa8",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "xuanlei": {
     "id": "xuanlei",
@@ -384,7 +398,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#2f6b5e"
+    "color": "#2f6b5e",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "liuxian": {
     "id": "liuxian",
@@ -412,7 +428,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#9a7fd0"
+    "color": "#9a7fd0",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "qinghe": {
     "id": "qinghe",
@@ -440,7 +458,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#9fd8b0"
+    "color": "#9fd8b0",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "chilun": {
     "id": "chilun",
@@ -467,7 +487,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#d84a3c"
+    "color": "#d84a3c",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "leigu": {
     "id": "leigu",
@@ -494,7 +516,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#3a5bb0"
+    "color": "#3a5bb0",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "baize": {
     "id": "baize",
@@ -521,7 +545,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#d9e6d2"
+    "color": "#d9e6d2",
+    "species": "beast",
+    "title": "灵兽"
   },
   "qianlin": {
     "id": "qianlin",
@@ -549,7 +575,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#2fb8c0"
+    "color": "#2fb8c0",
+    "species": "beast",
+    "title": "灵兽"
   },
   "tianshu": {
     "id": "tianshu",
@@ -577,7 +605,9 @@
     ],
     "money": 0,
     "exp": 0,
-    "color": "#a06ad0"
+    "color": "#a06ad0",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "tieliao": {
     "id": "tieliao",
@@ -604,7 +634,9 @@
     ],
     "money": 4000,
     "exp": 40,
-    "color": "#b0552a"
+    "color": "#b0552a",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "guideng": {
     "id": "guideng",
@@ -632,7 +664,9 @@
     ],
     "money": 3800,
     "exp": 38,
-    "color": "#b090d8"
+    "color": "#b090d8",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "duzhu": {
     "id": "duzhu",
@@ -659,7 +693,9 @@
     ],
     "money": 3500,
     "exp": 35,
-    "color": "#3f8a3a"
+    "color": "#3f8a3a",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "huiyuan": {
     "id": "huiyuan",
@@ -686,7 +722,9 @@
     ],
     "money": 3600,
     "exp": 36,
-    "color": "#8a8f98"
+    "color": "#8a8f98",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "liedi": {
     "id": "liedi",
@@ -713,7 +751,9 @@
     ],
     "money": 4200,
     "exp": 42,
-    "color": "#b08a3a"
+    "color": "#b08a3a",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "chuanyun": {
     "id": "chuanyun",
@@ -740,7 +780,9 @@
     ],
     "money": 4400,
     "exp": 44,
-    "color": "#3a4a7a"
+    "color": "#3a4a7a",
+    "species": "construct",
+    "title": "天工宗傀儡"
   },
   "mingwang": {
     "id": "mingwang",
@@ -769,7 +811,9 @@
     ],
     "money": 30000,
     "exp": 300,
-    "color": "#c08a30"
+    "color": "#c08a30",
+    "species": "construct",
+    "title": "天工宗镇宗傀儡"
   },
   "tiancheng": {
     "id": "tiancheng",
@@ -797,7 +841,9 @@
     ],
     "money": 40000,
     "exp": 400,
-    "color": "#6a5a3a"
+    "color": "#6a5a3a",
+    "species": "construct",
+    "title": "天工宗镇宗傀儡"
   },
   "zhulong": {
     "id": "zhulong",
@@ -826,6 +872,99 @@
     ],
     "money": 45000,
     "exp": 450,
-    "color": "#e0c070"
+    "color": "#e0c070",
+    "species": "beast",
+    "title": "上古神兽"
+  },
+  "linxuan": {
+    "id": "linxuan",
+    "name": "林玄",
+    "hp": 4600,
+    "en": 140,
+    "armor": 1000,
+    "mobility": 120,
+    "limit": 330,
+    "move": 6,
+    "size": "M",
+    "moveTypes": [
+      "land",
+      "air"
+    ],
+    "adapt": {
+      "air": "A",
+      "land": "A",
+      "sea": "B",
+      "space": "A"
+    },
+    "weapons": [
+      "qingfeng_jian",
+      "yujian_shu",
+      "tianhe_jianzhen"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#e8eef8",
+    "species": "human",
+    "title": "青云剑宗"
+  },
+  "suqinghan": {
+    "id": "suqinghan",
+    "name": "苏清寒",
+    "hp": 3600,
+    "en": 200,
+    "armor": 800,
+    "mobility": 115,
+    "limit": 320,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "B",
+      "land": "A",
+      "sea": "A",
+      "space": "A"
+    },
+    "weapons": [
+      "hanshuang_jue",
+      "zhangxin_lei",
+      "xuanbing_zhang"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#8fd0ff",
+    "species": "human",
+    "title": "玄霜阁"
+  },
+  "shipojun": {
+    "id": "shipojun",
+    "name": "石破军",
+    "hp": 6800,
+    "en": 110,
+    "armor": 1550,
+    "mobility": 70,
+    "limit": 260,
+    "move": 5,
+    "size": "M",
+    "moveTypes": [
+      "land"
+    ],
+    "adapt": {
+      "air": "C",
+      "land": "A",
+      "sea": "B",
+      "space": "B"
+    },
+    "weapons": [
+      "bengshan_quan",
+      "jingang_zhang",
+      "zhendi_jin"
+    ],
+    "money": 0,
+    "exp": 0,
+    "color": "#c8823a",
+    "species": "human",
+    "title": "散修"
   }
 }

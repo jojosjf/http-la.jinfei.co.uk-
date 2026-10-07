@@ -104,12 +104,12 @@ test('boots, moves a unit, undoes, and survives an enemy phase', async ({ page }
   await page.evaluate(() => window.__srpg!.setCursor(6, 10));
   await page.keyboard.press('KeyZ');
   s = await waitState(page, ['actionMenu']);
-  expect(s.units.find((u) => u.unitId === 'zhaoye')).toMatchObject({ x: 6, y: 10 });
+  expect(s.units.find((u) => u.unitId === 'linxuan')).toMatchObject({ x: 6, y: 10 });
   await page.screenshot({ path: 'test-results/03-action-menu.png' });
 
   await page.keyboard.press('KeyX');
   s = await waitState(page, ['unitSelected']);
-  expect(s.units.find((u) => u.unitId === 'zhaoye')).toMatchObject({ x: 2, y: 10 });
+  expect(s.units.find((u) => u.unitId === 'linxuan')).toMatchObject({ x: 2, y: 10 });
   await page.keyboard.press('KeyX');
   await waitState(page, ['idle']);
 
@@ -265,7 +265,7 @@ test('every imported mech poses without errors (screenshots per pose)', async ({
   await page.goto('/?view=dolls');
   await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
   const ids = await page.evaluate(() => window.__dolls!.ids.filter((id) => id !== 'cangqiong'));
-  expect(ids.length).toBe(24);
+  expect(ids.length).toBe(27);
   for (const id of ids) {
     await page.evaluate((x) => window.__dolls!.select(x), id);
     expect(await page.evaluate(() => window.__dolls!.current().kind)).toBe('rig');
@@ -298,6 +298,43 @@ test('non-humanoid mechs fight on the battle screen', async ({ page }) => {
     await page.screenshot({ path: `test-results/${name}-a.png` });
     await page.waitForTimeout(2300);
     await page.screenshot({ path: `test-results/${name}-b.png` });
+  }
+  expect(errors).toEqual([]);
+});
+
+test('修士: cloth follows a dash, defeat dissolves into light, battle effects', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors = collectErrors(page);
+  await page.goto('/?view=dolls');
+  await page.waitForFunction(() => window.__dolls !== undefined, null, { timeout: 30_000 });
+  await page.evaluate(() => window.__dolls!.select('linxuan'));
+  expect(await page.evaluate(() => window.__dolls!.current())).toMatchObject({ id: 'linxuan', kind: 'rig' });
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: 'test-results/30-linxuan-idle.png' });
+  await page.evaluate(() => window.__dolls!.dash(40));
+  await page.waitForTimeout(120);
+  const follow = await page.evaluate(() => window.__dolls!.current().follow);
+  expect(Math.max(...Object.values(follow).map(Math.abs))).toBeGreaterThan(0.05);
+  await page.screenshot({ path: 'test-results/31-linxuan-dash-cloth.png' });
+  await page.evaluate(() => window.__dolls!.reset());
+  await page.evaluate(() => window.__dolls!.die(true));
+  await page.waitForTimeout(700);
+  await page.screenshot({ path: 'test-results/32-linxuan-fallen.png' });
+  await page.waitForTimeout(1300);
+  await page.screenshot({ path: 'test-results/33-linxuan-dissolving.png' });
+
+  const bouts: Array<[string, string, number]> = [
+    ['/?view=battle&a=linxuan&d=xuetang&w=yujian_shu', '34-yujian', 1400],
+    ['/?view=battle&a=linxuan&d=heilei&w=tianhe_jianzhen', '35-jianzhen', 1500],
+    ['/?view=battle&a=suqinghan&d=fenlu&w=zhangxin_lei', '36-zhangxin-lei', 1250],
+    ['/?view=battle&a=suqinghan&d=suohun&w=hanshuang_jue', '37-hanshuang', 1250],
+    ['/?view=battle&a=xuetang&ateam=enemy&d=shipojun&dteam=player&w=xue_lian&kill=1&crit=1', '38-shipojun-defeated', 3800],
+  ];
+  for (const [url, name, at] of bouts) {
+    await page.goto(url);
+    await page.waitForFunction(() => window.__battleDemo?.playing === true, null, { timeout: 30_000 });
+    await page.waitForTimeout(at);
+    await page.screenshot({ path: `test-results/${name}.png` });
   }
   expect(errors).toEqual([]);
 });

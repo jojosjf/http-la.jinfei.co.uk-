@@ -1,0 +1,374 @@
+{
+ "id": "shipojun",
+ "name": "石破军",
+ "version": 2,
+ "image": "shipojun.png",
+ "species": "human",
+ "root": "torso",
+ "height": 110,
+ "follow": [
+  "hair_back",
+  "robe"
+ ],
+ "parts": [
+  {
+   "id": "hair_back",
+   "frame": {
+    "x": 168,
+    "y": 1,
+    "w": 14,
+    "h": 12
+   },
+   "x": -7,
+   "y": -104,
+   "w": 14,
+   "h": 12,
+   "layer": 0,
+   "mass": 0.6
+  },
+  {
+   "id": "upper_arm_l",
+   "frame": {
+    "x": 106,
+    "y": 1,
+    "w": 10,
+    "h": 16
+   },
+   "x": -16,
+   "y": -66,
+   "w": 10,
+   "h": 16,
+   "layer": 1,
+   "mass": 1
+  },
+  {
+   "id": "forearm_hand_l",
+   "frame": {
+    "x": 117,
+    "y": 1,
+    "w": 10,
+    "h": 16
+   },
+   "x": -17,
+   "y": -51,
+   "w": 10,
+   "h": 16,
+   "layer": 1,
+   "mass": 1
+  },
+  {
+   "id": "thigh_l",
+   "frame": {
+    "x": 150,
+    "y": 1,
+    "w": 8,
+    "h": 14
+   },
+   "x": -4,
+   "y": -40,
+   "w": 8,
+   "h": 14,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "thigh_r",
+   "frame": {
+    "x": 159,
+    "y": 1,
+    "w": 8,
+    "h": 14
+   },
+   "x": 4,
+   "y": -40,
+   "w": 8,
+   "h": 14,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "shin_l",
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 7,
+    "h": 26
+   },
+   "x": -4,
+   "y": -18,
+   "w": 7,
+   "h": 26,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "shin_r",
+   "frame": {
+    "x": 9,
+    "y": 1,
+    "w": 7,
+    "h": 26
+   },
+   "x": 4,
+   "y": -18,
+   "w": 7,
+   "h": 26,
+   "layer": 2,
+   "mass": 1
+  },
+  {
+   "id": "foot_l",
+   "frame": {
+    "x": 183,
+    "y": 1,
+    "w": 11,
+    "h": 5
+   },
+   "x": -2,
+   "y": -3,
+   "w": 11,
+   "h": 5,
+   "layer": 3,
+   "mass": 1
+  },
+  {
+   "id": "foot_r",
+   "frame": {
+    "x": 195,
+    "y": 1,
+    "w": 11,
+    "h": 5
+   },
+   "x": 6,
+   "y": -3,
+   "w": 11,
+   "h": 5,
+   "layer": 3,
+   "mass": 1
+  },
+  {
+   "id": "robe",
+   "frame": {
+    "x": 69,
+    "y": 1,
+    "w": 36,
+    "h": 20
+   },
+   "x": 0,
+   "y": -44,
+   "w": 36,
+   "h": 20,
+   "layer": 4,
+   "mass": 1.5
+  },
+  {
+   "id": "torso",
+   "frame": {
+    "x": 17,
+    "y": 1,
+    "w": 26,
+    "h": 26
+   },
+   "x": 0,
+   "y": -66,
+   "w": 26,
+   "h": 26,
+   "layer": 5,
+   "mass": 5
+  },
+  {
+   "id": "head",
+   "frame": {
+    "x": 44,
+    "y": 1,
+    "w": 24,
+    "h": 24
+   },
+   "x": 2,
+   "y": -91,
+   "w": 24,
+   "h": 24,
+   "layer": 6,
+   "mass": 3
+  },
+  {
+   "id": "upper_arm_r",
+   "frame": {
+    "x": 128,
+    "y": 1,
+    "w": 10,
+    "h": 16
+   },
+   "x": 16,
+   "y": -66,
+   "w": 10,
+   "h": 16,
+   "layer": 7,
+   "mass": 1
+  },
+  {
+   "id": "forearm_hand_r",
+   "frame": {
+    "x": 139,
+    "y": 1,
+    "w": 10,
+    "h": 16
+   },
+   "x": 17,
+   "y": -51,
+   "w": 10,
+   "h": 16,
+   "layer": 7,
+   "mass": 1
+  }
+ ],
+ "joints": [
+  {
+   "a": "torso",
+   "b": "head",
+   "anchor": [
+    0,
+    -79
+   ],
+   "min": -0.4,
+   "max": 0.4,
+   "detachable": false
+  },
+  {
+   "a": "head",
+   "b": "hair_back",
+   "anchor": [
+    -2,
+    -100
+   ],
+   "min": -0.9,
+   "max": 0.9,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "robe",
+   "anchor": [
+    0,
+    -54
+   ],
+   "min": -0.5,
+   "max": 0.5,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "thigh_l",
+   "anchor": [
+    -4,
+    -50
+   ],
+   "min": -0.9,
+   "max": 0.9,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "thigh_r",
+   "anchor": [
+    4,
+    -50
+   ],
+   "min": -0.9,
+   "max": 0.9,
+   "detachable": false
+  },
+  {
+   "a": "thigh_l",
+   "b": "shin_l",
+   "anchor": [
+    -4,
+    -31
+   ],
+   "min": 0,
+   "max": 1.4,
+   "detachable": false
+  },
+  {
+   "a": "thigh_r",
+   "b": "shin_r",
+   "anchor": [
+    4,
+    -31
+   ],
+   "min": 0,
+   "max": 1.4,
+   "detachable": false
+  },
+  {
+   "a": "shin_l",
+   "b": "foot_l",
+   "anchor": [
+    -4,
+    -6
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "shin_r",
+   "b": "foot_r",
+   "anchor": [
+    4,
+    -6
+   ],
+   "min": -0.3,
+   "max": 0.3,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_l",
+   "anchor": [
+    -14,
+    -74
+   ],
+   "min": -1.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "torso",
+   "b": "upper_arm_r",
+   "anchor": [
+    14,
+    -74
+   ],
+   "min": -1.6,
+   "max": 0.6,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_l",
+   "b": "forearm_hand_l",
+   "anchor": [
+    -16,
+    -59
+   ],
+   "min": -1.6,
+   "max": 0,
+   "detachable": false
+  },
+  {
+   "a": "upper_arm_r",
+   "b": "forearm_hand_r",
+   "anchor": [
+    16,
+    -59
+   ],
+   "min": -1.6,
+   "max": 0,
+   "detachable": false
+  }
+ ],
+ "source": {
+  "from": "tools/gen-cultivators.mjs",
+  "placeholder": true
+ }
+}

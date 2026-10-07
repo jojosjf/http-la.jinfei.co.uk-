@@ -3,6 +3,10 @@
  "name": "青禾",
  "version": 2,
  "image": "qinghe.png",
+ "species": "construct",
+ "follow": [
+  "tassel"
+ ],
  "root": "torso",
  "height": 96,
  "parts": [

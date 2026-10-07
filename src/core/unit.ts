@@ -43,9 +43,9 @@ export function unitDomain(def: UnitDef, terrain: TerrainDef): Domain {
 export type Unavailable = 'ammo' | 'en' | 'morale' | 'postMove';
 
 export const UNAVAILABLE_TEXT: Record<Unavailable, string> = {
-  ammo: '弹药不足',
-  en: 'EN不足',
-  morale: '气力不足',
+  ammo: '次数用尽',
+  en: '灵力不足',
+  morale: '战意不足',
   postMove: '移动后不可用',
 };
 

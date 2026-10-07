@@ -3,6 +3,7 @@
  "name": "赤轮",
  "version": 2,
  "image": "chilun.png",
+ "species": "construct",
  "root": "torso",
  "height": 115,
  "parts": [

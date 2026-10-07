@@ -3,6 +3,7 @@
  "name": "烛龙天机",
  "version": 2,
  "image": "zhulong.png",
+ "species": "beast",
  "root": "head",
  "height": 60,
  "parts": [

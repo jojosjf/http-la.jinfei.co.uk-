@@ -54,6 +54,8 @@ export interface WeaponDef {
   /** Beam attribute (I-field / beam coat interaction, later). */
   beam: boolean;
   kind: 'melee' | 'ranged';
+  /** Presentation only: sword 飞剑 / thunder 雷法 / ice 冰 / fire 火; default picks by kind/beam/ammo. */
+  fx?: 'sword' | 'thunder' | 'ice' | 'fire';
 }
 
 export interface UnitDef {
@@ -74,7 +76,13 @@ export interface UnitDef {
   money: number;
   exp: number;
   color: string;
+  /** human 修士 / construct 机关傀儡 / beast 神兽妖兽: affects defeat text and presentation only. */
+  species?: Species;
+  /** Faction or title shown under the name, e.g. 青云剑宗 / 天工宗傀儡. */
+  title?: string;
 }
+
+export type Species = 'human' | 'construct' | 'beast';
 
 export interface PilotDef {
   id: string;
@@ -119,9 +127,15 @@ export interface GameMap {
   tiles: string[][];
 }
 
+/**
+ * A character on the map. In 问剑录 a character is one fighter: `character` names both its body
+ * record (units.json: 气血 / 灵力 / 法宝) and its cultivation record (pilots.json). Legacy test
+ * scenarios may still give `unit` and `pilot` separately.
+ */
 export interface Deployment {
-  unit: string;
-  pilot: string;
+  character?: string;
+  unit?: string;
+  pilot?: string;
   team: Team;
   x: number;
   y: number;

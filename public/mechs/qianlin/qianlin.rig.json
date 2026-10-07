@@ -3,6 +3,7 @@
  "name": "潜鳞",
  "version": 2,
  "image": "qianlin.png",
+ "species": "beast",
  "root": "head",
  "height": 41,
  "parts": [
