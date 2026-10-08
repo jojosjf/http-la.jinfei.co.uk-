@@ -1,4 +1,8 @@
-"""生成可以直接上传的网页：技术支持页、iOS 隐私政策页和通用隐私政策页。
+"""生成可以直接上传的网页：技术支持页和各隐私政策页。
+
+  privacy_app.html  安卓、鸿蒙 1.1 版（有测量记录、结果图）
+  privacy_ios.html  iOS 版
+  privacy.html      安卓 1.0 版和网页版
 
     python3 tool/make_ios_pages.py [--zh] 中文名 英文名 邮箱 [输出目录]
 
@@ -8,7 +12,7 @@
 默认生成英文优先的页面（海外网站用）；加 --zh 则默认显示中文（国内网站用），
 仍可点按钮或用 #en 切换到英文。
 
-填好 web/support.html、web/privacy_ios.html、web/privacy.html 里的开发者姓名和邮箱，并把所有
+填好 web/ 下技术支持页和各隐私政策页里的开发者姓名和邮箱，并把所有
 非英文字符写成 HTML 字符引用（如“卡”写成 &#21345;）。这样文件只含英文字符，
 不管网站服务器声明的是什么编码，中文都不会显示成乱码。
 """
@@ -58,7 +62,7 @@ def main():
     name_zh, name_en, email = args[:3]
     out = pathlib.Path(args[3] if len(args) > 3 else ROOT / 'build' / 'ios_pages').expanduser()
     out.mkdir(parents=True, exist_ok=True)
-    for page in ('support.html', 'privacy_ios.html', 'privacy.html'):
+    for page in ('support.html', 'privacy_ios.html', 'privacy.html', 'privacy_app.html'):
         text = (ROOT / 'web' / page).read_text('utf-8')
         text = (text.replace('【开发者姓名】', name_zh).replace('【联系邮箱】', email)
                     .replace('[Developer name]', name_en).replace('[Contact email]', email))
