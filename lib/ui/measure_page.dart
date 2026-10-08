@@ -11,6 +11,7 @@ import 'angle_dial.dart';
 import 'canvas_geometry.dart';
 import 'guide_painter.dart';
 import 'image_loader.dart';
+import 'lift_off_filter.dart';
 import 'picked_file_cleanup.dart';
 import 'privacy.dart';
 import 'result_bar.dart';
@@ -208,6 +209,9 @@ class _MeasureViewState extends State<MeasureView> {
   LineId? _dragging;
   double _dragStart = 0;
   Offset _dragOrigin = Offset.zero;
+  final LiftOffFilter _liftOff = LiftOffFilter();
+  Duration? _upTime;
+  final Stopwatch _clock = Stopwatch()..start();
 
   /// 拖动时手指在画布上的位置，用于放大镜；null 表示不显示。
   Offset? _finger;
@@ -246,6 +250,12 @@ class _MeasureViewState extends State<MeasureView> {
     });
     _dragStart = _lines.value[id];
     _dragOrigin = d.globalPosition;
+    _upTime = null;
+    _liftOff.start(
+      d.sourceTimeStamp ?? _clock.elapsed,
+      id.isVertical ? d.globalPosition.dx : d.globalPosition.dy,
+      _dragStart,
+    );
   }
 
   void _onDragUpdate(DragUpdateDetails d) {
@@ -258,10 +268,19 @@ class _MeasureViewState extends State<MeasureView> {
       id,
       _dragStart + geo.screenToImage(id.isVertical ? moved.dx : moved.dy),
     );
+    _liftOff.add(
+      d.sourceTimeStamp ?? _clock.elapsed,
+      id.isVertical ? d.globalPosition.dx : d.globalPosition.dy,
+      _lines.value[id],
+    );
     setState(() => _finger = _toCanvas(d.globalPosition));
   }
 
   void _onDragEnd() {
+    final id = _dragging;
+    // 抬手时触点会偏几个像素，退回到手指停稳时对准的位置。
+    final settled = _liftOff.settle(_upTime);
+    if (id != null && settled != null) _moveLine(id, settled);
     setState(() {
       _dragging = null;
       _finger = null;
@@ -395,17 +414,21 @@ class _MeasureViewState extends State<MeasureView> {
             top: geo.handleRect(id, lines).top,
             width: geo.handleRect(id, lines).width,
             height: geo.handleRect(id, lines).height,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              dragStartBehavior: DragStartBehavior.down,
-              onTap: () => setState(() {
-                _rotating = false;
-                _selected = id;
-              }),
-              onPanStart: (d) => _onDragStart(id, d),
-              onPanUpdate: _onDragUpdate,
-              onPanEnd: (_) => _onDragEnd(),
-              onPanCancel: _onDragEnd,
+            // 记下抬手时间：在拖动结束回调之前送达，用来判断最后的位置停留了多久。
+            child: Listener(
+              onPointerUp: (e) => _upTime = e.timeStamp,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                dragStartBehavior: DragStartBehavior.down,
+                onTap: () => setState(() {
+                  _rotating = false;
+                  _selected = id;
+                }),
+                onPanStart: (d) => _onDragStart(id, d),
+                onPanUpdate: _onDragUpdate,
+                onPanEnd: (_) => _onDragEnd(),
+                onPanCancel: _onDragEnd,
+              ),
             ),
           ),
       if (finger != null && dragging != null)

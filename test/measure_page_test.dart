@@ -113,6 +113,63 @@ void main() {
     );
   });
 
+  group('抬手时触点偏移', () {
+    Future<double> dragAndRelease(
+      WidgetTester tester,
+      List<(int, double)> moves, // （毫秒, 相对按下点的水平位移）
+      int upAt,
+    ) async {
+      final start = tester.getCenter(handle('innerLeft'));
+      await tester.sendEventToBinding(
+        PointerDownEvent(pointer: 9, position: start),
+      );
+      var last = start;
+      for (final (t, dx) in moves) {
+        final pos = start + Offset(dx, 0);
+        await tester.sendEventToBinding(PointerMoveEvent(
+          pointer: 9,
+          position: pos,
+          delta: pos - last,
+          timeStamp: Duration(milliseconds: t),
+        ));
+        last = pos;
+      }
+      await tester.sendEventToBinding(PointerUpEvent(
+        pointer: 9,
+        position: last,
+        timeStamp: Duration(milliseconds: upAt),
+      ));
+      await tester.pump();
+      return tester.getCenter(handle('innerLeft')).dx - start.dx;
+    }
+
+    testWidgets('停住对准后抬手偏了几像素，线回到停住时的位置', (tester) async {
+      final img = await testImage(tester);
+      await tester.pumpWidget(app(MeasureView(image: img)));
+      final settled = await dragAndRelease(tester, [(16, 20), (32, 40)], 40);
+
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(app(MeasureView(image: img)));
+      final jittered = await dragAndRelease(
+        tester,
+        [(16, 20), (32, 40), (400, 43), (410, 45)],
+        420,
+      );
+      expect(jittered, settled);
+    });
+
+    testWidgets('快速拖动后松手，线停在最后的位置', (tester) async {
+      final img = await testImage(tester);
+      await tester.pumpWidget(app(MeasureView(image: img)));
+      final moved = await dragAndRelease(
+        tester,
+        [for (var i = 1; i <= 8; i++) (16 * i, 10.0 * i)],
+        136,
+      );
+      expect(moved, closeTo(80, 1));
+    });
+  });
+
   testWidgets('任何拖法都无法越过相邻线', (tester) async {
     final img = await testImage(tester);
     await tester.pumpWidget(app(MeasureView(image: img)));
