@@ -36,7 +36,10 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.saod.cardcentering"
+        // 华为应用市场的鸿蒙版已占用 com.saod.cardcentering，安卓版在华为上架时
+        // 换一个包名：flutter build apk -P app-id=com.saod.cardcentering.android。
+        // 其他商店不加这个参数，仍用原包名。
+        applicationId = (project.findProperty("app-id") as String?) ?: "com.saod.cardcentering"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
