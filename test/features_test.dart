@@ -16,6 +16,7 @@ import 'package:card_centering/ui/result_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/synthetic_card.dart';
 
@@ -71,6 +72,10 @@ Future<void> waitIdle(WidgetTester tester) async {
 }
 
 void main() {
+  // 已同意隐私政策，不弹首次启动提示。
+  setUp(() =>
+      SharedPreferences.setMockInitialValues({'privacy_agreed_version': 1}));
+
   group('自动识别', () {
     testWidgets('在缩小的图上识别，换算回原图坐标', (tester) async {
       await tester.runAsync(() async {

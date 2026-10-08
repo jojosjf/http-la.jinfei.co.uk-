@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import 'privacy.dart';
 
 /// “说明”页：使用方法、测量记录、结果图、隐私与免责。
 class AboutPage extends StatelessWidget {
@@ -24,6 +25,15 @@ class AboutPage extends StatelessWidget {
                   style: theme.textTheme.bodyLarge?.copyWith(height: 1.6),
                 ),
               ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: OutlinedButton.icon(
+                key: const Key('about-privacy'),
+                onPressed: () => showPrivacyPolicy(context),
+                icon: const Icon(Icons.privacy_tip_outlined),
+                label: Text(l10n.privacyPolicy),
+              ),
+            ),
           ],
         ),
       ),

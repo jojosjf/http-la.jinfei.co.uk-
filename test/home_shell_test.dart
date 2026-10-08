@@ -5,6 +5,7 @@ import 'package:card_centering/ui/measure_page.dart';
 import 'package:card_centering/ui/records_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// 包住 [page] 的那个 TickerMode 是否开启（隐藏页面要关掉，动画才会暂停）。
 bool tickersOn(WidgetTester tester, Type page) => tester
@@ -17,6 +18,10 @@ bool tickersOn(WidgetTester tester, Type page) => tester
     .enabled;
 
 void main() {
+  // 已同意隐私政策，不弹首次启动提示。
+  setUp(() =>
+      SharedPreferences.setMockInitialValues({'privacy_agreed_version': 1}));
+
   testWidgets('只有当前页面的动画在运行，隐藏页面不绘制', (tester) async {
     await tester.pumpWidget(
       CardCenteringApp(

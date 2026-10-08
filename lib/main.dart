@@ -6,6 +6,7 @@ import 'app_config.dart';
 import 'l10n/app_localizations.dart';
 import 'logic/record_store.dart';
 import 'ui/home_shell.dart';
+import 'ui/privacy.dart';
 import 'ui/web_fonts.dart';
 
 void main() {
@@ -63,7 +64,8 @@ class _CardCenteringAppState extends State<CardCenteringApp> {
           locale?.languageCode == 'en'
               ? const Locale('en')
               : const Locale('zh'),
-      home: HomeShell(store: _store, bottomNav: widget.bottomNav),
+      home: PrivacyGate(
+          child: HomeShell(store: _store, bottomNav: widget.bottomNav)),
     );
   }
 }

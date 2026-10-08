@@ -11,6 +11,25 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    // 把引擎等 .so 压缩后放进 APK，安装包小一半以上；安装时系统再解压。
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+            // 用 --target-platform 只打部分 CPU 架构时，插件自带的 .so 也去掉其他架构；
+            // 否则安装包里会混进没有 Flutter 引擎的架构，在那种设备上打不开。
+            // （Flutter 插件会重置 abiFilters，所以在打包这一步排除。）
+            (project.findProperty("target-platform") as String?)?.let { platforms ->
+                val abis = mapOf(
+                    "android-arm" to "armeabi-v7a",
+                    "android-arm64" to "arm64-v8a",
+                    "android-x64" to "x86_64",
+                )
+                val wanted = platforms.split(",").mapNotNull { abis[it.trim()] }
+                abis.values.filter { it !in wanted }.forEach { excludes += "lib/$it/**" }
+            }
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
