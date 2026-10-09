@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +16,10 @@ void showPrivacyPolicy(BuildContext context) {
 
 /// 首次启动时弹出隐私政策提示，同意后才能使用。
 ///
-/// 国内应用商店（安卓、鸿蒙）要求 App 首次启动时用弹窗告知隐私规则。
-/// iOS 和网页版不弹：App Store 没有这个要求，网页也没有“退出应用”。
+/// 国内安卓应用商店要求 App 首次启动时用弹窗告知隐私规则。
+/// 只在安卓上弹：鸿蒙版接入了华为应用市场的隐私声明托管，由系统在首次打开时
+/// 弹出，App 再弹一次会被审核拒绝；App Store 没有这个要求；网页也没有“退出应用”。
+/// 各平台都能从“说明”里打开完整的隐私政策。
 class PrivacyGate extends StatefulWidget {
   const PrivacyGate({super.key, required this.child});
 
@@ -25,11 +29,24 @@ class PrivacyGate extends StatefulWidget {
   State<PrivacyGate> createState() => _PrivacyGateState();
 }
 
+/// 是否需要 App 自己弹隐私提示。鸿蒙版 Flutter 的 [operatingSystem] 是 'ohos'。
+@visibleForTesting
+bool needsPrivacyPrompt({
+  required bool isWeb,
+  required TargetPlatform platform,
+  required String operatingSystem,
+}) =>
+    !isWeb && platform == TargetPlatform.android && operatingSystem != 'ohos';
+
 class _PrivacyGateState extends State<PrivacyGate> {
   @override
   void initState() {
     super.initState();
-    if (!kIsWeb && defaultTargetPlatform != TargetPlatform.iOS) {
+    if (needsPrivacyPrompt(
+      isWeb: kIsWeb,
+      platform: defaultTargetPlatform,
+      operatingSystem: kIsWeb ? '' : Platform.operatingSystem,
+    )) {
       _checkConsent();
     }
   }

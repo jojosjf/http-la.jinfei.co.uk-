@@ -102,4 +102,13 @@ void main() {
     expect(find.text('隐私政策提示'), findsNothing);
     debugDefaultTargetPlatformOverride = null;
   });
+
+  test('只有安卓弹隐私提示，鸿蒙由华为应用市场的托管弹窗负责', () {
+    bool ask(TargetPlatform p, String os, {bool web = false}) =>
+        needsPrivacyPrompt(isWeb: web, platform: p, operatingSystem: os);
+    expect(ask(TargetPlatform.android, 'android'), isTrue);
+    expect(ask(TargetPlatform.android, 'ohos'), isFalse);
+    expect(ask(TargetPlatform.iOS, 'ios'), isFalse);
+    expect(ask(TargetPlatform.android, '', web: true), isFalse);
+  });
 }
